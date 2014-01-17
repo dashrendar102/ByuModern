@@ -14,52 +14,52 @@
     <RegisteredVersion>1.0.0.0</RegisteredVersion>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\bin\Debug\AppxManifest.xml">
+    <AppXManifest Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-01-17T05:28:29.481</Modified>
+      <Modified>2014-01-17T22:06:01.406</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\bin\Debug\HelloWorld.exe">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\HelloWorld.exe">
       <PackagePath>HelloWorld.exe</PackagePath>
-      <Modified>2014-01-17T05:28:28.950</Modified>
+      <Modified>2014-01-17T22:07:04.893</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\Assets\Logo.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\Assets\Logo.scale-100.png">
       <PackagePath>Assets\Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
       <Modified>2013-07-31T15:01:26.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\Assets\SmallLogo.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\Assets\SmallLogo.scale-100.png">
       <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
       <Modified>2013-07-31T15:01:26.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\Assets\SplashScreen.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\Assets\SplashScreen.scale-100.png">
       <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
       <Modified>2013-07-31T15:01:26.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\Assets\StoreLogo.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\Assets\StoreLogo.scale-100.png">
       <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
       <Modified>2013-07-31T15:01:26.000</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\Common\ReadMe.txt">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\Common\ReadMe.txt">
       <PackagePath>Common\ReadMe.txt</PackagePath>
       <Modified>2014-01-17T05:27:44.315</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\bin\Debug\App.xbf">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2014-01-17T05:28:28.755</Modified>
+      <Modified>2014-01-17T22:06:00.871</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\bin\Debug\MainPage.xbf">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2014-01-17T05:28:28.757</Modified>
+      <Modified>2014-01-17T22:06:00.872</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\HelloWorld\HelloWorld\bin\Debug\resources.pri">
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2014-01-17T05:28:29.214</Modified>
+      <Modified>2014-01-17T22:06:01.156</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

@@ -66,6 +66,20 @@ namespace HelloWorld
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            // Restore values stored in session state.
+            if (e.PageState != null && e.PageState.ContainsKey("greetingOutputText"))
+            {
+                greetingOutput.Text = e.PageState["greetingOutputText"].ToString();
+            }
+
+
+            // Restore values stored in app data.
+            Windows.Storage.ApplicationDataContainer roamingSettings =
+                Windows.Storage.ApplicationData.Current.RoamingSettings;
+            if (roamingSettings.Values.ContainsKey("userName"))
+            {
+                nameInput.Text = roamingSettings.Values["userName"].ToString();
+            }
         }
 
         /// <summary>
@@ -78,6 +92,7 @@ namespace HelloWorld
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            e.PageState["greetingOutputText"] = greetingOutput.Text;
         }
 
         #region NavigationHelper registration
@@ -102,5 +117,17 @@ namespace HelloWorld
         }
 
         #endregion
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            greetingOutput.Text = "Hello, " + nameInput.Text + "!";
+        }
+
+        private void NameInput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Windows.Storage.ApplicationDataContainer roamingSettings =
+                Windows.Storage.ApplicationData.Current.RoamingSettings;
+            roamingSettings.Values["userName"] = nameInput.Text;
+        }
     }
 }
