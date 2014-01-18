@@ -124,8 +124,8 @@ namespace HelloWorld.HelloWorld_XamlTypeInfo
 
         private void InitTypeTables()
         {
-            _typeNameTable = new string[8];
-            _typeNameTable[0] = "HelloWorld.MainPage";
+            _typeNameTable = new string[9];
+            _typeNameTable[0] = "HelloWorld.PhotoPage";
             _typeNameTable[1] = "Windows.UI.Xaml.Controls.Page";
             _typeNameTable[2] = "Windows.UI.Xaml.Controls.UserControl";
             _typeNameTable[3] = "HelloWorld.Common.ObservableDictionary";
@@ -133,9 +133,10 @@ namespace HelloWorld.HelloWorld_XamlTypeInfo
             _typeNameTable[5] = "String";
             _typeNameTable[6] = "HelloWorld.Common.NavigationHelper";
             _typeNameTable[7] = "Windows.UI.Xaml.DependencyObject";
+            _typeNameTable[8] = "HelloWorld.MainPage";
 
-            _typeTable = new global::System.Type[8];
-            _typeTable[0] = typeof(global::HelloWorld.MainPage);
+            _typeTable = new global::System.Type[9];
+            _typeTable[0] = typeof(global::HelloWorld.PhotoPage);
             _typeTable[1] = typeof(global::Windows.UI.Xaml.Controls.Page);
             _typeTable[2] = typeof(global::Windows.UI.Xaml.Controls.UserControl);
             _typeTable[3] = typeof(global::HelloWorld.Common.ObservableDictionary);
@@ -143,6 +144,7 @@ namespace HelloWorld.HelloWorld_XamlTypeInfo
             _typeTable[5] = typeof(global::System.String);
             _typeTable[6] = typeof(global::HelloWorld.Common.NavigationHelper);
             _typeTable[7] = typeof(global::Windows.UI.Xaml.DependencyObject);
+            _typeTable[8] = typeof(global::HelloWorld.MainPage);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -177,8 +179,9 @@ namespace HelloWorld.HelloWorld_XamlTypeInfo
             return -1;
         }
 
-        private object Activate_0_MainPage() { return new global::HelloWorld.MainPage(); }
+        private object Activate_0_PhotoPage() { return new global::HelloWorld.PhotoPage(); }
         private object Activate_3_ObservableDictionary() { return new global::HelloWorld.Common.ObservableDictionary(); }
+        private object Activate_8_MainPage() { return new global::HelloWorld.MainPage(); }
         private void MapAdd_3_ObservableDictionary(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.String, global::System.Object>)instance;
@@ -197,9 +200,9 @@ namespace HelloWorld.HelloWorld_XamlTypeInfo
             switch (typeIndex)
             {
 
-            case 0:   //  HelloWorld.MainPage
+            case 0:   //  HelloWorld.PhotoPage
                 userType = new global::HelloWorld.HelloWorld_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
-                userType.Activator = Activate_0_MainPage;
+                userType.Activator = Activate_0_PhotoPage;
                 userType.AddMemberName("DefaultViewModel");
                 userType.AddMemberName("NavigationHelper");
                 xamlType = userType;
@@ -237,17 +240,35 @@ namespace HelloWorld.HelloWorld_XamlTypeInfo
             case 7:   //  Windows.UI.Xaml.DependencyObject
                 xamlType = new global::HelloWorld.HelloWorld_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
+
+            case 8:   //  HelloWorld.MainPage
+                userType = new global::HelloWorld.HelloWorld_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Windows.UI.Xaml.Controls.Page"));
+                userType.Activator = Activate_8_MainPage;
+                userType.AddMemberName("DefaultViewModel");
+                userType.AddMemberName("NavigationHelper");
+                xamlType = userType;
+                break;
             }
             return xamlType;
         }
 
 
-        private object get_0_MainPage_DefaultViewModel(object instance)
+        private object get_0_PhotoPage_DefaultViewModel(object instance)
+        {
+            var that = (global::HelloWorld.PhotoPage)instance;
+            return that.DefaultViewModel;
+        }
+        private object get_1_PhotoPage_NavigationHelper(object instance)
+        {
+            var that = (global::HelloWorld.PhotoPage)instance;
+            return that.NavigationHelper;
+        }
+        private object get_2_MainPage_DefaultViewModel(object instance)
         {
             var that = (global::HelloWorld.MainPage)instance;
             return that.DefaultViewModel;
         }
-        private object get_1_MainPage_NavigationHelper(object instance)
+        private object get_3_MainPage_NavigationHelper(object instance)
         {
             var that = (global::HelloWorld.MainPage)instance;
             return that.NavigationHelper;
@@ -260,16 +281,28 @@ namespace HelloWorld.HelloWorld_XamlTypeInfo
 
             switch (longMemberName)
             {
+            case "HelloWorld.PhotoPage.DefaultViewModel":
+                userType = (global::HelloWorld.HelloWorld_XamlTypeInfo.XamlUserType)GetXamlTypeByName("HelloWorld.PhotoPage");
+                xamlMember = new global::HelloWorld.HelloWorld_XamlTypeInfo.XamlMember(this, "DefaultViewModel", "HelloWorld.Common.ObservableDictionary");
+                xamlMember.Getter = get_0_PhotoPage_DefaultViewModel;
+                xamlMember.SetIsReadOnly();
+                break;
+            case "HelloWorld.PhotoPage.NavigationHelper":
+                userType = (global::HelloWorld.HelloWorld_XamlTypeInfo.XamlUserType)GetXamlTypeByName("HelloWorld.PhotoPage");
+                xamlMember = new global::HelloWorld.HelloWorld_XamlTypeInfo.XamlMember(this, "NavigationHelper", "HelloWorld.Common.NavigationHelper");
+                xamlMember.Getter = get_1_PhotoPage_NavigationHelper;
+                xamlMember.SetIsReadOnly();
+                break;
             case "HelloWorld.MainPage.DefaultViewModel":
                 userType = (global::HelloWorld.HelloWorld_XamlTypeInfo.XamlUserType)GetXamlTypeByName("HelloWorld.MainPage");
                 xamlMember = new global::HelloWorld.HelloWorld_XamlTypeInfo.XamlMember(this, "DefaultViewModel", "HelloWorld.Common.ObservableDictionary");
-                xamlMember.Getter = get_0_MainPage_DefaultViewModel;
+                xamlMember.Getter = get_2_MainPage_DefaultViewModel;
                 xamlMember.SetIsReadOnly();
                 break;
             case "HelloWorld.MainPage.NavigationHelper":
                 userType = (global::HelloWorld.HelloWorld_XamlTypeInfo.XamlUserType)GetXamlTypeByName("HelloWorld.MainPage");
                 xamlMember = new global::HelloWorld.HelloWorld_XamlTypeInfo.XamlMember(this, "NavigationHelper", "HelloWorld.Common.NavigationHelper");
-                xamlMember.Getter = get_1_MainPage_NavigationHelper;
+                xamlMember.Getter = get_3_MainPage_NavigationHelper;
                 xamlMember.SetIsReadOnly();
                 break;
             }

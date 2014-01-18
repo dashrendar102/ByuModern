@@ -17,13 +17,13 @@
     <AppXManifest Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-01-17T22:06:01.406</Modified>
+      <Modified>2014-01-18T02:07:58.656</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\HelloWorld.exe">
       <PackagePath>HelloWorld.exe</PackagePath>
-      <Modified>2014-01-17T22:07:04.893</Modified>
+      <Modified>2014-01-18T02:07:58.510</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\Assets\Logo.scale-100.png">
       <PackagePath>Assets\Logo.scale-100.png</PackagePath>
@@ -53,13 +53,17 @@
       <PackagePath>App.xbf</PackagePath>
       <Modified>2014-01-17T22:06:00.871</Modified>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\PhotoPage.xbf">
+      <PackagePath>PhotoPage.xbf</PackagePath>
+      <Modified>2014-01-18T02:07:58.341</Modified>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2014-01-17T22:06:00.872</Modified>
+      <Modified>2014-01-18T02:07:58.341</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2014-01-17T22:06:01.156</Modified>
+      <Modified>2014-01-18T02:07:58.561</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>

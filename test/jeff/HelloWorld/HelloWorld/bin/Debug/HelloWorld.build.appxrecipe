@@ -39,6 +39,9 @@
     <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\PhotoPage.xbf">
+      <PackagePath>PhotoPage.xbf</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
     </AppxPackagedFile>

@@ -14,6 +14,11 @@
         <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
         <x:String x:Key="AppName">Hello, world!</x:String>
     </Page.Resources>
+    <Page.TopAppBar>
+        <CommandBar>
+            <AppBarButton x:ConnectionId='1' Label="Pictures" Icon="Pictures"                              />
+        </CommandBar>
+    </Page.TopAppBar>
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -49,8 +54,8 @@
         <StackPanel Grid.Row="1" Margin="120,30,0,0">
             <TextBlock Text="What's your name?" Style="{StaticResource BaseTextBlockStyle}"/>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,20">
-                <TextBox x:ConnectionId='1' x:Name="nameInput" Width="300" HorizontalAlignment="Left"                                    />
-                <Button x:ConnectionId='2' Content="Say &quot;Hello&quot;"                     />
+                <TextBox x:ConnectionId='2' x:Name="nameInput" Width="300" HorizontalAlignment="Left"                                    />
+                <Button x:ConnectionId='3' Content="Say &quot;Hello&quot;"                     />
             </StackPanel>
             <TextBlock x:Name="greetingOutput" Style="{StaticResource BaseTextBlockStyle}"/>
         </StackPanel>

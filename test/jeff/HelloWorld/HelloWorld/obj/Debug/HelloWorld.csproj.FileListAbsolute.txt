@@ -60,3 +60,8 @@ C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld
 C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\obj\Debug\qualifiers.txt.intermediate
 C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\obj\Debug\MultipleQualifiersPerDimensionFound.txt
 C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\obj\Debug\ProjectArchitectures.txt
+C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\bin\Debug\PhotoPage.xbf
+C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\obj\Debug\PhotoPage.g.i.cs
+C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\obj\Debug\PhotoPage.g.cs
+C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\obj\Debug\PhotoPage.xaml
+C:\Users\Jeff\Documents\Programming\C#\byumodern\test\jeff\HelloWorld\HelloWorld\obj\Debug\PhotoPage.xbf
