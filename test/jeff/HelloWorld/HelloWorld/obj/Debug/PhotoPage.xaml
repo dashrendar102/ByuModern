@@ -52,19 +52,19 @@
                 <RowDefinition Height="70"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Button Content="Get photo"/>
-            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource SubheaderTextBlockStyle}"/>
+            <Button x:ConnectionId='2' Content="Get photo"                             />
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding DisplayName}" Style="{StaticResource SubheaderTextBlockStyle}"/>
             <StackPanel x:Name="imagePanel" Grid.Row="2" Orientation="Horizontal">
                 <Border BorderBrush="Gray" BorderThickness="1" Background="Gray">
                     <Image x:Name="displayImage" Source="Assets/Logo.png"/>
                 </Border>
                 <StackPanel Margin="20,0,0,0">
                     <TextBlock TextWrapping="Wrap" Text="File Name:" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    <TextBlock TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding Name}" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
                     <TextBlock TextWrapping="Wrap" Text="Path:" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    <TextBlock TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding Path}" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
                     <TextBlock TextWrapping="Wrap" Text="Date created:" Style="{StaticResource CaptionTextBlockStyle}"/>
-                    <TextBlock TextWrapping="Wrap" Text="TextBlock" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding DateCreated.Date}" Style="{StaticResource BodyTextBlockStyle}" Margin="10,0,0,30"/>
                 </StackPanel>
             </StackPanel>
         </Grid>
