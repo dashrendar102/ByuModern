@@ -1,0 +1,54 @@
+﻿<SettingsFlyout
+    x:Class="HierarchicalNavTemplate.Settings.HelpSettings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HierarchicalNavTemplate.Settings"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    IconSource="Assets/SmallLogo.png"
+    Title="HelpFlyout"
+    d:DesignWidth="346">
+
+    <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
+    <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+
+        <!-- The StackPanel(s) below define individual content sections -->
+
+        <!-- Content Section 1-->
+        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
+
+            <!-- Section 1 header -->
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Help"/>
+
+            <!-- Section 1 body -->
+            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,25" TextWrapping="Wrap">
+                <TextBlock.Text>Help content should be a single page and can include text, links, and images. To provide the most current content, you should include a link to a support page or conditionally embed an online page into your help if the user is online.</TextBlock.Text>
+            </TextBlock>
+            <TextBlock>See:</TextBlock>
+
+            <HyperlinkButton NavigateUri="http://go.microsoft.com/fwlink/?LinkID=275434">
+                <TextBlock TextWrapping="Wrap" Text="How to include online content in your help"/>
+            </HyperlinkButton>
+
+            <TextBlock Style="{StaticResource BodyTextBlockStyle}" Margin="0,0,0,25" TextWrapping="Wrap">
+                <TextBlock.Text>
+                    Before including Help content for your app, you should consider whether your app 
+        actually needs it. For example, if your app has proven easy to use, help content 
+        might not be necessary. If there are one or two UI elements in your app 
+        that are a bit tricky for users to understand, try integrating tips into 
+        the UI, creating a simple in-app demo, or redesigning those elements to avoid 
+        creating help that only addresses one or two simple fixes.
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock>See:</TextBlock>
+
+            <HyperlinkButton NavigateUri="http://go.microsoft.com/fwlink/?LinkID=275435">
+                Guidelines for app help
+            </HyperlinkButton>
+        </StackPanel>
+
+        <!-- Define more Content Sections below as necessary -->
+
+    </StackPanel>
+</SettingsFlyout>

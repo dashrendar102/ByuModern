@@ -1,0 +1,333 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head><link rel="stylesheet" type="text/css" href="description/Combined.css,0:ImageSprite,0:Header.NonMtps,1:LinkList;/Areas/Centers/Themes/Msdn/Content:0,/Areas/Epx/Themes/Base/Content:1&amp;amp;hashKey=EB87627F1FAC8F417DDC560F58ECEDC8" xmlns="http://www.w3.org/1999/xhtml" />
+<link rel="stylesheet" type="text/css" href="description/0f42f23f-7cc7-474a-aa23-b6ed8ca59481Combined.css,0:ImageSprite,0:Footer.NonMtps,1:LinkList;/Areas/Centers/Themes/Msdn/Content:0,/Areas/Epx/Themes/Base/Content:1&amp;amp;hashKey=59AF12CEA39A0C1AEAA6487FF1817969" xmlns="http://www.w3.org/1999/xhtml" />
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Windows Store app hierarchical navigation, start to finish</title>
+        <link href="description/Galleries.css" type="text/css" rel="Stylesheet" /><link href="description/Layout.css" type="text/css" rel="Stylesheet" /><link href="description/Brand.css" type="text/css" rel="Stylesheet" />
+        <link href="description/iframedescription.css" rel="Stylesheet" type="text/css" />
+        <script src="description/offline.js" type="text/javascript"></script>
+        <style type="text/css">
+            #projectInfo {
+                overflow: auto;
+            }
+            #longDesc {
+                clear:both;
+                margin: 25px 0 10px 0;
+            }
+
+            #SampleIndexList{
+                margin-left: 15px;
+            }
+        </style>
+    </head>
+<body>
+    <div id="offlineDescription">
+        <h1>Windows Store app hierarchical navigation, start to finish</h1>
+        <br/>
+        <div id="projectInfo">
+            <div class="section">
+                    <div class="itemBarLong tagsContainer">
+                        <label for="Technologies">Technologies</label>
+                        <div id="Technologies">
+                            Visual Studio 2013, Windows Store app
+                        </div>
+                    </div>
+                    <div class="itemBarLong tagsContainer">
+                        <label for="Topics">Topics</label>
+                        <div id="Topics">
+                            User Interface, Getting Started, User Experience
+                        </div>
+                    </div>
+                <div class="itemBarLong">
+                    <label for="Platforms">Platforms</label>
+                    <div id="Platforms">
+                        Windows RT
+                    </div>
+                </div>
+                <div class="itemBarLong">
+                    <label for="Requirements">Requirements</label>
+                    <div id="Requirements">
+                        
+                    </div>
+                </div>
+                <div class="itemBar">
+                    <label for="LastUpdated">Primary language</label>
+                    <div id="LastUpdated">en-US</div>
+                </div>
+                <div class="itemBar">
+                    <label for="LastUpdated">Updated</label>
+                    <div id="LastUpdated">10/31/2013</div>
+                </div>
+                <div class="itemBarLong">
+                    <label for="License">License</label>
+                    <div id="License">
+                        <a href="license.rtf">MS-LPL</a></div>
+                </div>
+                <div class="itemBar">
+                    <div class="viewonlinecont">
+                        <a data-link="online" href="http://code.msdn.microsoft.com/Windows-Store-hierarchical-4b1c67c4">View this sample online</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+                   
+<script type="text/javascript">
+    function initializePage() {
+        var otherTabClass = 'otherTab';
+        var hiddenPreClass = 'hidden';
+
+        var htmlDecode = function(encodedData) {
+            var decodedData = "";
+            if (encodedData) {
+                var div = document.createElement('div');
+                div.innerHTML = encodedData;
+                decodedData = div.firstChild.nodeValue.replace( /\\r\\n/ig , '\r\n');
+            }
+            return decodedData;
+        };
+                
+        Galleries.iterateElem(Galleries.findElem(null, 'div', 'scriptcode'), function (index, scriptBlock) {
+            var titleElem = Galleries.findElem(scriptBlock, 'div', 'title')[0];
+            var labelElems = Galleries.findElem(titleElem, 'span');
+            if (labelElems.length == 0) {
+                labelElems = titleElem;
+            }
+            var languageSpans = Galleries.findElem(scriptBlock, 'span', 'hidden');
+            var pres = Galleries.findElem(scriptBlock, 'pre');
+            if (languageSpans.length > 0 && pres.length > 1) {
+                Galleries.iterateElem(labelElems, function(index, elem) {
+                    var codePre = pres[index];
+                    var labelSpan = elem;
+                    var languageSpan = languageSpans[index];
+                            
+                    elem.code = codePre.innerHTML.replace( /(\r(\n)?)|((\r)?\n)/ig , '\\r\\n');
+                            
+                    codePre.className = codePre.className.replace(hiddenPreClass, '');
+                            
+                    languageSpan.parentNode.removeChild(languageSpan);
+                });
+
+                pres = Galleries.findElem(scriptBlock, 'pre');
+                Galleries.iterateElem(labelElems, function(index, elem) {
+                    var codePre = pres[index];
+                    var labelSpan = elem;
+                    if (index == 0) {
+                        scriptBlock.activeTab = 0;
+                    }
+                    else {
+                        labelSpan.className += otherTabClass;
+                        codePre.className += hiddenPreClass;
+                    }
+                    Galleries.attachEventHandler(labelSpan, 'click', function(e) {
+                        var activeTab = scriptBlock.activeTab;
+                        labelElems[activeTab].className += otherTabClass;
+                        pres[activeTab].className += hiddenPreClass;
+
+                        codePre.className = codePre.className.replace(hiddenPreClass, '');
+                        labelSpan.className = labelSpan.className.replace(otherTabClass, '');
+                        scriptBlock.activeTab = index;
+                    });
+                });
+
+                var preview = Galleries.findElem(scriptBlock, 'div', 'preview');
+                if (preview.length == 0) {
+                    preview.push(pres[pres.length - 1]);
+                }
+                Galleries.iterateElem(preview, function(index, elem) {
+                    elem.parentNode.removeChild(elem);
+                });
+
+                if (window.clipboardData && clipboardData.setData) {
+                    var copyLink = document.createElement('a');
+                    copyLink.href = 'javascript:void(0);';
+                    copyLink.className = 'copyCode';
+                    copyLink.innerHTML = 'Copy code';
+                    Galleries.attachEventHandler(copyLink, 'click', function (e) {
+                        clipboardData.setData("Text", htmlDecode(labelElems[scriptBlock.activeTab].code));
+                        return false;
+                    });
+                    scriptBlock.insertBefore(copyLink, scriptBlock.childNodes[0]);
+                }
+            }
+        });
+    }
+
+    Galleries.onWindowLoad(function(){
+        initializePage();
+    });
+
+</script>
+<div id="longDesc">
+    
+<h1>
+<p style="margin:0in 0in 8pt"><span style="font-size:small"><span style="font-family:Calibri">An instructional sample app for Windows 8.1 that demonstrates the hierarchical navigation pattern and meets all basic Windows Store certification requirements. This
+ is the companion sample for the </span><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327895"><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (HTML)</span></a><span style="font-family:Calibri">
+<span>&nbsp;</span>and </span><a href="http://go.microsoft.com/fwlink/?LinkID=327898"><span><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (XAML)</span></span></a><span style="font-family:Calibri">
+<span>&nbsp;</span></span></span><span style="font-family:Calibri">topics.</span></span></p>
+<p style="margin:0in 0in 8pt"><span style="font-family:Calibri; font-size:small">Note: The sample is also available in template form through a VSIX template installer. Use the Visual Studio JavaScript or C# Hub app template or this template as a starting point
+ for your Windows Store apps.</span></p>
+<p style="margin:0in 0in 8pt"><strong><span lang="EN"><br>
+</span></strong><span style="font-family:Calibri; font-size:small">Use a hierarchical navigation pattern for your Windows Store app when its content can be separated into distinct, yet related, sections or categories with varying levels of detail. This is a
+ common and familiar pattern that works well with a relational information architecture, traversed in a preferred sequence or order.</span></p>
+<p style="margin:0in 0in 8pt"><span style="font-family:Calibri; font-size:small">Here, we cover how to create a Windows Store app using JavaScript or C# that uses the hierarchical navigation pattern and meets all basic Windows Store certification requirements,
+ from start to finish. This includes: </span></p>
+<ul style="list-style-type:disc; direction:ltr">
+<li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>App bars</strong> to support navigation and commanding</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Image resources</strong> to expose your app throughout the operating system</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Data roaming</strong> to sync your app across sessions and devices</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Settings</strong> to provide privacy, help, and other app info</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Globalization</strong> to reach customers in countries and regions around the world</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:8pt">
+<strong>Accessibility</strong> to help users accomplish tasks regardless of physical ability and input<span>&nbsp;
+</span>device</p>
+</li></ul>
+<p style="margin:0in 0in 8pt"><span style="font-size:small"><span style="font-family:Calibri">This sample includes everything discussed in the
+</span><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327895"><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (HTML)</span></a></span><span style="font-family:Calibri"> and
+</span><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327898"><span><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (XAML)</span></span></a><span style="font-family:Calibri">
+</span></span><span style="font-family:Calibri"><span>&nbsp;</span>topics.</span></span></p>
+<p style="margin:5pt 0in 6pt; line-height:normal; page-break-after:avoid"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Operating system requirements</span></span></strong></p>
+<table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td width="77" style="padding:0in 0.5pt; border:#000000; width:0.8in; background-color:transparent">
+<p style="margin:5pt 6pt; text-align:center; line-height:normal"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Client</span></span></strong></p>
+</td>
+<td width="256" style="padding:0in 0.5pt; border:#000000; width:192pt; background-color:transparent">
+<p style="margin:5pt 6pt; line-height:normal"><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Windows 8.1
+</span></span></p>
+</td>
+</tr>
+<tr>
+<td width="77" style="padding:0in 0.5pt; border:#000000; width:0.8in; background-color:transparent">
+<p style="margin:5pt 6pt; text-align:center; line-height:normal"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Server</span></span></strong></p>
+</td>
+<td width="256" style="padding:0in 0.5pt; border:#000000; width:192pt; background-color:transparent">
+<p style="margin:5pt 6pt; line-height:normal"><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Windows Server 2012 R2
+</span></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="margin:5pt 0in; line-height:normal; page-break-after:avoid"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Build the sample</span></span></strong></p>
+<p style="margin:0in 0in 8pt 42pt; line-height:normal; text-indent:-0.25in"><span style="color:black; font-size:16pt"><span><span style="font-family:Calibri">1.</span><span style="font:7pt/normal &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;
+</span></span></span><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Visual Studio 2013 Preview and select File &gt; Open &gt; Project/Solution.
+</span></span></strong></p>
+<p style="margin:0in 0in 8pt 42pt; line-height:normal; text-indent:-0.25in"><span style="color:black; font-size:16pt"><span><span style="font-family:Calibri">2.</span><span style="font:7pt/normal &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;
+</span></span></span><span style="color:black; font-size:12pt"><span style="font-family:Calibri"><span>&nbsp;</span>Go to the directory in which you unzipped the sample. Go to the directory named for the sample, and double-click the Visual Studio 2013 Solution
+ (.sln) file. </span></span></p>
+<p style="margin:0in 0in 8pt 42pt; line-height:normal; text-indent:-0.25in"><span style="color:black; font-size:16pt"><span><span style="font-family:Calibri">3.</span><span style="font:7pt/normal &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;
+</span></span></span><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Press F7 or use
+<strong>Build</strong> &gt; <strong>Build Solution</strong> to build the sample. </span>
+</span></p>
+<p style="margin:0in 0in 8pt; line-height:normal"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Run the sample</span></span></strong></p>
+<p style="margin:5pt 0in 6pt 42pt; line-height:normal"><span style="color:black; font-size:12pt"><span style="font-family:Calibri">To debug the app and then run it, press F5 or use
+<strong>Debug</strong> &gt; <strong>Start Debugging</strong>. To run the app without debugging, press Ctrl&#43;F5 or use
+<strong>Debug</strong> &gt; <strong>Start Without Debugging</strong>. </span></span></p>
+<p style="margin:0in 0in 8pt"><span style="font-family:Calibri; font-size:small">&nbsp;</span></p>
+<p style="margin:0in 0in 8pt"><strong><span lang="EN"><br>
+</span></strong><strong><span lang="EN" style="line-height:107%; font-size:14pt"><span style="font-family:Calibri">SEE ALSO</span></span></strong></p>
+<p style="margin:0in 0in 8pt"><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327895"><span style="color:#0000ff; font-family:Times New Roman; font-size:small">Hierarchical navigation, start to finish (HTML)</span></a></span></p>
+<p style="margin:0in 0in 8pt"><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327898"><span><span style="color:#0000ff; font-family:Times New Roman; font-size:small">Hierarchical navigation, start to finish (XAML)</span></span></a></span></p>
+</h1>
+<div class="mcePaste" id="_mcePaste" style="left:-10000px; top:0px; width:1px; height:1px; overflow:hidden">
+<p style="margin:0in 0in 8pt"><span style="font-size:small"><span style="font-family:Calibri">An instructional sample app for Windows 8.1 that demonstrates the hierarchical navigation pattern and meets all basic Windows Store certification requirements. This
+ is the companion sample for the </span><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327895"><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (HTML)</span></a><span style="font-family:Calibri">
+<span>&nbsp;</span>and </span><a href="http://go.microsoft.com/fwlink/?LinkID=327898"><span><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (XAML)</span></span></a><span style="font-family:Calibri">
+<span>&nbsp;</span></span></span><span style="font-family:Calibri">topics.</span></span></p>
+<p style="margin:0in 0in 8pt"><span style="font-family:Calibri; font-size:small">Note: The sample is also available in template form through a VSIX template installer. Use the Visual Studio JavaScript or C# Hub app template or this template as a starting point
+ for your Windows Store apps.</span></p>
+<p style="margin:0in 0in 8pt"><strong><span lang="EN"><br>
+</span></strong><span style="font-family:Calibri; font-size:small">Use a hierarchical navigation pattern for your Windows Store app when its content can be separated into distinct, yet related, sections or categories with varying levels of detail. This is a
+ common and familiar pattern that works well with a relational information architecture, traversed in a preferred sequence or order.</span></p>
+<p style="margin:0in 0in 8pt"><span style="font-family:Calibri; font-size:small">Here, we cover how to create a Windows Store app using JavaScript or C# that uses the hierarchical navigation pattern and meets all basic Windows Store certification requirements,
+ from start to finish. This includes: </span></p>
+<ul style="list-style-type:disc; direction:ltr">
+<li style="color:#000000; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Image resources</strong> to expose your app throughout the operating system</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>App bars</strong> to support navigation and commanding</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Data roaming</strong> to sync your app across sessions and devices</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Settings</strong> to provide privacy, help, and other app info</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:0pt">
+<strong>Globalization</strong> to reach customers in countries and regions around the world</p>
+</li><li style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal">
+<p style="color:#000000; font-family:&quot;Calibri&quot;,&quot;sans-serif&quot;; font-size:11pt; font-style:normal; font-weight:normal; margin-top:0in; margin-bottom:8pt">
+<strong>Accessibility</strong> to help users accomplish tasks regardless of physical ability and input<span>&nbsp;
+</span>device</p>
+</li></ul>
+<p style="margin:0in 0in 8pt"><span style="font-size:small"><span style="font-family:Calibri">This sample includes everything discussed in the
+</span><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327895"><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (HTML)</span></a></span><span style="font-family:Calibri"> and
+</span><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327898"><span><span style="color:#0000ff; font-family:Times New Roman">Hierarchical navigation, start to finish (XAML)</span></span></a><span style="font-family:Calibri">
+</span></span><span style="font-family:Calibri"><span>&nbsp;</span>topics.</span></span></p>
+<p style="margin:5pt 0in 6pt; line-height:normal; page-break-after:avoid"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Operating system requirements</span></span></strong></p>
+<table border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+<tbody>
+<tr>
+<td width="77" style="padding:0in 0.5pt; border:#000000; width:0.8in; background-color:transparent">
+<p style="margin:5pt 6pt; text-align:center; line-height:normal"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Client</span></span></strong></p>
+</td>
+<td width="256" style="padding:0in 0.5pt; border:#000000; width:192pt; background-color:transparent">
+<p style="margin:5pt 6pt; line-height:normal"><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Windows 8.1
+</span></span></p>
+</td>
+</tr>
+<tr>
+<td width="77" style="padding:0in 0.5pt; border:#000000; width:0.8in; background-color:transparent">
+<p style="margin:5pt 6pt; text-align:center; line-height:normal"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Server</span></span></strong></p>
+</td>
+<td width="256" style="padding:0in 0.5pt; border:#000000; width:192pt; background-color:transparent">
+<p style="margin:5pt 6pt; line-height:normal"><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Windows Server 2012 R2
+</span></span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p style="margin:5pt 0in; line-height:normal; page-break-after:avoid"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Build the sample</span></span></strong></p>
+<p style="margin:0in 0in 8pt 42pt; line-height:normal; text-indent:-0.25in"><span style="color:black; font-size:16pt"><span><span style="font-family:Calibri">1.</span><span style="font:7pt/normal &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;
+</span></span></span><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Visual Studio 2013 Preview and select File &gt; Open &gt; Project/Solution.
+</span></span></strong></p>
+<p style="margin:0in 0in 8pt 42pt; line-height:normal; text-indent:-0.25in"><span style="color:black; font-size:16pt"><span><span style="font-family:Calibri">2.</span><span style="font:7pt/normal &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;
+</span></span></span><span style="color:black; font-size:12pt"><span style="font-family:Calibri"><span>&nbsp;</span>Go to the directory in which you unzipped the sample. Go to the directory named for the sample, and double-click the Visual Studio 2013 Solution
+ (.sln) file. </span></span></p>
+<p style="margin:0in 0in 8pt 42pt; line-height:normal; text-indent:-0.25in"><span style="color:black; font-size:16pt"><span><span style="font-family:Calibri">3.</span><span style="font:7pt/normal &quot;Times New Roman&quot;">&nbsp;&nbsp;&nbsp;
+</span></span></span><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Press F7 or use
+<strong>Build</strong> &gt; <strong>Build Solution</strong> to build the sample. </span>
+</span></p>
+<p style="margin:0in 0in 8pt; line-height:normal"><strong><span style="color:black; font-size:12pt"><span style="font-family:Calibri">Run the sample</span></span></strong></p>
+<p style="margin:5pt 0in 6pt 42pt; line-height:normal"><span style="color:black; font-size:12pt"><span style="font-family:Calibri">To debug the app and then run it, press F5 or use
+<strong>Debug</strong> &gt; <strong>Start Debugging</strong>. To run the app without debugging, press Ctrl&#43;F5 or use
+<strong>Debug</strong> &gt; <strong>Start Without Debugging</strong>. </span></span></p>
+<p style="margin:0in 0in 8pt"><span style="font-family:Calibri; font-size:small">&nbsp;</span></p>
+<p style="margin:0in 0in 8pt"><strong><span lang="EN"><br>
+</span></strong><strong><span lang="EN" style="line-height:107%; font-size:14pt"><span style="font-family:Calibri">SEE ALSO</span></span></strong></p>
+<p style="margin:0in 0in 8pt"><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327895"><span style="color:#0000ff; font-family:Times New Roman; font-size:small">Hierarchical navigation, start to finish (HTML)</span></a></span></p>
+<p style="margin:0in 0in 8pt"><span style="color:black"><a href="http://go.microsoft.com/fwlink/?LinkID=327898"><span><span style="color:#0000ff; font-family:Times New Roman; font-size:small">Hierarchical navigation, start to finish (XAML)</span></span></a></span></p>
+</div>
+
+</div>
+
+
+    </div>
+</body>
+</html>
