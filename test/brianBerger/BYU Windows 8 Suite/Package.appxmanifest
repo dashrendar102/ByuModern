@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
+  <Identity Name="e187ae03-36d0-4256-9ebb-91edfbe52d33" Publisher="CN=Brian" Version="1.0.0.0" />
+  <Properties>
+    <DisplayName>BYU Windows 8 Suite</DisplayName>
+    <PublisherDisplayName>Brian</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.3.0</OSMinVersion>
+    <OSMaxVersionTested>6.3.0</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BYU_Windows_8_Suite.App">
+      <m2:VisualElements DisplayName="BYU Windows 8 Suite" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="BYU Windows 8 Suite" ForegroundText="light" BackgroundColor="#003468">
+        <m2:DefaultTile ShortName="BYUModern">
+        </m2:DefaultTile>
+        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#003468" />
+      </m2:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>
