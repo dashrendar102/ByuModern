@@ -33,42 +33,45 @@
     <!--
     This grid acts as a root panel for the page.
   -->
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF002255" Offset="0.113"/>
+                <GradientStop Color="#FF040202"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Hub SectionHeaderClick="Hub_SectionHeaderClick">
-            <Hub.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="1"/>
-                    <GradientStop Color="#FF002255" Offset="0.43"/>
-                </LinearGradientBrush>
-            </Hub.Background>
-            <Hub.Header>
-                <!-- Back button and page title -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="80"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        Margin="-1,-1,39,0" 
-                        VerticalAlignment="Top"
-                        Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                        AutomationProperties.Name="Back"
-                        AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
-                    <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
-                        VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Grid.ColumnSpan="2" Margin="70,0,10,0" />
-                </Grid>
-            </Hub.Header>
-            <HubSection Width="780">
-                <HubSection.Background>
-                    <ImageBrush ImageSource="Assets/800px-BYUclarillon.jpg" Stretch="UniformToFill" />
-                </HubSection.Background>
-            </HubSection>
+
+        <!-- button and page title -->
+        <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                Margin="20,42,0,0" 
+                VerticalAlignment="Top"
+                Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                AutomationProperties.Name="Back"
+                AutomationProperties.AutomationId="BackButton"
+                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41"/>
+        <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
+                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="10,42,0,0" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Right" Width="80" />
+        <TextBlock x:Name="studentName" Text="Student Name" Style="{StaticResource HeaderTextBlockStyle}" 
+                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="0,42,61,0" Grid.Column="2" HorizontalAlignment="Right" Width="393" TextAlignment="Right" FontFamily="Global User Interface" />
+        <Hub SectionHeaderClick="Hub_SectionHeaderClick" Grid.Row="2" Grid.ColumnSpan="3" Background="#FF1D3355">
+            <!--<Hub.Header>
+                
+            </Hub.Header>-->
             <HubSection Width="500" x:Uid="Section1Header" Header="Classes">
                 <DataTemplate>
                     <Grid>

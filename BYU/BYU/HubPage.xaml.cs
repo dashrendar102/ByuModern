@@ -65,7 +65,7 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-4");
+            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
             this.DefaultViewModel["Section3Items"] = sampleDataGroup;
         }
 
