@@ -19,13 +19,14 @@ namespace TermWebService
             base_url += current_date.Year.ToString("0000")
                         + current_date.Month.ToString("00") 
                         + current_date.Day.ToString("00");
-            base_url += "/current_yyt";
+            base_url += "/current_yyt,semester";
 
             WebClient client = new WebClient();
             String result = client.DownloadString(base_url);
 
             JavaScriptSerializer ser = new JavaScriptSerializer();
             RootObject test = ser.Deserialize<RootObject>(result);
+            var foo = test.ControldateswsService.response;
             String term = test.ControldateswsService.response.first_date_list().year_term;
             Console.WriteLine(term);
 

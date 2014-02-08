@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using WebServiceDemos.DOs;
 
-namespace WebServiceDemos
+namespace WebServiceDemos.CalendarLand
 {
     class WebServiceDemoMain
     {
@@ -21,7 +21,7 @@ namespace WebServiceDemos
         static void Main(string[] args)
         {
             const string courseID = "D3pGY5aU0FWK"; //cs428, found by inspecting my learning suite page
-            getStudentSchedule();
+			//getStudentSchedule();
             jsonTest();
             getAssignmentsByCourseID(courseID);
 

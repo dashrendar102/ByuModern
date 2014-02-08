@@ -156,5 +156,6 @@
                 </DataTemplate>
             </HubSection>
         </Hub>
+        <!--<Button Content="Run Brian's Demo Code" HorizontalAlignment="Left" Margin="1127,36,0,0" VerticalAlignment="Top" Click="RunBrianDemo"/>-->
     </Grid>
 </Page>

@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using BergerClassLibrary.WebServices;
 
 // The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=321224
 
@@ -116,5 +117,17 @@ namespace BYU
         }
 
         #endregion
+
+        //private async void RunBrianDemo(object sender, RoutedEventArgs e)
+        //{
+        //    string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID, "D3pGY5aU0FWK");
+        //    BYUWebServiceHelper wsHelper = new BYUWebServiceHelper("fregley", "DrR25178/*/y/U");
+        //    var response = wsHelper.sendAuthenticatedGETRequest(url);
+        //    string prettyJson = JsonUtils.prettifyJson(response);
+        //    Windows.UI.Popups.MessageDialog messageDialog =
+        //        new Windows.UI.Popups.MessageDialog(prettyJson);
+        //    //wsHelper.
+        //    await messageDialog.ShowAsync();
+        //}
     }
 }

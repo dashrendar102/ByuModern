@@ -87,6 +87,13 @@ namespace BYU
             this.Frame.Navigate(typeof(ItemPage), itemId);
         }
 
+        private async void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.UI.Popups.MessageDialog messageDialog =
+                new Windows.UI.Popups.MessageDialog("Thank you for choosing banana.");
+            await messageDialog.ShowAsync();
+        }
+
         #region NavigationHelper registration
 
         /// The methods provided in this section are simply used to allow
