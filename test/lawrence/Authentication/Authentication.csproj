@@ -46,6 +46,8 @@
     <Compile Include="ClassSchedule.cs" />
     <Compile Include="ClassScheduleRequest.cs" />
     <Compile Include="ClassScheduleResponse.cs" />
+    <Compile Include="LearningSuiteCourse\Course.cs" />
+    <Compile Include="LearningSuiteCourse\Section.cs" />
     <Compile Include="MainTest.cs" />
     <Compile Include="Nonce.cs" />
     <Compile Include="NonceAuthentication.cs" />
