@@ -37,6 +37,8 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <Button Content="Banana" Click="Button_Click" Margin="1215,75,0,27"/>
+
         <!-- Horizontal scrolling grid -->
         <GridView
             x:Name="itemGridView"

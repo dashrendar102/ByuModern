@@ -166,7 +166,10 @@
                 </DataTemplate>
             </HubSection>
         </Hub>
+
         <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="354,362,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
+
+        <!--<Button Content="Run Brian's Demo Code" HorizontalAlignment="Left" Margin="1127,36,0,0" VerticalAlignment="Top" Click="RunBrianDemo"/>-->
 
     </Grid>
 </Page>
