@@ -50,27 +50,22 @@
   <ItemGroup>
     <Compile Include="BYUWebServiceHelper.cs" />
     <Compile Include="BYUWebServiceURLs.cs" />
-    <Compile Include="Calendar.cs" />
+    <Compile Include="CalendarLand\Calendar.cs" />
+    <Compile Include="CalendarLand\Constants.cs" />
     <Compile Include="CamelCaseNameMatchingConverter.cs" />
-    <Compile Include="NodaDateRange.cs" />
+    <Compile Include="CalendarLand\NodaDateRange.cs" />
     <Compile Include="DOs\CourseInfo.cs" />
     <Compile Include="JsonUtils.cs" />
-    <Compile Include="RecurringScheduledEvent.cs" />
-    <Compile Include="ScheduledEvent.cs" />
-    <Compile Include="TimeRange.cs" />
+    <Compile Include="CalendarLand\RecurringScheduledEvent.cs" />
+    <Compile Include="CalendarLand\ScheduledEvent.cs" />
+    <Compile Include="CalendarLand\TimeRange.cs" />
     <Compile Include="WebServiceDemoMain.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WeeklyRecurrenceInfo.cs" />
+    <Compile Include="CalendarLand\WeeklyRecurrenceInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\lawrence\Authentication\Authentication.csproj">
-      <Project>{4152b248-4a54-414e-9cf6-d4c9b7f85c2c}</Project>
-      <Name>Authentication</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -9,6 +9,8 @@
         <!-- Application-specific resources -->
 
         <x:String x:Key="AppName">BYU</x:String>
+        <Color x:Key="BYU_BLUE">#FF002255</Color>
+        <Color x:Key="BYU_TAN">#FFC5AF7D</Color>
 
     </Application.Resources>
 </Application>
