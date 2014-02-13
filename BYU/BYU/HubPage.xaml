@@ -74,7 +74,7 @@
             </Hub.Header>-->
             <HubSection Width="300" x:Uid="FeaturedHeader" Header="Featured">
             </HubSection>
-            <HubSection Width="413" x:Uid="ClassesHeader" Header="My Classes">
+            <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes">
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -102,7 +102,7 @@
                     </Grid>
                 </DataTemplate>
             </HubSection>
-            <HubSection x:Uid="MapHeader" Header="Where on campus" Padding="40,40,40,32" Width="401">
+            <HubSection x:Uid="MapHeader" Header="Where on campus" Padding="40,40,40,32" Width="428">
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -113,10 +113,18 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Row="0" Grid.Column="0" Source="Assets/campus_buildings.jpg" Margin="0,0,20,20"/>
-                        <Image Grid.Row="0" Grid.Column="1" Source="Assets/blank_map_tile.jpg" Margin="20,0,0,20" />
-                        <Image Grid.Row="1" Grid.Column="0" Source="Assets/blank_map_tile.jpg" Margin="0,20,20,0"/>
-                        <Image Grid.Row="1" Grid.Column="1" Source="Assets/parking_lots.jpg" Margin="20,20,0,0" />
+                        <Button Grid.Row="0" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
+                            <Image Source="Assets/campus_buildings.jpg"/>
+                        </Button>
+                        <Button Grid.Row="0" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
+                            <Image Source="Assets/blank_map_tile.jpg"/>
+                        </Button>
+                        <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
+                            <Image Source="Assets/blank_map_tile.jpg"/>
+                        </Button>
+                        <Button Grid.Row="1" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
+                            <Image Source="Assets/parking_lots.jpg"/>
+                        </Button>
                     </Grid>
                 </DataTemplate>
             </HubSection>
