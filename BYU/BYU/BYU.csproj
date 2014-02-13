@@ -113,6 +113,9 @@
     <Compile Include="HubPage.xaml.cs">
       <DependentUpon>HubPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MapPage.xaml.cs">
+      <DependentUpon>MapPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SectionPage.xaml.cs">
       <DependentUpon>SectionPage.xaml</DependentUpon>
     </Compile>
@@ -130,6 +133,10 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Page Include="MapPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <None Include="Common\ReadMe.txt" />
     <None Include="BYU_TemporaryKey.pfx" />
     <None Include="packages.config" />
@@ -137,12 +144,16 @@
       <SubType>Designer</SubType>
     </PRIResource>
     <Content Include="Assets\800px-BYUclarillon.jpg" />
+    <Content Include="Assets\blank_map_tile.jpg" />
+    <Content Include="Assets\campus_buildings.jpg" />
+    <Content Include="Assets\class_demo.jpg" />
+    <Content Include="Assets\parking_lots.jpg" />
     <Content Include="DataModel\SampleData.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
-    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
