@@ -147,9 +147,15 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
-                            <Image Source="Assets/MediumGray.png" Grid.Row="1" Stretch="Fill"/>
-                            <Image Source="Assets/MediumGray.png" Grid.Row="1" Grid.Column="2" Stretch="Fill"/>
-                            <Image Source="Assets/MediumGray.png" Grid.Row="1" Grid.Column="4" Stretch="Fill"/>
+                            <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
+                                <Image Source="Assets/campus_buildings.jpg"/>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="MapButton_Clicked">
+                                <Image Source="Assets/blank_map_tile.jpg"/>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="4" BorderThickness="0" Click="MapButton_Clicked">
+                                <Image Source="Assets/parking_lots.jpg"/>
+                            </Button>
                         </Grid>
                     </StackPanel>
                 </DataTemplate>
