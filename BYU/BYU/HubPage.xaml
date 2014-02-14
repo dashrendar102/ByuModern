@@ -101,8 +101,8 @@
                         <Button Grid.Row="3" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
                             <Image Source="Assets/class_demo.jpg"/>
                         </Button>
-                        <Button Grid.Row="4" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
+                        <Button Grid.Row="4" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="BergerTest">
+                            Brian Berger Test
                         </Button>
                     </Grid>
                 </DataTemplate>

@@ -133,7 +133,6 @@
       <SubType>Designer</SubType>
     </Page>
     <None Include="Common\ReadMe.txt" />
-    <None Include="BYU_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <PRIResource Include="Strings\en-US\Resources.resw">
       <SubType>Designer</SubType>

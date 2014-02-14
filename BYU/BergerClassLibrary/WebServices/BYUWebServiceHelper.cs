@@ -32,7 +32,7 @@ namespace BergerClassLibrary.WebServices
             try
             {
                 HttpRequestMessage foo = new HttpRequestMessage(HttpMethod.Get, url);
-                foo.Headers.Add("Authorization", nonceHeader);
+                foo.Headers.TryAddWithoutValidation("Authorization", nonceHeader);
                 if (!string.IsNullOrEmpty(acceptString))
                 {
                     foo.Headers.Add("Accept", acceptString);

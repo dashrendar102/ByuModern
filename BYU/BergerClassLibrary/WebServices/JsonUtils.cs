@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BergerClassLibrary.Extensions;
 
 namespace BergerClassLibrary.WebServices
 {
-    public sealed class JsonUtils
+    public class JsonUtils
     {
         internal static string prettifyJson(string unformattedJson)
         {
@@ -20,6 +22,11 @@ namespace BergerClassLibrary.WebServices
             object parsedObj = JsonConvert.DeserializeObject(unformattedJson);
             string prettyJsonStr = JsonConvert.SerializeObject(parsedObj, Formatting.Indented);
             return prettyJsonStr;
+        }
+
+        internal static string prettifyJson(HttpResponseMessage response)
+        {
+            return prettifyJson(response.GetContentAsString());
         }
 
         internal static string prettifyJson(WebResponse response)

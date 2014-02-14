@@ -20,7 +20,7 @@ namespace BYUAuthentication
         private const string NONCE_URL = "https://ws.byu.edu/authentication/services/rest/v1/hmac/nonce/";
         private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
 
-        private static ManualResetEvent allDone = new ManualResetEvent(false);
+        private static ManualResetEvent asyncWaiter = new ManualResetEvent(false);
         private static Stream responseStream;
 
         public static string GetNonceAuthHeader(string netId, string password, int timeout)
@@ -137,9 +137,10 @@ namespace BYUAuthentication
                 //}
             }
             
-            allDone.WaitOne();
+            asyncWaiter.WaitOne();
             var respStreamTask = request.BeginGetResponse(GetResponseStreamCallback, request);
-            allDone.WaitOne();
+            asyncWaiter.Reset();
+            asyncWaiter.WaitOne();
             return responseStream;
         }
 
@@ -147,7 +148,7 @@ namespace BYUAuthentication
         {
             HttpWebRequest request = (HttpWebRequest) asynchronousResult.AsyncState;
             responseStream = request.EndGetResponse(asynchronousResult).GetResponseStream();
-            allDone.Set();
+            asyncWaiter.Set();
         }
 
         private static void GetRequestStreamCallback(IAsyncResult asynchronousResult)
@@ -162,7 +163,7 @@ namespace BYUAuthentication
             {
                 writer.Write(parameters);
             }
-            allDone.Set();
+            asyncWaiter.Set();
         }
     }
 }
