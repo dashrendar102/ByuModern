@@ -1,18 +1,40 @@
-﻿//using System;
+﻿using System.IO;
+//using System;
 //using System.Collections.Generic;
 //using System.IO;
-//using System.Linq;
-//using System.Net;
-//using System.Runtime.Serialization.Json;
-//using System.Text;
-//using System.Threading.Tasks;
+using System.Linq;
+using System.Net;
+using System.Runtime.Serialization.Json;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace Authentication
-//{
-//    public class MainTest
-//    {
-//        public static void Main()
-//        {
+namespace BYUAuthentication
+{
+    public class MainTest
+    {
+        public static string MainRun(string netId, string password)
+        {
+            WebServiceSession session = NonceAuthentication.GetWsSession(netId, password, 5);
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/coursebuilder/course/personEnrolled/" + session.personId + "/period/20141");
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(LearningSuiteCourse[]));
+            LearningSuiteCourse[] courses = (LearningSuiteCourse[])serializer.ReadObject(response.GetResponseStream());
+
+            string toReturn = "";
+
+            foreach (LearningSuiteCourse course in courses)
+            {
+                toReturn += course.id + " ";
+            }
+
+            return toReturn.TrimEnd();
+
 //            Console.Write("Enter NetID: ");
 //            string username = Console.ReadLine();
 
@@ -71,6 +93,6 @@
 //            {
 //                Console.WriteLine("An error ocurred: " + ex.Message);
 //            }*/
-//        }
-//    }
-//}
+        }
+    }
+}
