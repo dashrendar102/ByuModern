@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BYUAuthentication
+namespace AuthenticationLib.LearningSuite
 {
     [DataContract]
     public class LearningSuiteSection

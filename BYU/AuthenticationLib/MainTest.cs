@@ -7,6 +7,7 @@ using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using AuthenticationLib.LearningSuite;
 
 namespace BYUAuthentication
 {
@@ -30,10 +31,177 @@ namespace BYUAuthentication
 
             foreach (LearningSuiteCourse course in courses)
             {
-                toReturn += course.id + " ";
+                Assignment[] assignments = getAssignments(course.id, session);
+                CalendarItem[] calendarItems = getCalendarItems(course.id, session);
+                ContentPage[] contentItems = getContent(course.id, session);
+                Announcement[] announcements = getAnnouncements(course.id, session);
+                Instructor[] instructors = getInstructors(course.id, session);
+                Material[] materials = getMaterials(course.id, session);
+                Syllabus[] syllabi = getSyllabi(course.id, session);
+                SystemAnnouncement sysAnnouncement = getSystemAnnouncement(session);
+
+                /*foreach (Assignment assignment in assignments)
+                {
+                    toReturn += assignment.id + " ";
+                }
+
+                toReturn += "END_ASSIGNMENTS_START_CALENDAR ";
+                
+                foreach(CalendarItem calItem in calendarItems)
+                {
+                    toReturn += calItem.id + " ";
+                }
+
+                foreach(ContentPage page in contentItems)
+                {
+                    toReturn += page.id + " ";
+                }
+                
+                foreach(Announcement announcement in announcements)
+                {
+                    toReturn += announcement.id + " ";
+                }
+                
+                foreach(Instructor instructor in instructors)
+                {
+                    toReturn += instructor.id + " ";
+                }
+                
+                foreach(Material material in materials)
+                {
+                    toReturn += material.id + " ";
+                }
+                
+                foreach(Syllabus syllabus in syllabi)
+                {
+                    toReturn += syllabus.id + " ";
+                }
+                */
+                toReturn += sysAnnouncement.id;
             }
 
             return toReturn.TrimEnd();
+        }
+
+        public static SystemAnnouncement getSystemAnnouncement(WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/announcements/sysannouncement/student-anno");
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(SystemAnnouncement));
+            SystemAnnouncement announcement = (SystemAnnouncement)serializer.ReadObject(response.GetResponseStream());
+
+            return announcement;
+        }
+
+        public static Syllabus[] getSyllabi(string courseId, WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/syllabus/courseID/" + courseId);
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Syllabus[]));
+            Syllabus[] syllabi = (Syllabus[])serializer.ReadObject(response.GetResponseStream());
+
+            return syllabi;
+        }
+
+        public static Material[] getMaterials(string courseId, WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/material/courseID/" + courseId + "/includeBooklist/true");
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Material[]));
+            Material[] materials = (Material[])serializer.ReadObject(response.GetResponseStream());
+
+            return materials;
+        }
+
+        public static Instructor[] getInstructors(string courseId, WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/coursebuilder/instructor-information/courseID/" + courseId);
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Instructor[]));
+            Instructor[] instructors = (Instructor[])serializer.ReadObject(response.GetResponseStream());
+
+            return instructors;
+        }
+
+        public static Announcement[] getAnnouncements(string courseId, WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/announcements/announcement/courseID/" + courseId);
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Announcement[]));
+            Announcement[] announcements = (Announcement[])serializer.ReadObject(response.GetResponseStream());
+
+            return announcements;
+        }
+
+        public static ContentPage[] getContent(string courseId, WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/pages/page-and-content/courseID/" + courseId);
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ContentPage[]));
+            ContentPage[] contentPages = (ContentPage[])serializer.ReadObject(response.GetResponseStream());
+
+            return contentPages;
+        }
+
+        public static Assignment[] getAssignments(string courseId, WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/assignments/assignment/courseID/" + courseId);
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Assignment[]));
+            Assignment[] assignments = (Assignment[])serializer.ReadObject(response.GetResponseStream());
+
+            return assignments;
+        }
+
+        public static CalendarItem[] getCalendarItems(string courseId, WebServiceSession session)
+        {
+            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/calendar/aggregate/courseID/" + courseId);
+            request.Headers["Authorization"] = nonceHeader;
+
+            Task<WebResponse> responseTask = request.GetResponseAsync();
+            responseTask.Wait();
+            WebResponse response = responseTask.Result;
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(CalendarItem[]));
+            CalendarItem[] calendarItems = (CalendarItem[])serializer.ReadObject(response.GetResponseStream());
+
+            return calendarItems;
+        }
 
 //            Console.Write("Enter NetID: ");
 //            string username = Console.ReadLine();
@@ -93,6 +261,6 @@ namespace BYUAuthentication
 //            {
 //                Console.WriteLine("An error ocurred: " + ex.Message);
 //            }*/
-        }
+//      }
     }
 }
