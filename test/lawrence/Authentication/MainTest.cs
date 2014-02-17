@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Authentication.LearningSuiteCourse;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,7 +26,8 @@ namespace Authentication
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ws.byu.edu/rest/v1.0/academic/registration/studentschedule/" + session.personId + "/20141");
+                //HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://ws.byu.edu/rest/v1.0/academic/registration/studentschedule/" + session.personId + "/20141");
+                HttpWebRequest request = WebRequest.CreateHttp("https://lsapi.byu.edu/coursebuilder/course/personEnrolled/" + session.personId + "/period/20141");
                 request.Method = "GET";
                 //request.Accept = "application/json";
                 request.Headers.Add("Authorization", nonceHeader);
@@ -33,18 +35,27 @@ namespace Authentication
                 Stream response = request.GetResponse().GetResponseStream();
                 //string testResult = new StreamReader(response).ReadToEnd();
 
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ClassSchedule));
-                ClassSchedule schedule = (ClassSchedule)serializer.ReadObject(response);
-                Console.WriteLine("Email:" + schedule.WeeklySchedService.response.email_address);
+                //DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(ClassSchedule));
+                //ClassSchedule schedule = (ClassSchedule)serializer.ReadObject(response);
+                //Console.WriteLine("Email:" + schedule.WeeklySchedService.response.email_address);
 
-                
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Course[]));
+                Course[] courses = (Course[])serializer.ReadObject(response);
+
+                Console.WriteLine(courses.Count());
             }
             catch (WebException ex)
             {
                 Stream errorStream = ex.Response.GetResponseStream();
-                StreamReader streamReader = new StreamReader(errorStream);
-
-                Console.WriteLine(streamReader.ReadToEnd());
+                using (StreamReader streamReader = new StreamReader(errorStream))
+                {
+                    string responseText = streamReader.ReadToEnd();
+                    Console.WriteLine(responseText);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
             Console.ReadLine();
             
