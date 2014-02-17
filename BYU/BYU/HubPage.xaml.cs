@@ -95,7 +95,7 @@ namespace BYU
             // Navigate to the appropriate destination page, configuring the new page
             // by passing required information as a navigation parameter
             var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ItemPage), itemId);
+            this.Frame.Navigate(typeof(ClassesPage), itemId);
         }
         #region NavigationHelper registration
 
@@ -123,7 +123,7 @@ namespace BYU
 
         private void ClassButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ItemPage));
+            this.Frame.Navigate(typeof(ClassesPage));
         }
 
         private void MapButton_Clicked(object sender, RoutedEventArgs e)

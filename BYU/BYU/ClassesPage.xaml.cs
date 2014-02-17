@@ -24,7 +24,7 @@ namespace BYU
     /// <summary>
     /// A page that displays details for a single item within a group.
     /// </summary>
-    public sealed partial class ItemPage : Page
+    public sealed partial class ClassesPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -46,7 +46,7 @@ namespace BYU
             get { return this.defaultViewModel; }
         }
 
-        public ItemPage()
+        public ClassesPage()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
@@ -91,6 +91,14 @@ namespace BYU
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedFrom(e);
+        }
+
+        private void ClassClick(object sender, RoutedEventArgs e)
+        {
+            selectedClassContent.ScrollIntoView(selectedClassContent);
+            //ScrollIntoViewAlignment
+            Button test = (Button)sender;
+            selectedClassTitle.Text = (String)test.Content;
         }
 
         #endregion
