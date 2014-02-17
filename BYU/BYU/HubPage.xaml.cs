@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using BergerClassLibrary.WebServices;
 using BergerClassLibrary;
+using BYU.BergerDemos;
 
 // The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=321224
 
@@ -130,10 +131,13 @@ namespace BYU
             this.Frame.Navigate(typeof(MapPage));
         }
 
-        private void BergerTest(object sender, RoutedEventArgs e)
+        private void BergerHyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
-            Demo demo = new Demo();
-            demo.doDemoStuff();
+            //Demo demo = new Demo();
+            //demo.doDemoStuff();
+            this.Frame.Navigate(typeof(BergerDemoLand));
         }
+
+
     }
 }

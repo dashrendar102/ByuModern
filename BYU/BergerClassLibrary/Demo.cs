@@ -2,6 +2,7 @@
 using BergerClassLibrary.Extensions;
 using BergerClassLibrary.WebServices;
 using BergerClassLibrary.WebServices.DOs;
+using Microsoft.Live;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,14 +19,33 @@ namespace BergerClassLibrary
         private const string pwd = "";
         private const string yearTerm = "20141";
 
-        public string doDemoStuff()
+        public async void doDemoStuff()
         {
             const string courseID = "D3pGY5aU0FWK"; //cs428, found by inspecting my learning suite page
-            getStudentSchedule();
-            jsonTest();
-            getAssignmentsByCourseID(courseID);
+            //getStudentSchedule();
+            //jsonTest();
+            //getAssignmentsByCourseID(courseID);
 
-            return "demo done";
+            //return "demo done";
+        }
+
+        public async Task<LiveConnectSessionStatus> getCalendarPermissions()
+        {
+            try
+            {
+                LiveAuthClient auth = new LiveAuthClient();
+                LiveLoginResult loginResult = await auth.LoginAsync(new string[] { "wl.calendars_update" });
+                if (loginResult.Status == LiveConnectSessionStatus.Connected)
+                {
+                    //this.infoTextBlock.Text = "Signed in.";
+                }
+                return loginResult.Status;
+            }
+            catch (LiveAuthException exception)
+            {
+                //this.infoTextBlock.Text = "Error signing in: " + exception.Message;
+                return LiveConnectSessionStatus.NotConnected;
+            }
         }
 
         private void getAssignmentsByCourseID(string courseID)

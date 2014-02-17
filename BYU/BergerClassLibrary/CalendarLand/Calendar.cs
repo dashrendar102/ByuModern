@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NodaTime;
 using BergerClassLibrary.WebServices.DOs;
+using Microsoft.Live;
 
 namespace BergerClassLibrary.CalendarLand
 {
@@ -26,13 +27,13 @@ namespace BergerClassLibrary.CalendarLand
         {
             //try
             //{
-                //LiveConnectClient liveClient = new LiveConnectClient(this.session);
-                var calendar = new Dictionary<string, object>();
-                calendar.Add("name", this.Name);
-                calendar.Add("description", this.Description);
-                //LiveOperationResult operationResult = await liveClient.PostAsync("me/calendars", calendar);
-                //dynamic result = operationResult.Result;
-                //this.infoTextBlock.Text = string.Join(" ", "Created calendar:", result.name, "ID:", result.id);
+            //    LiveConnectClient liveClient = new LiveConnectClient(this.session);
+            //    var calendar = new Dictionary<string, object>();
+            //    calendar.Add("name", this.Name);
+            //    calendar.Add("description", this.Description);
+            //    LiveOperationResult operationResult = await liveClient.PostAsync("me/calendars", calendar);
+            //    dynamic result = operationResult.Result;
+            //    this.infoTextBlock.Text = string.Join(" ", "Created calendar:", result.name, "ID:", result.id);
             //}
             //catch (LiveConnectException exception)
             //{
