@@ -13,7 +13,7 @@ namespace BergerClassLibrary.WebServices
 {
     public class JsonUtils
     {
-        internal static string prettifyJson(string unformattedJson)
+        public static string prettifyJson(string unformattedJson)
         {
             if (string.IsNullOrEmpty(unformattedJson))
             {
@@ -24,12 +24,12 @@ namespace BergerClassLibrary.WebServices
             return prettyJsonStr;
         }
 
-        internal static string prettifyJson(HttpResponseMessage response)
+        public static string prettifyJson(HttpResponseMessage response)
         {
             return prettifyJson(response.GetContentAsString());
         }
 
-        internal static string prettifyJson(WebResponse response)
+        public static string prettifyJson(WebResponse response)
         {
             if (response.ContentType.Contains("application/json"))
             {

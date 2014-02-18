@@ -10,22 +10,27 @@ using System.Threading.Tasks;
 
 namespace BergerClassLibrary.WebServices
 {
-    public sealed class BYUWebServiceHelper
+    public class BYUWebServiceHelper
     {
         WebServiceSession session;
         private const int timeout = 5;
 
         public BYUWebServiceHelper(string netID, string password)
         {
+            this.NetID = netID;
+            this.Password = password;
             this.session = NonceAuthentication.GetWsSession(netID, password, timeout);
         }
 
-        internal HttpResponseMessage sendAuthenticatedGETRequest(string url)
+        public string NetID { get; set; }
+        public string Password { get; set; }
+
+        public HttpResponseMessage sendAuthenticatedGETRequest(string url)
         {
             return sendAuthenticatedGETRequest(url, null);
         }
 
-        internal HttpResponseMessage sendAuthenticatedGETRequest(string url, string acceptString)
+        public HttpResponseMessage sendAuthenticatedGETRequest(string url, string acceptString)
         {
             string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
 

@@ -48,10 +48,11 @@
         </Grid>
         <TextBlock HorizontalAlignment="Left" Margin="105,56,0,0" Grid.Row="1" TextWrapping="Wrap" Name="LoginStatusTB" Text="Status: " VerticalAlignment="Top"/>
         <TextBox HorizontalAlignment="Left" Margin="179,92,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" Name="UsernameTB" VerticalAlignment="Top"/>
+        <PasswordBox HorizontalAlignment="Left" Margin="179,149,0,0" Grid.Row="1" Name="PasswordInput" VerticalAlignment="Top"/>
         <Button Content="Login" Name="LoginButton" HorizontalAlignment="Left" Margin="102,199,0,0" Grid.Row="1" VerticalAlignment="Top" Click="LoginButton_Click"/>
         <Button Content="Logout" Name="LogoutButton" HorizontalAlignment="Left" Margin="102,269,0,0" Grid.Row="1" VerticalAlignment="Top" Click="LogoutButton_Click"/>
-        <PasswordBox HorizontalAlignment="Left" Margin="179,149,0,0" Grid.Row="1" Name="PasswordInput" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="105,92,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="105,149,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top"/>
+        <Image HorizontalAlignment="Left" Height="160" Margin="452,62,0,0" Grid.Row="1" VerticalAlignment="Top" Width="191" Name="UserPhoto"/>
     </Grid>
 </Page>

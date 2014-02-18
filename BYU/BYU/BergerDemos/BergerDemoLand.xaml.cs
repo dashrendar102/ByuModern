@@ -26,7 +26,7 @@ namespace BYU.BergerDemos
     public sealed partial class BergerDemoLand : Page
     {
 
-        public async void BYUAuthDemo_Click(Object sender, RoutedEventArgs e)
+        public void BYUAuthDemo_Click(Object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(AuthDemoPage));
         }

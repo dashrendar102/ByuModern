@@ -112,12 +112,15 @@
     <Compile Include="Demo.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\FileHelper.cs" />
     <Compile Include="WebServices\BYUWebServiceHelper.cs" />
     <Compile Include="WebServices\BYUWebServiceURLs.cs" />
     <Compile Include="WebServices\CamelCaseNameMatchingConverter.cs" />
     <Compile Include="WebServices\DOs\ClassScheduleDOs.cs" />
     <Compile Include="WebServices\DOs\CourseInfo.cs" />
     <Compile Include="WebServices\JsonUtils.cs" />
+    <Compile Include="WebServices\DOs\UserInformation.cs" />
+    <Compile Include="WebServices\AuthenticatedWebServiceFacade.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

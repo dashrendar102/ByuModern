@@ -19,9 +19,9 @@ namespace BergerClassLibrary
         private const string pwd = "";
         private const string yearTerm = "20141";
 
-        public async void doDemoStuff()
+        public void doDemoStuff()
         {
-            const string courseID = "D3pGY5aU0FWK"; //cs428, found by inspecting my learning suite page
+            //const string courseID = "D3pGY5aU0FWK"; //cs428, found by inspecting my learning suite page
             //getStudentSchedule();
             //jsonTest();
             //getAssignmentsByCourseID(courseID);
@@ -41,7 +41,7 @@ namespace BergerClassLibrary
                 }
                 return loginResult.Status;
             }
-            catch (LiveAuthException exception)
+            catch (LiveAuthException)
             {
                 //this.infoTextBlock.Text = "Error signing in: " + exception.Message;
                 return LiveConnectSessionStatus.NotConnected;

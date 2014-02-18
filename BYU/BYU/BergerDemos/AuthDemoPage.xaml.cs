@@ -1,19 +1,15 @@
-﻿using BYU.Common;
+﻿using BergerClassLibrary.Storage;
+using BergerClassLibrary.WebServices;
+using BergerClassLibrary.WebServices.DOs.UserInformation;
+using BYU.Common;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
 using Windows.Security.Credentials;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
@@ -25,9 +21,13 @@ namespace BYU.BergerDemos
     /// </summary>
     public sealed partial class AuthDemoPage : Page
     {
-
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        private const string userPhotoName = "userPhoto.jpg";
+        private Uri userPhotoUri;
+
+        UserInformation userInfo;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -69,6 +69,7 @@ namespace BYU.BergerDemos
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             SetElementEnableStatuses();
+            LoadUserPhoto();
         }
 
         private void SetElementEnableStatuses()
@@ -77,7 +78,14 @@ namespace BYU.BergerDemos
             bool loggedIn = (credential != null);
             if (loggedIn)
             {
-                this.LoginStatusTB.Text = "Logged in as: " + credential.UserName;
+                if (userInfo != null)
+                {
+                    this.LoginStatusTB.Text = "Logged in as: " + userInfo.names.preferred_name;
+                }
+                else
+                {
+                    this.LoginStatusTB.Text = "Logged in as: " + credential.UserName;
+                }
             }
             else
             {
@@ -126,7 +134,7 @@ namespace BYU.BergerDemos
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CheckCredentials())
+            if (await CheckCredentialsGetUserInfo())
             {
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
@@ -141,12 +149,33 @@ namespace BYU.BergerDemos
             SetElementEnableStatuses();
         }
 
-        private bool CheckCredentials()
+        private async Task<bool> CheckCredentialsGetUserInfo()
         {
             var uname = UsernameTB.Text;
             var password = PasswordInput.Password;
 
+            AuthenticatedWebServiceFacade wsFacade = new AuthenticatedWebServiceFacade(uname, password);
+            if (!wsFacade.AuthenticationIsValid)
+            {
+                return false;
+            }
+            this.userInfo = wsFacade.LoadUserInformation();
+            userPhotoUri = await wsFacade.GetPhoto(userPhotoName);
+            LoadUserPhoto();
+
             return true;
+        }
+
+        private void LoadUserPhoto()
+        {
+            if (userPhotoUri != null)
+            {
+                UserPhoto.Source = new BitmapImage(userPhotoUri);
+            }
+            else
+            {
+                UserPhoto.Source = null;
+            }
         }
 
         private PasswordCredential GetBYUCredentials()
@@ -157,7 +186,7 @@ namespace BYU.BergerDemos
                 var credentialList = vault.FindAllByResource("byu.edu");
                 return credentialList.FirstOrDefault();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
@@ -166,10 +195,14 @@ namespace BYU.BergerDemos
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             var credential = GetBYUCredentials();
+            this.userInfo = null;
             if (credential != null)
             {
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Remove(credential);
+                FileHelper.DeleteFile(userPhotoName);
+                userPhotoUri = null;
+                LoadUserPhoto();
             }
             SetElementEnableStatuses();
         }

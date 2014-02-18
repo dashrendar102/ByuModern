@@ -20,7 +20,6 @@ namespace BYUAuthentication
         private const string NONCE_URL = "https://ws.byu.edu/authentication/services/rest/v1/hmac/nonce/";
         private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
 
-        private static ManualResetEvent asyncWaiter = new ManualResetEvent(false);
         private static Stream responseStream;
 
         public static string GetNonceAuthHeader(string netId, string password, int timeout)
@@ -34,11 +33,11 @@ namespace BYUAuthentication
             {
                 session = (WebServiceSession)serializer.ReadObject(responseStream);
             }
-            //responseStream.Close();
 
             serializer = new DataContractJsonSerializer(typeof(Nonce));
             Nonce nonce;
-            using (responseStream = SendPost(NONCE_URL + session.apiKey, null)) {
+            using (responseStream = SendPost(NONCE_URL + session.apiKey, null))
+            {
                 nonce = (Nonce)serializer.ReadObject(responseStream);
             }
 
@@ -109,7 +108,7 @@ namespace BYUAuthentication
         {
             byte[] key = Encoding.UTF8.GetBytes(sharedSecret);
             byte[] value = Encoding.UTF8.GetBytes(nonceValue);
-            
+
             //HMACSHA512 hasher = new HMACSHA512(key);
 
 
@@ -122,48 +121,48 @@ namespace BYUAuthentication
         public static Stream SendPost(string url, string parameters)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            ManualResetEvent waiter = new ManualResetEvent(false);
+
             request.Method = "POST";
             request.Accept = "application/json";
 
             if (parameters != null)
             {
-                //request.
+                var getReqStreamTask = request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), Tuple.Create(parameters, request, waiter));
 
-                var getReqStreamTask = request.BeginGetRequestStream(new AsyncCallback(GetRequestStreamCallback), Tuple.Create(parameters, request));
-                
-                //using (var writer = new StreamWriter(request.GetRequestStream()))
-                //{
-                //    writer.Write(parameters);
-                //}
+                waiter.WaitOne();
             }
-            
-            asyncWaiter.WaitOne();
-            var respStreamTask = request.BeginGetResponse(GetResponseStreamCallback, request);
-            asyncWaiter.Reset();
-            asyncWaiter.WaitOne();
+            waiter.Reset();
+            var respStreamTask = request.BeginGetResponse(GetResponseStreamCallback, Tuple.Create(request, waiter));
+            waiter.WaitOne();
             return responseStream;
         }
 
         private static void GetResponseStreamCallback(IAsyncResult asynchronousResult)
         {
-            HttpWebRequest request = (HttpWebRequest) asynchronousResult.AsyncState;
+            var paramTuple = (Tuple<HttpWebRequest, ManualResetEvent>)asynchronousResult.AsyncState;
+            var request = paramTuple.Item1;
+            var waiter = paramTuple.Item2;
             responseStream = request.EndGetResponse(asynchronousResult).GetResponseStream();
-            asyncWaiter.Set();
+            waiter.Set();
         }
 
         private static void GetRequestStreamCallback(IAsyncResult asynchronousResult)
         {
-            var paramTuple = (Tuple<String, HttpWebRequest>) asynchronousResult.AsyncState;
+            var paramTuple = (Tuple<String, HttpWebRequest, ManualResetEvent>)asynchronousResult.AsyncState;
             String parameters = paramTuple.Item1;
             HttpWebRequest request = paramTuple.Item2;
+            var waiter = paramTuple.Item3;
 
             // End the operation
-            Stream postStream = request.EndGetRequestStream(asynchronousResult);
-            using (var writer = new StreamWriter(postStream))
+            using (Stream postStream = request.EndGetRequestStream(asynchronousResult))
             {
-                writer.Write(parameters);
+                using (var writer = new StreamWriter(postStream))
+                {
+                    writer.Write(parameters);
+                }
             }
-            asyncWaiter.Set();
+            waiter.Set();
         }
     }
 }
