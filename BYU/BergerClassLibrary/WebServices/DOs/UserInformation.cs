@@ -42,7 +42,7 @@ namespace BergerClassLibrary.WebServices.DOs.UserInformation
         public string byu_id { get; set; }
         public string byu_id_issue_number { get; set; }
         public string net_id { get; set; }
-        public string ssn { get; set; }
+        //public string ssn { get; set; } we don't need this and there's no reason to store it
     }
 
     public class Names

@@ -9,6 +9,7 @@ using Windows.Security.Credentials;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -53,6 +54,11 @@ namespace BYU.BergerDemos
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+            //Binding b = new Binding();
+            //b.Mode = BindingMode.OneWay;
+            //b.Mode = BindingMode.OneWay;
+            //b.Source = isBusy;
+            //this.ProgressBar.SetBinding(ProgressBar.IsIndeterminateProperty, b);
         }
 
         /// <summary>
@@ -134,8 +140,24 @@ namespace BYU.BergerDemos
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if (await CheckCredentialsGetUserInfo())
+            ProgressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
+            LoginButton.IsEnabled = false;
+            UsernameTB.IsEnabled = false;
+            PasswordInput.IsEnabled = false;
+
+            var userName = UsernameTB.Text;
+            var password = PasswordInput.Password;
+
+            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
+            var wsFacade = await Task.Run(() =>
             {
+                return new AuthenticatedWebServiceFacade(userName, password);
+            });
+            if (wsFacade.AuthenticationIsValid)
+            {
+                this.userInfo = wsFacade.LoadUserInformation();
+                userPhotoUri = await wsFacade.GetPhoto(userPhotoName);
+                LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
                     "byu.edu", UsernameTB.Text, PasswordInput.Password));
@@ -145,25 +167,9 @@ namespace BYU.BergerDemos
                 var messageDialog = new MessageDialog("credentials are invalid");
                 await messageDialog.ShowAsync();
             }
+            ProgressBar.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
 
             SetElementEnableStatuses();
-        }
-
-        private async Task<bool> CheckCredentialsGetUserInfo()
-        {
-            var uname = UsernameTB.Text;
-            var password = PasswordInput.Password;
-
-            AuthenticatedWebServiceFacade wsFacade = new AuthenticatedWebServiceFacade(uname, password);
-            if (!wsFacade.AuthenticationIsValid)
-            {
-                return false;
-            }
-            this.userInfo = wsFacade.LoadUserInformation();
-            userPhotoUri = await wsFacade.GetPhoto(userPhotoName);
-            LoadUserPhoto();
-
-            return true;
         }
 
         private void LoadUserPhoto()
@@ -186,7 +192,7 @@ namespace BYU.BergerDemos
                 var credentialList = vault.FindAllByResource("byu.edu");
                 return credentialList.FirstOrDefault();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }
@@ -196,6 +202,7 @@ namespace BYU.BergerDemos
         {
             var credential = GetBYUCredentials();
             this.userInfo = null;
+
             if (credential != null)
             {
                 var vault = new Windows.Security.Credentials.PasswordVault();

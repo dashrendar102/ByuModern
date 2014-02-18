@@ -54,5 +54,6 @@
         <TextBlock HorizontalAlignment="Left" Margin="105,92,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Username" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="105,149,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Password" VerticalAlignment="Top"/>
         <Image HorizontalAlignment="Left" Height="160" Margin="452,62,0,0" Grid.Row="1" VerticalAlignment="Top" Width="191" Name="UserPhoto"/>
+        <ProgressBar HorizontalAlignment="Left" Height="10" Margin="203,224,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100" Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed"/>
     </Grid>
 </Page>
