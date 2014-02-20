@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BergerClassLibrary.CalendarLand
+namespace Common.Calendar
 {
     public class ScheduledEvent
     {

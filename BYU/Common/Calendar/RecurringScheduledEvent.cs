@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ScheduleWidget.ScheduledEvents;
 using ScheduleWidget.Enums;
 
-namespace BergerClassLibrary.CalendarLand
+namespace Common.Calendar
 {
 	public class RecurringScheduledEvent : ScheduledEvent
 	{

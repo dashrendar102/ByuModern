@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NodaTime;
-using BergerClassLibrary.WebServices.DOs;
+using Common.WebServices.DOs;
 using Microsoft.Live;
 
-namespace BergerClassLibrary.CalendarLand
+namespace Common.Calendar
 {
     public class Calendar
     {

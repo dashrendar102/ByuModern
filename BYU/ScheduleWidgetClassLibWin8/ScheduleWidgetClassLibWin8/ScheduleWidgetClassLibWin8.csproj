@@ -104,7 +104,6 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Enums\DayOfWeekEnum.cs" />
     <Compile Include="Enums\EnumExtensions.cs" />
     <Compile Include="Enums\FrequencyTypeEnum.cs" />
