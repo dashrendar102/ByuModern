@@ -1,6 +1,6 @@
-﻿using BergerClassLibrary.Storage;
-using BergerClassLibrary.WebServices;
-using BergerClassLibrary.WebServices.DOs.UserInformation;
+﻿using Common.Storage;
+using Common.WebServices;
+using Common.WebServices.DOs.UserInformation;
 using BYU.Common;
 using System;
 using System.Linq;

@@ -14,8 +14,8 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using BergerClassLibrary.WebServices;
-using BergerClassLibrary;
+using Common.WebServices;
+using Common;
 using BYU.BergerDemos;
 
 // The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=321224

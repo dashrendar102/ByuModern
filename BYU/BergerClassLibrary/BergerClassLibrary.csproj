@@ -134,10 +134,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AuthenticationLib\BYUAuthentication.csproj">
-      <Project>{4865a72a-6a67-44b8-8f12-6e996728944e}</Project>
-      <Name>BYUAuthentication</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ScheduleWidgetClassLibWin8\ScheduleWidgetClassLibWin8\ScheduleWidgetClassLibWin8.csproj">
       <Project>{d5648a3d-5432-4fc7-9467-c19684c1518c}</Project>
       <Name>ScheduleWidgetClassLibWin8</Name>
