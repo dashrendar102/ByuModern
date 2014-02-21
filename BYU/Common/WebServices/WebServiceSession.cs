@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common
+namespace Common.WebServices
 {
     [DataContract]
     public class WebServiceSession

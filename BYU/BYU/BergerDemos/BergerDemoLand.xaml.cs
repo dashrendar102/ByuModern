@@ -33,7 +33,7 @@ namespace BYU.BergerDemos
 
         public async void Win8CalPermissions_Click(Object sender, RoutedEventArgs e)
         {
-            Demo demo = new Demo();
+            BergerDemo demo = new BergerDemo();
             var status = await demo.getCalendarPermissions();
             // Create the message dialog and set its content
             var messageDialog = new MessageDialog("" + status);

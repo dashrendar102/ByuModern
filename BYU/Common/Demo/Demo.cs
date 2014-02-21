@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Common
 {
-    public sealed class Demo
+    public sealed class BergerDemo
     {
         private const string netID = "";
         private const string pwd = "";

@@ -5,15 +5,15 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common
+namespace Common.WebServices
 {
     [DataContract]
-    public class Nonce
+    internal class Nonce
     {
         [DataMember(Name = "nonceKey")]
-        public string nonceKey { get; set; }
+        internal string nonceKey { get; set; }
 
         [DataMember(Name = "nonceValue")]
-        public string nonceValue { get; set; }
+        internal string nonceValue { get; set; }
     }
 }

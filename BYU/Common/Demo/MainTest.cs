@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AuthenticationLib.LearningSuite;
 using Common.WebServices.DO.LearningSuite;
+using Common.WebServices;
 
 namespace Common
 {

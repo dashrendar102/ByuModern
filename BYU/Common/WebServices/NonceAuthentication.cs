@@ -12,17 +12,17 @@ using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 
-namespace Common
+namespace Common.WebServices
 {
-    public class NonceAuthentication
+    internal class NonceAuthentication
     {
-        public const string WS_SESSION_URL = "https://ws.byu.edu/authentication/services/rest/v1/ws/session";
+        internal const string WS_SESSION_URL = "https://ws.byu.edu/authentication/services/rest/v1/ws/session";
         private const string NONCE_URL = "https://ws.byu.edu/authentication/services/rest/v1/hmac/nonce/";
         private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
 
         private static Stream responseStream;
 
-        public static string GetNonceAuthHeader(string netId, string password, int timeout)
+        internal static string GetNonceAuthHeader(string netId, string password, int timeout)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(WebServiceSession));
 
@@ -46,7 +46,7 @@ namespace Common
             return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
         }
 
-        public static string GetNonceAuthHeader(WebServiceSession session)
+        internal static string GetNonceAuthHeader(WebServiceSession session)
         {
             Stream responseStream = SendPost(NONCE_URL + session.apiKey, null);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Nonce));
@@ -57,7 +57,7 @@ namespace Common
             return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
         }
 
-        public static WebServiceSession GetWsSession(string netId, string password, int timeout)
+        internal static WebServiceSession GetWsSession(string netId, string password, int timeout)
         {
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(WebServiceSession));
             using (var responseStream = SendPost(WS_SESSION_URL,
@@ -118,7 +118,7 @@ namespace Common
             return Convert.ToBase64String(hash);
         }
 
-        public static Stream SendPost(string url, string parameters)
+        internal static Stream SendPost(string url, string parameters)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             ManualResetEvent waiter = new ManualResetEvent(false);
