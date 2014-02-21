@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ScheduleWidget.Enums;
 
-namespace Common.Calendar
+namespace Common.CalendarLand
 {
     public class WeeklyRecurrenceInfo
     {

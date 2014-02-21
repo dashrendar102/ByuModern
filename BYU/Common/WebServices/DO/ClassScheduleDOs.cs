@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.WebServices.DOs
+namespace Common.WebServices.DO
 {
     [JsonConverter(typeof(CamelCaseNameMatchingConverter))]
     internal class Response

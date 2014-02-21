@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NodaTime;
-using Common.WebServices.DOs;
+using Common.WebServices.DO;
 using Microsoft.Live;
 
-namespace Common.Calendar
+namespace Common.CalendarLand
 {
-    public class Calendar
+    public class BYUCalendar
     {
         private List<ScheduledEvent> Events {get; set;}
         public string Name {get; set;}
         public string Description {get; set;}
         //private string ID;
 
-		public Calendar(string name, string description)
+		public BYUCalendar(string name, string description)
 		{
             this.Name = name;
             this.Description = description;

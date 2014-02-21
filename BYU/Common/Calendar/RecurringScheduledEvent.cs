@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ScheduleWidget.ScheduledEvents;
 using ScheduleWidget.Enums;
 
-namespace Common.Calendar
+namespace Common.CalendarLand
 {
 	public class RecurringScheduledEvent : ScheduledEvent
 	{

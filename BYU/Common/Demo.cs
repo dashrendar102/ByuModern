@@ -1,7 +1,7 @@
 ﻿using Common.CalendarLand;
 using Common.Extensions;
 using Common.WebServices;
-using Common.WebServices.DOs;
+using Common.WebServices.DO;
 using Microsoft.Live;
 using Newtonsoft.Json;
 using System;
@@ -72,7 +72,7 @@ namespace Common
             var foo = JsonConvert.DeserializeObject<RootObject>(json);
 
             CourseInfo sampleCourse = foo.WeeklySchedService.Response.CourseList[0];
-            Calendar cal = new Calendar("Course Schedule", "My Current Courses");
+            BYUCalendar cal = new BYUCalendar("Course Schedule", "My Current Courses");
             cal.AddCourse(sampleCourse);
         }
 

@@ -1,6 +1,6 @@
 ﻿using Common.Storage;
 using Common.WebServices;
-using Common.WebServices.DOs.UserInformation;
+using Common.WebServices.DO.UserInformation;
 using BYU.Common;
 using System;
 using System.Linq;

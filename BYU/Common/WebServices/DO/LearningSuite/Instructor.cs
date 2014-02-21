@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationLib.LearningSuite
+namespace Common.WebServices.DO.LearningSuite
 {
     [DataContract]
     public class Instructor

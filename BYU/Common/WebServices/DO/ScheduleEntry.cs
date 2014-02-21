@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common
+namespace Common.WebServices.DO
 {
     [DataContract]
     public class ScheduleEntry

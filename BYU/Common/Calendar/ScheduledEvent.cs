@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.Calendar
+namespace Common.CalendarLand
 {
     public class ScheduledEvent
     {
