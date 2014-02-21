@@ -51,19 +51,20 @@ namespace Common
         private void getAssignmentsByCourseID(string courseID)
         {
             string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID, courseID);
-            BYUWebServiceHelper wsHelper = new BYUWebServiceHelper(netID, pwd);
-            var response = wsHelper.sendAuthenticatedGETRequest(url);
-            string prettyJson = JsonUtils.prettifyJson(response);
+            var response = BYUWebServiceHelper.sendAuthenticatedGETRequest(url);
+            StreamReader reader = new StreamReader(response);
+            string prettyJson = JsonUtils.prettifyJson(reader.ReadToEnd());
             prettyJson.ToString();
         }
 
         private string getStudentSchedule()
         {
-            BYUWebServiceHelper wsHelper = new BYUWebServiceHelper(netID, pwd);
-            
-            string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, wsHelper.PersonID, yearTerm);
-            var response = wsHelper.sendAuthenticatedGETRequest(url);
-            return response.GetContentAsString();
+            WebServiceSession session = WebServiceSession.GetSession();
+
+            string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, yearTerm);
+            var response = BYUWebServiceHelper.sendAuthenticatedGETRequest(url);
+            StreamReader reader = new StreamReader(response);
+            return reader.ReadToEnd();
         }
 
         private void jsonTest()

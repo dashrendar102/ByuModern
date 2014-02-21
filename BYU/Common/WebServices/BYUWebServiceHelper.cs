@@ -16,11 +16,6 @@ namespace Common.WebServices
     {
         private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
 
-        public HttpResponseMessage sendAuthenticatedGETRequest(string url)
-        {
-            return sendAuthenticatedGETRequest(url, null);
-        }
-
         public static string GetNonceAuthHeader()
         {
             WebServiceSession session = WebServiceSession.GetSession();
@@ -34,22 +29,30 @@ namespace Common.WebServices
             return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
         }
 
-        public HttpResponseMessage sendAuthenticatedGETRequest(string url, string acceptString)
+        public static Stream sendAuthenticatedGETRequest(string url)
+        {
+            return sendAuthenticatedGETRequest(url, null);
+        }
+
+        public static Stream sendAuthenticatedGETRequest(string url, string acceptString)
         {
             string nonceHeader = GetNonceAuthHeader();
 
             try
             {
-                HttpRequestMessage foo = new HttpRequestMessage(HttpMethod.Get, url);
-                foo.Headers.TryAddWithoutValidation("Authorization", nonceHeader);
+                HttpWebRequest request = HttpWebRequest.CreateHttp(url);
+                request.Headers["Authorization"] = nonceHeader;
+                
                 if (!string.IsNullOrEmpty(acceptString))
                 {
-                    foo.Headers.Add("Accept", acceptString);
+                    request.Accept = acceptString;
                 }
-                HttpClient client = new HttpClient();
-                var responseTask = client.SendAsync(foo);
+
+                Task<WebResponse> responseTask = request.GetResponseAsync();
                 responseTask.Wait();
-                return responseTask.Result;
+
+                WebResponse response = responseTask.Result;
+                return response.GetResponseStream();
             }
             catch (WebException ex)
             {

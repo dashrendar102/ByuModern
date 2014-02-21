@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -38,18 +39,25 @@ namespace Common.WebServices
 
         public static WebServiceSession GetSession()
         {
-            PasswordVault vault = new PasswordVault();
-            try
+            if (sessionIsValid())
             {
-                IReadOnlyList<PasswordCredential> credentialList = vault.FindAllByResource("byu.edu");
-                PasswordCredential passwordCredential = credentialList.FirstOrDefault();
-                passwordCredential.RetrievePassword();
-
-                return GetSession(passwordCredential.UserName, passwordCredential.Password, DEFAULT_TIMEOUT);
+                return curSession;
             }
-            catch (Exception)
+            else
             {
-                return null;
+                PasswordVault vault = new PasswordVault();
+                try
+                {
+                    IReadOnlyList<PasswordCredential> credentialList = vault.FindAllByResource("byu.edu");
+                    PasswordCredential passwordCredential = credentialList.FirstOrDefault();
+                    passwordCredential.RetrievePassword();
+
+                    return GetSession(passwordCredential.UserName, passwordCredential.Password, DEFAULT_TIMEOUT);
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
         }
 
@@ -82,7 +90,8 @@ namespace Common.WebServices
             else
             {
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(WebServiceSession));
-                using (var responseStream = BYUWebServiceHelper.SendPost(BYUWebServiceURLs.GET_WS_SESSION,
+
+                using (Stream responseStream = BYUWebServiceHelper.SendPost(BYUWebServiceURLs.GET_WS_SESSION,
                     "timeout=" + timeout + "&netId=" + netId + "&password=" + password))
                 {
                     curSession = (WebServiceSession)serializer.ReadObject(responseStream);

@@ -12,6 +12,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using Common.WebServices.DO.PersonSummary;
+using Common.WebServices.DO;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -28,7 +30,7 @@ namespace BYU.BergerDemos
         private const string userPhotoName = "userPhoto.jpg";
         private Uri userPhotoUri;
 
-        UserInformation userInfo;
+        PersonSummaryResponse userInfo;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -149,14 +151,15 @@ namespace BYU.BergerDemos
             var password = PasswordInput.Password;
 
             //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
-            var wsFacade = await Task.Run(() =>
+            WebServiceSession webServiceSession = await Task.Run(() =>
             {
-                return new AuthenticatedWebServiceFacade(userName, password);
+                return WebServiceSession.GetSession(userName, password);
             });
-            if (wsFacade.AuthenticationIsValid)
+            if (webServiceSession != null)
             {
-                this.userInfo = wsFacade.LoadUserInformation();
-                userPhotoUri = await wsFacade.GetPhoto(userPhotoName);
+                this.userInfo = PersonSummaryResponse.GetPersonSummary();
+
+                userPhotoUri = PersonPhoto.getPhotoUri();
                 LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
