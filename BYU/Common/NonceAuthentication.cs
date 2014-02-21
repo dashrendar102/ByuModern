@@ -16,7 +16,7 @@ namespace Common
 {
     public class NonceAuthentication
     {
-        private const string WS_SESSION_URL = "https://ws.byu.edu/authentication/services/rest/v1/ws/session";
+        public const string WS_SESSION_URL = "https://ws.byu.edu/authentication/services/rest/v1/ws/session";
         private const string NONCE_URL = "https://ws.byu.edu/authentication/services/rest/v1/hmac/nonce/";
         private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
 
