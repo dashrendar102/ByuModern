@@ -108,33 +108,33 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalendarLand\Calendar.cs" />
-    <Compile Include="CalendarLand\Constants.cs" />
-    <Compile Include="CalendarLand\NodaDateRange.cs" />
-    <Compile Include="CalendarLand\RecurringScheduledEvent.cs" />
-    <Compile Include="CalendarLand\ScheduledEvent.cs" />
-    <Compile Include="CalendarLand\TimeRange.cs" />
-    <Compile Include="CalendarLand\WeeklyRecurrenceInfo.cs" />
-    <Compile Include="ClassSchedule.cs" />
-    <Compile Include="ClassScheduleRequest.cs" />
-    <Compile Include="ClassScheduleResponse.cs" />
+    <Compile Include="Calendar\Calendar.cs" />
+    <Compile Include="Calendar\Constants.cs" />
+    <Compile Include="Calendar\NodaDateRange.cs" />
+    <Compile Include="Calendar\RecurringScheduledEvent.cs" />
+    <Compile Include="Calendar\ScheduledEvent.cs" />
+    <Compile Include="Calendar\TimeRange.cs" />
+    <Compile Include="Calendar\WeeklyRecurrenceInfo.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule.cs" />
+    <Compile Include="WebServices\DO\ClassScheduleRequest.cs" />
+    <Compile Include="WebServices\DO\ClassScheduleResponse.cs" />
     <Compile Include="Demo.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
-    <Compile Include="LearningSuite\Announcement.cs" />
-    <Compile Include="LearningSuite\Assignment.cs" />
-    <Compile Include="LearningSuite\CalendarItem.cs" />
-    <Compile Include="LearningSuite\ContentPage.cs" />
-    <Compile Include="LearningSuite\Instructor.cs" />
-    <Compile Include="LearningSuite\LearningSuiteCourse.cs" />
-    <Compile Include="LearningSuite\LearningSuiteSection.cs" />
-    <Compile Include="LearningSuite\Material.cs" />
-    <Compile Include="LearningSuite\Syllabus.cs" />
-    <Compile Include="LearningSuite\SystemAnnouncement.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\Announcement.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\Assignment.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\CalendarItem.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\ContentPage.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\Instructor.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\LearningSuiteCourse.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\LearningSuiteSection.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\Material.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\Syllabus.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\SystemAnnouncement.cs" />
     <Compile Include="MainTest.cs" />
     <Compile Include="Nonce.cs" />
     <Compile Include="NonceAuthentication.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScheduleEntry.cs" />
+    <Compile Include="WebServices\DO\ScheduleEntry.cs" />
     <Compile Include="ServiceTest.cs" />
     <Compile Include="Storage\FileHelper.cs" />
     <Compile Include="WebServiceSession.cs" />
@@ -142,11 +142,11 @@
     <Compile Include="WebServices\BYUWebServiceHelper.cs" />
     <Compile Include="WebServices\BYUWebServiceURLs.cs" />
     <Compile Include="WebServices\CamelCaseNameMatchingConverter.cs" />
-    <Compile Include="WebServices\DOs\ClassScheduleDOs.cs" />
-    <Compile Include="WebServices\DOs\CourseInfo.cs" />
-    <Compile Include="WebServices\DOs\UserInformation.cs" />
+    <Compile Include="WebServices\DO\ClassScheduleDOs.cs" />
+    <Compile Include="WebServices\DO\CourseInfo.cs" />
+    <Compile Include="WebServices\DO\UserInformation.cs" />
     <Compile Include="WebServices\JsonUtils.cs" />
-    <Compile Include="WeeklySchedService.cs" />
+    <Compile Include="WebServices\DO\WeeklySchedService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

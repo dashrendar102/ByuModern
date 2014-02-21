@@ -1,4 +1,4 @@
-﻿using Common.WebServices.DOs;
+﻿using Common.WebServices.DO;
 using Common.Extensions;
 using Common;
 using Newtonsoft.Json;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.WebServices.DOs.UserInformation;
+using Common.WebServices.DO.UserInformation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Controls;
 using Windows.Storage.Streams;
@@ -57,7 +57,7 @@ namespace Common.WebServices
         public UserInformation LoadUserInformation()
         {
             string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_PERSONAL_INFO, wsHelper.NetID);
-            var root = GetAndDeserializeJson<Common.WebServices.DOs.UserInformation.RootObject>(url);
+            var root = GetAndDeserializeJson<Common.WebServices.DO.UserInformation.RootObject>(url);
             return root.PersonSummaryService.response;
         }
 

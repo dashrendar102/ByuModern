@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 using AuthenticationLib.LearningSuite;
+using Common.WebServices.DO.LearningSuite;
 
 namespace Common
 {
