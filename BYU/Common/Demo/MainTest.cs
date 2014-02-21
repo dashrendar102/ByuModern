@@ -15,10 +15,10 @@ namespace Common
 {
     public class MainTest
     {
-        public static string MainRun(string netId, string password)
+        public static string MainRun()
         {
-            WebServiceSession session = NonceAuthentication.GetWsSession(netId, password, 5);
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            WebServiceSession session = WebServiceSession.GetSession();
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
 
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/coursebuilder/course/personEnrolled/" + session.personId + "/period/20141");
             request.Headers["Authorization"] = nonceHeader;
@@ -87,7 +87,7 @@ namespace Common
 
         public static SystemAnnouncement getSystemAnnouncement(WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/announcements/sysannouncement/student-anno");
             request.Headers["Authorization"] = nonceHeader;
 
@@ -102,7 +102,7 @@ namespace Common
 
         public static Syllabus[] getSyllabi(string courseId, WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/syllabus/courseID/" + courseId);
             request.Headers["Authorization"] = nonceHeader;
 
@@ -117,7 +117,7 @@ namespace Common
 
         public static Material[] getMaterials(string courseId, WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/material/courseID/" + courseId + "/includeBooklist/true");
             request.Headers["Authorization"] = nonceHeader;
 
@@ -132,7 +132,7 @@ namespace Common
 
         public static Instructor[] getInstructors(string courseId, WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/coursebuilder/instructor-information/courseID/" + courseId);
             request.Headers["Authorization"] = nonceHeader;
 
@@ -147,7 +147,7 @@ namespace Common
 
         public static Announcement[] getAnnouncements(string courseId, WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/announcements/announcement/courseID/" + courseId);
             request.Headers["Authorization"] = nonceHeader;
 
@@ -162,7 +162,7 @@ namespace Common
 
         public static ContentPage[] getContent(string courseId, WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/pages/page-and-content/courseID/" + courseId);
             request.Headers["Authorization"] = nonceHeader;
 
@@ -177,7 +177,7 @@ namespace Common
 
         public static Assignment[] getAssignments(string courseId, WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/assignments/assignment/courseID/" + courseId);
             request.Headers["Authorization"] = nonceHeader;
 
@@ -192,7 +192,7 @@ namespace Common
 
         public static CalendarItem[] getCalendarItems(string courseId, WebServiceSession session)
         {
-            string nonceHeader = NonceAuthentication.GetNonceAuthHeader(session);
+            string nonceHeader = BYUWebServiceHelper.GetNonceAuthHeader();
             HttpWebRequest request = HttpWebRequest.CreateHttp("https://ws.byu.edu/rest/v1.0/learningsuite/calendar/aggregate/courseID/" + courseId);
             request.Headers["Authorization"] = nonceHeader;
 

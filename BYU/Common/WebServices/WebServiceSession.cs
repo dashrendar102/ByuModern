@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Credentials;
 
 namespace Common.WebServices
 {
@@ -35,17 +36,44 @@ namespace Common.WebServices
             }
         }
 
+        public static WebServiceSession GetSession()
+        {
+            PasswordVault vault = new PasswordVault();
+            try
+            {
+                IReadOnlyList<PasswordCredential> credentialList = vault.FindAllByResource("byu.edu");
+                PasswordCredential passwordCredential = credentialList.FirstOrDefault();
+                passwordCredential.RetrievePassword();
+
+                return GetSession(passwordCredential.UserName, passwordCredential.Password, DEFAULT_TIMEOUT);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+#if DEBUG
+
         public static WebServiceSession GetSession(string netId, string password)
         {
-            return GetSession(netId, password, DEFAULT_TIMEOUT);
+            if (sessionIsValid())
+            {
+                return curSession;
+            }
+            else
+            {
+                return GetSession(netId, password, DEFAULT_TIMEOUT);
+            }
         }
+#endif
 
         public static void LogOut()
         {
             curSession = null;
         }
 
-        public static WebServiceSession GetSession(string netId, string password, string timeout)
+        private static WebServiceSession GetSession(string netId, string password, string timeout)
         {
             if (sessionIsValid())
             {
@@ -54,7 +82,7 @@ namespace Common.WebServices
             else
             {
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(WebServiceSession));
-                using (var responseStream = NonceAuthentication.SendPost(NonceAuthentication.WS_SESSION_URL,
+                using (var responseStream = BYUWebServiceHelper.SendPost(BYUWebServiceURLs.GET_WS_SESSION,
                     "timeout=" + timeout + "&netId=" + netId + "&password=" + password))
                 {
                     curSession = (WebServiceSession)serializer.ReadObject(responseStream);

@@ -13,6 +13,8 @@ namespace Common.WebServices
         internal const string GET_STUDENT_SCHEDULE = "https://ws.byu.edu/rest/v1.0/academic/registration/studentschedule/<personID>/<yearTerm>";
         internal const string GET_PERSONAL_INFO = "https://ws.byu.edu/rest/v2.0/identity/person/PRO/personSummary.cgi/<netID>";
         internal const string GET_USER_PHOTO_BY_NET_ID = "https://ws.byu.edu/rest/v1.0/identity/person/idphoto/?n=<netID>";
+        internal const string GET_WS_SESSION = "https://ws.byu.edu/authentication/services/rest/v1/ws/session";
+        internal const string GET_NONCE_URL = "https://ws.byu.edu/authentication/services/rest/v1/hmac/nonce/";
 
         public static string GetFullURL(string baseURL, params string[] argList) {
             string result = baseURL;
