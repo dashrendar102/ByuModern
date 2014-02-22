@@ -146,6 +146,11 @@
     <Compile Include="WebServices\DO\PersonSummary\Relationship.cs" />
     <Compile Include="WebServices\DO\PersonSummary\RootObject.cs" />
     <Compile Include="WebServices\DO\PersonSummary\StudentInformation.cs" />
+    <Compile Include="WebServices\DO\TermUtility\ControldateswsService.cs" />
+    <Compile Include="WebServices\DO\TermUtility\DateList.cs" />
+    <Compile Include="WebServices\DO\TermUtility\Response.cs" />
+    <Compile Include="WebServices\DO\TermUtility\RootObject.cs" />
+    <Compile Include="WebServices\DO\TermUtility\TermUtility.cs" />
     <Compile Include="WebServices\Nonce.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebServices\DO\ScheduleEntry.cs" />
@@ -176,6 +181,9 @@
     <SDKReference Include="LiveSDKXAML, Version=5.5">
       <Name>Live SDK</Name>
     </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebServices\RootObject.cs.txt" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
