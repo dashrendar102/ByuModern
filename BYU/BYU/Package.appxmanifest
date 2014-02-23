@@ -4,7 +4,7 @@
   <Properties>
     <DisplayName>Brigham Young University</DisplayName>
     <PublisherDisplayName>Dr. K's Minion Army</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <Logo>Assets\Logos\logo_50_50.png</Logo>
   </Properties>
   <Prerequisites>
     <OSMinVersion>6.3.0</OSMinVersion>
@@ -15,8 +15,14 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BYU.App">
-      <m2:VisualElements DisplayName="Brigham Young University" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="BYU" ForegroundText="light" BackgroundColor="#464646">
-        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#002255" />
+      <m2:VisualElements DisplayName="Brigham Young University" Square150x150Logo="Assets\Logos\logo_150_150.png" Square30x30Logo="Assets\Logos\logo_30_30.png" Description="BYU" ForegroundText="light" BackgroundColor="#002255">
+        <m2:DefaultTile Square310x310Logo="Assets\Logos\logo_310_310.png" Wide310x150Logo="Assets\Logos\logo_310_150.png" Square70x70Logo="Assets\Logos\logo_70_70.png">
+        </m2:DefaultTile>
+        <m2:SplashScreen Image="Assets\Logos\Splash_620_300.png" BackgroundColor="#002255" />
+        <m2:InitialRotationPreference>
+          <m2:Rotation Preference="landscape" />
+          <m2:Rotation Preference="landscapeFlipped" />
+        </m2:InitialRotationPreference>
       </m2:VisualElements>
     </Application>
   </Applications>
