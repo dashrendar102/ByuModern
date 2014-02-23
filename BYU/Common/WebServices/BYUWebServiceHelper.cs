@@ -67,6 +67,11 @@ namespace Common.WebServices
 
         internal static T GetObjectFromWebService<T>(string url)
         {
+            if(WebServiceSession.GetSession() == null)
+            {
+                return default(T);
+            }
+
             Stream responseStream = sendAuthenticatedGETRequest(url);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
             return (T)serializer.ReadObject(responseStream);
