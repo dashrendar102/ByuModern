@@ -1,6 +1,5 @@
 ﻿using Common.Storage;
 using Common.WebServices;
-using Common.WebServices.DO.UserInformation;
 using BYU.Common;
 using System;
 using System.Linq;
@@ -195,7 +194,7 @@ namespace BYU.BergerDemos
                 var credentialList = vault.FindAllByResource("byu.edu");
                 return credentialList.FirstOrDefault();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }

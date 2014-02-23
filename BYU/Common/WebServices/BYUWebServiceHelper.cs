@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.WebServices.DO;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -62,6 +63,13 @@ namespace Common.WebServices
                 //Console.Error.WriteLine(streamReader.ReadToEnd());
                 return null;
             }
+        }
+
+        internal static T GetObjectFromWebService<T>(string url)
+        {
+            Stream responseStream = sendAuthenticatedGETRequest(url);
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+            return (T)serializer.ReadObject(responseStream);
         }
 
         internal static Stream SendPost(string url, string parameters)

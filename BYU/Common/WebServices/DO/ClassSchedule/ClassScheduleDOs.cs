@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿/*using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.WebServices.DO
+namespace Common.WebServices.DO.ClassSchedule
 {
     [JsonConverter(typeof(CamelCaseNameMatchingConverter))]
     internal class Response
@@ -34,3 +34,4 @@ namespace Common.WebServices.DO
         internal WeeklySchedService WeeklySchedService { get; set; }
     }
 }
+*/

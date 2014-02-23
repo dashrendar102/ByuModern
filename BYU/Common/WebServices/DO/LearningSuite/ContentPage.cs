@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthenticationLib.LearningSuite
+namespace Common.WebServices.DO.LearningSuite
 {
     [DataContract]
     public class ContentPage
@@ -27,5 +27,10 @@ namespace AuthenticationLib.LearningSuite
 
         [DataMember]
         public string title;
+
+        public static ContentPage[] GetContentPages(string courseId)
+        {
+            return BYUWebServiceHelper.GetObjectFromWebService<ContentPage[]>(BYUWebServiceURLs.GET_CONTENT_PAGES + courseId);
+        }
     }
 }

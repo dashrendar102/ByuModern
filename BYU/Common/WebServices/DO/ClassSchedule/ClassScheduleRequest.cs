@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.WebServices.DO
+namespace Common.WebServices.DO.ClassSchedule
 {
     [DataContract(Name = "request")]
     public class ClassScheduleRequest

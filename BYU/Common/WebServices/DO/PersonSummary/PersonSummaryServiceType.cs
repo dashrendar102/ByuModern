@@ -13,9 +13,9 @@ namespace Common.WebServices.DO.PersonSummary
     internal class PersonSummaryServiceType
     {
         [DataMember]
-        internal PersonSummaryRequest request;
+        internal PersonSummaryRequest request { get; set; }
 
         [DataMember]
-        internal PersonSummaryResponse response;
+        internal PersonSummaryResponse response { get; set; }
     }
 }

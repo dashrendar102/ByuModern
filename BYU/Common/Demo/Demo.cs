@@ -2,6 +2,9 @@
 using Common.Extensions;
 using Common.WebServices;
 using Common.WebServices.DO;
+using Common.WebServices.DO.ClassSchedule;
+using Common.WebServices.DO.LearningSuite;
+using Common.WebServices.DO.TermUtility;
 using Microsoft.Live;
 using Newtonsoft.Json;
 using System;
@@ -50,29 +53,24 @@ namespace Common
 
         private void getAssignmentsByCourseID(string courseID)
         {
-            string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID, courseID);
-            var response = BYUWebServiceHelper.sendAuthenticatedGETRequest(url);
-            StreamReader reader = new StreamReader(response);
-            string prettyJson = JsonUtils.prettifyJson(reader.ReadToEnd());
-            prettyJson.ToString();
+            Assignment[] assignments = Assignment.GetAssignments(courseID);
+            assignments.ToString();
         }
 
-        private string getStudentSchedule()
+        private ClassScheduleResponse getStudentSchedule()
         {
             WebServiceSession session = WebServiceSession.GetSession();
+            Task<string> termTask = TermUtility.getCurrentTerm();
+            termTask.Wait();
+            string term = termTask.Result;
 
-            string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, yearTerm);
-            var response = BYUWebServiceHelper.sendAuthenticatedGETRequest(url);
-            StreamReader reader = new StreamReader(response);
-            return reader.ReadToEnd();
+            return ClassScheduleRoot.GetClassSchedule();
         }
 
         private void jsonTest()
         {
-            string json = getStudentSchedule();
-            var foo = JsonConvert.DeserializeObject<RootObject>(json);
-
-            CourseInfo sampleCourse = foo.WeeklySchedService.Response.CourseList[0];
+            ClassScheduleResponse schedule = getStudentSchedule();
+            ScheduleEntry sampleCourse = schedule.courseList[0];
             BYUCalendar cal = new BYUCalendar("Course Schedule", "My Current Courses");
             cal.AddCourse(sampleCourse);
         }

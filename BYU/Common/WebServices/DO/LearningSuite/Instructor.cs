@@ -42,5 +42,10 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember]
         public string professionalTitle;
+
+        public static Instructor[] GetInstructors(string courseId)
+        {
+            return BYUWebServiceHelper.GetObjectFromWebService<Instructor[]>(BYUWebServiceURLs.GET_INSTRUCTORS + courseId);
+        }
     }
 }

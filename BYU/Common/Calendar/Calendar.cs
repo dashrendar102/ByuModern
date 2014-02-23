@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NodaTime;
 using Common.WebServices.DO;
 using Microsoft.Live;
+using Common.WebServices.DO.ClassSchedule;
 
 namespace Common.CalendarLand
 {
@@ -79,9 +80,9 @@ namespace Common.CalendarLand
         }
 
         //does not currently handle block classes very well
-        public void AddCourse(CourseInfo course)
+        public void AddCourse(ScheduleEntry course)
         {
-            TimeRange timeRange = new TimeRange(course.ClassPeriod);
+            TimeRange timeRange = new TimeRange(course.class_period);
             NodaDateRange courseDates = new NodaDateRange();
 			LocalDate localStart = new LocalDate(2014, 1, 6);
 			LocalDate localEnd = new LocalDate(2014, 4, 27);
@@ -89,12 +90,12 @@ namespace Common.CalendarLand
 			courseDates.EndDate = localEnd.AtMidnight().InUtc();
 
             RecurringScheduledEvent courseEvent = new RecurringScheduledEvent();
-            courseEvent.Name = course.Course + " - " +  course.CourseTitle;
+            courseEvent.Name = course.course + " - " +  course.course_title;
             courseEvent.Description = "insert description here";
-            courseEvent.Location = course.Room;
+            courseEvent.Location = course.room;
             courseEvent.TimeRange = timeRange;
             courseEvent.DateRange = courseDates;
-            courseEvent.WeeklyRecurrenceInfo = new WeeklyRecurrenceInfo(course.Days);
+            courseEvent.WeeklyRecurrenceInfo = new WeeklyRecurrenceInfo(course.days);
 
 			courseEvent.PrintOccurrences();
         }

@@ -57,5 +57,10 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember]
         public string vendor;
+
+        public static Material[] GetMaterials(string courseId)
+        {
+            return BYUWebServiceHelper.GetObjectFromWebService<Material[]>(string.Format(BYUWebServiceURLs.GET_MATERIALS, courseId));
+        }
     }
 }

@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.WebServices.DO
+namespace Common.WebServices.DO.ClassSchedule
 {
     [DataContract(Name = "response")]
     public class ClassScheduleResponse
@@ -32,6 +32,6 @@ namespace Common.WebServices.DO
         public string enrolled { get; set; }
 
         [DataMember(Name = "schedule_table")]
-        public ScheduleEntry[] schedule_table { get; set; }
+        public ScheduleEntry[] courseList { get; set; }
     }
 }

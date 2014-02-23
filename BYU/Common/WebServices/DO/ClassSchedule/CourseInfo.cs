@@ -1,11 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿/*using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.WebServices.DO
+namespace Common.WebServices.DO.ClassSchedule
 {
     [JsonConverter(typeof(CamelCaseNameMatchingConverter))]
     public sealed class CourseInfo
@@ -26,3 +26,4 @@ namespace Common.WebServices.DO
         public string Instructor { get; set; }
     }
 }
+*/

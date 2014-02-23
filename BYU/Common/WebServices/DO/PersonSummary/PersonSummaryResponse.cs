@@ -41,12 +41,8 @@ namespace Common.WebServices.DO.PersonSummary
             WebServiceSession session = WebServiceSession.GetSession();
             string personId = session.personId;
 
-            using (Stream responseStream = BYUWebServiceHelper.sendAuthenticatedGETRequest(BYUWebServiceURLs.GET_PERSONAL_INFO + WebServiceSession.GetSession().personId))
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(RootObject));
-                RootObject root = (RootObject)serializer.ReadObject(responseStream);
-                return root.PersonSummaryService.response;
-            }
+            RootObject root = BYUWebServiceHelper.GetObjectFromWebService<RootObject>(BYUWebServiceURLs.GET_PERSONAL_INFO + WebServiceSession.GetSession().personId);
+            return root.PersonSummaryService.response;
         }
     }
 }
