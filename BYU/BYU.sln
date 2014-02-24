@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BYU", "BYU\BYU.csproj", "{C70BB8A0-DD8C-4D9A-9014-A770E2E82192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TermWebService", "..\test\tyler\TermWebService\TermWebService\TermWebService.csproj", "{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleWidgetClassLibWin8", "ScheduleWidgetClassLibWin8\ScheduleWidgetClassLibWin8\ScheduleWidgetClassLibWin8.csproj", "{D5648A3D-5432-4FC7-9467-C19684C1518C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}"
@@ -47,16 +45,6 @@ Global
 		{C70BB8A0-DD8C-4D9A-9014-A770E2E82192}.Release|x86.ActiveCfg = Release|x86
 		{C70BB8A0-DD8C-4D9A-9014-A770E2E82192}.Release|x86.Build.0 = Release|x86
 		{C70BB8A0-DD8C-4D9A-9014-A770E2E82192}.Release|x86.Deploy.0 = Release|x86
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Release|ARM.ActiveCfg = Release|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Release|x64.ActiveCfg = Release|Any CPU
-		{BB44A0A6-5E5F-4ECB-A643-D26996AD261D}.Release|x86.ActiveCfg = Release|Any CPU
 		{D5648A3D-5432-4FC7-9467-C19684C1518C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D5648A3D-5432-4FC7-9467-C19684C1518C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5648A3D-5432-4FC7-9467-C19684C1518C}.Debug|ARM.ActiveCfg = Debug|ARM

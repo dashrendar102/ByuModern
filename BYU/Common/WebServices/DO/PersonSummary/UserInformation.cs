@@ -1,10 +1,10 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.WebServices.DO.UserInformation
+namespace Common.WebServices.DO.PersonSummary
 {
     internal class Request
     {
@@ -126,3 +126,4 @@ namespace Common.WebServices.DO.UserInformation
         public PersonSummaryService PersonSummaryService { get; set; }
     }
 }
+*/

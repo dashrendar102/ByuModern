@@ -11,6 +11,6 @@ namespace Common.WebServices.DO.PersonSummary
     internal class RootObject
     {
         [DataMember]
-        internal PersonSummaryServiceType PersonSummaryService;
+        internal PersonSummaryServiceType PersonSummaryService { get; set; }
     }
 }

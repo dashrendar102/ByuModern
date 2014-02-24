@@ -45,5 +45,10 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember]
         public string type;
+
+        public static CalendarItem[] GetCalendarItems(string courseId)
+        {
+            return BYUWebServiceHelper.GetObjectFromWebService<CalendarItem[]>(BYUWebServiceURLs.GET_CALENDAR_ITEMS + courseId);
+        }
     }
 }

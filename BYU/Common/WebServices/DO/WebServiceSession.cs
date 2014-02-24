@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
 
-namespace Common.WebServices
+namespace Common.WebServices.DO
 {
     [DataContract]
     public class WebServiceSession
@@ -27,7 +27,7 @@ namespace Common.WebServices
         public string sharedSecret { get; set; }
 
         [DataMember(Name = "expireDate")]
-        private string internalExpireDate;
+        private string internalExpireDate { get; set; }
 
         public DateTime ExpireDate
         {
@@ -61,8 +61,6 @@ namespace Common.WebServices
             }
         }
 
-#if DEBUG
-
         public static WebServiceSession GetSession(string netId, string password)
         {
             if (sessionIsValid())
@@ -74,7 +72,6 @@ namespace Common.WebServices
                 return GetSession(netId, password, DEFAULT_TIMEOUT);
             }
         }
-#endif
 
         public static void LogOut()
         {
@@ -91,11 +88,18 @@ namespace Common.WebServices
             {
                 DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(WebServiceSession));
 
-                using (Stream responseStream = BYUWebServiceHelper.SendPost(BYUWebServiceURLs.GET_WS_SESSION,
-                    "timeout=" + timeout + "&netId=" + netId + "&password=" + password))
+                try
                 {
-                    curSession = (WebServiceSession)serializer.ReadObject(responseStream);
-                    return curSession;
+                    using (Stream responseStream = BYUWebServiceHelper.SendPost(BYUWebServiceURLs.GET_WS_SESSION,
+                        "timeout=" + timeout + "&netId=" + netId + "&password=" + password))
+                    {
+                        curSession = (WebServiceSession)serializer.ReadObject(responseStream);
+                        return curSession;
+                    }
+                }
+                catch(Exception)
+                {
+                    return null;
                 }
             }
         }

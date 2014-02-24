@@ -50,14 +50,7 @@
         </Grid.ChildrenTransitions>
         
         <!-- Define Backgrounds -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3">
-            <Border.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF002255" Offset="0.517"/>
-                    <GradientStop Color="#FF040202"/>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="#FF002255"/>
         
         <Border Grid.Row="1" Grid.ColumnSpan="3" Background="#FFB0B0B0"/>
 
@@ -69,103 +62,85 @@
                 AutomationProperties.Name="Back"
                 AutomationProperties.AutomationId="BackButton"
                 AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41"/>
-        <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
-                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="10,42,0,0" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Right" Width="80" />
+        <Image Source="Assets/Logos/logo_150_150.png" Grid.Column="1"/>
         <TextBlock x:Name="studentName" Text="Student Name" Style="{StaticResource HeaderTextBlockStyle}" 
                  VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="0,42,61,0" Grid.Column="2" HorizontalAlignment="Right" Width="393" TextAlignment="Right" FontFamily="Global User Interface" FontSize="48" />
-        <Hub SectionHeaderClick="Hub_SectionHeaderClick" Grid.Row="2" Grid.ColumnSpan="3">
-            <!--<Hub.Header>
-                
-            </Hub.Header>-->
-            <HubSection Width="300" x:Uid="FeaturedHeader" Header="Featured">
-            </HubSection>
-            <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes">
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="1" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="2" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="3" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="4" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294"  Content="Enter Brian's Demotopia" Click="BergerHyperlinkButton_Click"/>
-                    </Grid>
-                </DataTemplate>
-            </HubSection>
-            <HubSection x:Uid="MapHeader" Header="Where on campus" Padding="40,40,40,32" Width="428">
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <Button Grid.Row="0" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/campus_buildings.jpg"/>
-                        </Button>
-                        <Button Grid.Row="0" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/blank_map_tile.jpg"/>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/blank_map_tile.jpg"/>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/parking_lots.jpg"/>
-                        </Button>
-                    </Grid>
-                </DataTemplate>
-            </HubSection>
-            <HubSection x:Uid="Map2Header" Header="Where on campus, version 2">
-                <DataTemplate>
-                    <!-- width of 400 -->
-                    <StackPanel Orientation="Vertical">
+        <ScrollViewer VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="2" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes" Grid.Column="0">
+                    <DataTemplate>
+                        <StackPanel>
+                            <Button Grid.Row="0" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
+                                <Image Source="Assets/class_demo.jpg"/>
+                            </Button>
+                            <Button Grid.Row="4" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294"  Content="Enter Brian's Demotopia" Click="BergerHyperlinkButton_Click"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </HubSection>
+                <HubSection x:Uid="MapHeader" Header="Where on campus" Padding="40,40,40,32" Width="428" Grid.Column="1">
+                    <DataTemplate>
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="270"/>
-                                <RowDefinition Height="95"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
-                            <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Row="0" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
                                 <Image Source="Assets/campus_buildings.jpg"/>
                             </Button>
-                            <Button Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="MapButton_Clicked">
+                            <Button Grid.Row="0" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
                                 <Image Source="Assets/blank_map_tile.jpg"/>
                             </Button>
-                            <Button Grid.Row="1" Grid.Column="4" BorderThickness="0" Click="MapButton_Clicked">
+                            <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
+                                <Image Source="Assets/blank_map_tile.jpg"/>
+                            </Button>
+                            <Button Grid.Row="1" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
                                 <Image Source="Assets/parking_lots.jpg"/>
                             </Button>
                         </Grid>
-                    </StackPanel>
-                </DataTemplate>
-            </HubSection>
-        </Hub>
-
-        <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="354,362,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
-
+                    </DataTemplate>
+                </HubSection>
+                <HubSection x:Uid="Map2Header" Header="Where on campus, version 2" Grid.Column="2">
+                    <DataTemplate>
+                        <!-- width of 400 -->
+                        <StackPanel Orientation="Vertical">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="5"/>
+                                    <ColumnDefinition Width="130"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="270"/>
+                                    <RowDefinition Height="95"/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
+                                <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
+                                    <Image Source="Assets/campus_buildings.jpg"/>
+                                </Button>
+                                <Button Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="MapButton_Clicked">
+                                    <Image Source="Assets/blank_map_tile.jpg"/>
+                                </Button>
+                                <Button Grid.Row="1" Grid.Column="4" BorderThickness="0" Click="MapButton_Clicked">
+                                    <Image Source="Assets/parking_lots.jpg"/>
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </DataTemplate>
+                </HubSection>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

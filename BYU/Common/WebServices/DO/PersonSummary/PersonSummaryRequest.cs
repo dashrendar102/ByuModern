@@ -11,18 +11,18 @@ namespace Common.WebServices.DO.PersonSummary
     internal class PersonSummaryRequest
     {
         [DataMember]
-        internal string method;
+        internal string method { get; set; }
 
         [DataMember]
-        internal string resource;
+        internal string resource { get; set; }
 
         [DataMember]
-        internal string attributes;
+        internal string attributes { get; set; }
 
         [DataMember]
-        internal int status;
+        internal int status { get; set; }
 
         [DataMember]
-        internal string statusMessage;
+        internal string statusMessage { get; set; }
     }
 }

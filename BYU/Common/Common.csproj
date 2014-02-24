@@ -115,9 +115,9 @@
     <Compile Include="Calendar\ScheduledEvent.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\WeeklyRecurrenceInfo.cs" />
-    <Compile Include="WebServices\DO\ClassSchedule.cs" />
-    <Compile Include="WebServices\DO\ClassScheduleRequest.cs" />
-    <Compile Include="WebServices\DO\ClassScheduleResponse.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleResponse.cs" />
     <Compile Include="Demo\Demo.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="WebServices\DO\LearningSuite\Announcement.cs" />
@@ -151,20 +151,20 @@
     <Compile Include="WebServices\DO\TermUtility\Response.cs" />
     <Compile Include="WebServices\DO\TermUtility\RootObject.cs" />
     <Compile Include="WebServices\DO\TermUtility\TermUtility.cs" />
-    <Compile Include="WebServices\Nonce.cs" />
+    <Compile Include="WebServices\DO\Nonce.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebServices\DO\ScheduleEntry.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\ScheduleEntry.cs" />
     <Compile Include="Demo\ServiceTest.cs" />
     <Compile Include="Storage\FileHelper.cs" />
-    <Compile Include="WebServices\WebServiceSession.cs" />
+    <Compile Include="WebServices\DO\WebServiceSession.cs" />
     <Compile Include="WebServices\BYUWebServiceHelper.cs" />
     <Compile Include="WebServices\BYUWebServiceURLs.cs" />
     <Compile Include="WebServices\CamelCaseNameMatchingConverter.cs" />
-    <Compile Include="WebServices\DO\ClassScheduleDOs.cs" />
-    <Compile Include="WebServices\DO\CourseInfo.cs" />
-    <Compile Include="WebServices\DO\UserInformation.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleDOs.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\CourseInfo.cs" />
+    <Compile Include="WebServices\DO\PersonSummary\UserInformation.cs" />
     <Compile Include="WebServices\JsonUtils.cs" />
-    <Compile Include="WebServices\DO\WeeklySchedService.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\WeeklySchedService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -182,9 +182,7 @@
       <Name>Live SDK</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="WebServices\RootObject.cs.txt" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

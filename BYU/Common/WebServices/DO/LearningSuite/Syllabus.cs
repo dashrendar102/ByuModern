@@ -27,5 +27,10 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember]
         public string courseID;
+
+        public static Syllabus[] GetSyllabi(string courseId)
+        {
+            return BYUWebServiceHelper.GetObjectFromWebService<Syllabus[]>(BYUWebServiceURLs.GET_SYLLABI + courseId);
+        }
     }
 }

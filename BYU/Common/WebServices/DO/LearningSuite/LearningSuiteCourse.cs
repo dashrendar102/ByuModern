@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -72,5 +74,16 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember(Name = "sections")]
         public LearningSuiteSection[] sections { get; set; }
+
+        public static LearningSuiteCourse[] GetCourses()
+        {
+            WebServiceSession session = WebServiceSession.GetSession();
+            
+            Task<string> termTask = TermUtility.TermUtility.getCurrentTerm();
+            termTask.Wait();
+            string curTerm = termTask.Result;
+
+            return BYUWebServiceHelper.GetObjectFromWebService<LearningSuiteCourse[]>(string.Format(BYUWebServiceURLs.GET_LEARNINGSUITE_COURSES, session.personId, curTerm));
+        }
     }
 }
