@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -20,21 +21,19 @@ namespace Map
 {
     public sealed partial class ByuMap : UserControl
     {
-        private const string ByuVenueId = "hcl-brighamyounguniversity";
         private VenueMap ByuVenue;
-
-        private const string StadiumId = "hcl-lavelledwardsstadium";
+        Task MapInit = null;
 
         public ByuMap()
         {
             this.InitializeComponent();
 
-            SetupMapAsync();
+            MapInit = SetupMapAsync();
         }
 
-        public async void SetupMapAsync()
+        async Task SetupMapAsync()
         {
-            ByuVenue = await this.BingMap.VenueManager.CreateVenueMapAsync(ByuVenueId);
+            ByuVenue = await this.BingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
             BingMap.VenueManager.ActiveVenue = ByuVenue;
 
             BingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
@@ -44,5 +43,28 @@ namespace Map
         {
             BingMap.VenueManager.ActiveVenue = ByuVenue;
         }
+
+        public async Task<IEnumerable<ByuMapEntity>> GetBuildings()
+        {
+            await Task<IEnumerable<ByuMapEntity>>.Run(() =>
+            {
+                if (MapInit != null && (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10))))
+                {
+                    var buildings =
+                        from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
+                        where !String.IsNullOrWhiteSpace(ve.Name)
+                        select new ByuMapEntity(ve.Name, ve.Description, ve);
+                    return buildings;
+                }
+                else throw new TimeoutException("Could not load maps data");
+            });
+            throw new TimeoutException("Could not load maps data");
+        }
+
+        public void SelectEntity(ByuMapEntity entity)
+        {
+            entity.BingEntity.Highlight();
+        }
+
     }
 }
