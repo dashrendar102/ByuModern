@@ -159,40 +159,43 @@ namespace BYU
 
         private void SetElementEnableStatuses()
         {
+            
             var credential = GetBYUCredentials();
             bool loggedIn = (credential != null);
             if (loggedIn)
             {
                 if (userInfo != null)
                 {
-                    //this.SignInButton.Content = userInfo.names.preferred_name;
+                    this.UserButton.Content = userInfo.names.preferred_name;
                 }
                 else
                 {
-                    //this.SignInButton.Content = credential.UserName;
+                    this.UserButton.Content = credential.UserName;
                 }
             }
             else
             {
-                //this.SignInButton.Content = "Sign In";
+                this.SignInButton.Content = "Login";
             }
-            //this.SignInButton.IsEnabled = !loggedIn;
-            //this.UsernameTB.IsEnabled = !loggedIn;
-            //this.PasswordInput.IsEnabled = !loggedIn;
-            //this.LogoutButton.IsEnabled = loggedIn;
+            this.SignInButton.IsEnabled = loggedIn;
+            this.UserButton.IsEnabled = loggedIn;
+            this.UserButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
+            this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.LoginNameTextbox.IsEnabled = loggedIn;
+            this.LoginPasswordTextbox.IsEnabled = loggedIn;
+            //this.LogoutButton.IsEnabled = !loggedIn;
         }
 
         private async void Login_Click(object sender, RoutedEventArgs e)
-        {
-            var signinDialog = new Windows.UI.Popups.MessageDialog("Log in using your BYU NetID credentials.");
-            await signinDialog.ShowAsync();
-            
-            //LogInButton.IsEnabled = false;
-            //UsernameTB.IsEnabled = false;
-            //PasswordInput.IsEnabled = false;
+        {            
+            SignInButton.IsEnabled = false;
+            LoginNameTextbox.IsEnabled = false;
+            LoginPasswordTextbox.IsEnabled = false;
 
-            var userName = "username";// UsernameTB.Text;
-            var password = "password";// PasswordInput.Password;
+            var userName = LoginNameTextbox.Text;
+            var password = LoginPasswordTextbox.Password;
 
             //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
             WebServiceSession webServiceSession = await Task.Run(() =>
@@ -207,7 +210,7 @@ namespace BYU
                 LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
-                    "byu.edu", "username", "password"));//UsernameTB.Text, PasswordInput.Password));
+                    "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
             }
             else
             {
@@ -222,11 +225,11 @@ namespace BYU
         {
             if (userPhotoUri != null)
             {
-                //UserPhoto.Source = new BitmapImage(userPhotoUri);
+                UserImage.Source = new BitmapImage(userPhotoUri);
             }
             else
             {
-                //UserPhoto.Source = null;
+                UserImage.Source = null;
             }
         }
     }
