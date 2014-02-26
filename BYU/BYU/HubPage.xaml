@@ -70,10 +70,23 @@
                 AutomationProperties.AutomationId="BackButton"
                 AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41"/>
         <Image Source="Assets/Logos/logo_150_150.png" Grid.Column="1"/>
-        <Button x:Name="SignInButton" Content="Sign In" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,30,0" Click="SignIn_Click"/>
+        <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="50" Height="50" Grid.Column="2" Margin="0,0,30,0" Visibility="Collapsed"/>
+        <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Content="Mike Curtis" Background="#FFB6B6B6" Grid.Column="2" Margin="0,0,100,0" Visibility="Collapsed"/>
         <ScrollViewer VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="2" Grid.ColumnSpan="3">
             <StackPanel Orientation="Horizontal">
-                <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes">
+                <HubSection Width="342" x:Uid="LoginSection" Header="Login">
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="Sign in using your BYU NetID credentials to view more personalized information." FontSize="14" TextWrapping="WrapWholeWords"/>
+                            <TextBlock Text="Username:" Margin="0,20,0,0"/>
+                            <TextBox x:Name="LoginNameTextbox" Margin="0,10,0,0" />
+                            <TextBlock Text="Password:" Margin="0,20,0,0"/>
+                            <PasswordBox x:Name="LoginPasswordTextbox" Margin="0,10,0,0"/>
+                            <Button x:Name="LoginButton" Content="Login" Margin="0,20,0,0" HorizontalAlignment="Right" Click="Login_Click" />
+                        </StackPanel>
+                    </DataTemplate>
+                </HubSection>
+                <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes" Visibility="Collapsed">
                     <DataTemplate>
                         <StackPanel>
                             <Button Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">

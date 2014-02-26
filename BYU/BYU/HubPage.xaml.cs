@@ -165,28 +165,29 @@ namespace BYU
             {
                 if (userInfo != null)
                 {
-                    this.SignInButton.Content = userInfo.names.preferred_name;
+                    //this.SignInButton.Content = userInfo.names.preferred_name;
                 }
                 else
                 {
-                    this.SignInButton.Content = credential.UserName;
+                    //this.SignInButton.Content = credential.UserName;
                 }
             }
             else
             {
-                this.SignInButton.Content = "Sign In";
+                //this.SignInButton.Content = "Sign In";
             }
-            this.SignInButton.IsEnabled = !loggedIn;
+            //this.SignInButton.IsEnabled = !loggedIn;
             //this.UsernameTB.IsEnabled = !loggedIn;
             //this.PasswordInput.IsEnabled = !loggedIn;
             //this.LogoutButton.IsEnabled = loggedIn;
         }
 
-        private async void SignIn_Click(object sender, RoutedEventArgs e)
+        private async void Login_Click(object sender, RoutedEventArgs e)
         {
             var signinDialog = new Windows.UI.Popups.MessageDialog("Log in using your BYU NetID credentials.");
             await signinDialog.ShowAsync();
-            SignInButton.IsEnabled = false;
+            
+            //LogInButton.IsEnabled = false;
             //UsernameTB.IsEnabled = false;
             //PasswordInput.IsEnabled = false;
 
