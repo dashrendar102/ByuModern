@@ -48,11 +48,18 @@
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        
+
         <!-- Define Backgrounds -->
         <Border Grid.Row="0" Grid.ColumnSpan="3" Background="#FF002255"/>
-        
-        <Border Grid.Row="1" Grid.ColumnSpan="3" Background="#FFB0B0B0"/>
+
+        <Border Grid.Row="1" Grid.ColumnSpan="3">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0EDF9" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
 
         <!-- button and page title -->
         <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
@@ -63,26 +70,20 @@
                 AutomationProperties.AutomationId="BackButton"
                 AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41"/>
         <Image Source="Assets/Logos/logo_150_150.png" Grid.Column="1"/>
-        <TextBlock x:Name="studentName" Text="Student Name" Style="{StaticResource HeaderTextBlockStyle}" 
-                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="0,42,61,0" Grid.Column="2" HorizontalAlignment="Right" Width="393" TextAlignment="Right" FontFamily="Global User Interface" FontSize="48" />
+        <Button x:Name="SignInButton" Content="Sign In" Grid.Column="2" HorizontalAlignment="Right" Margin="0,0,30,0" Click="SignIn_Click"/>
         <ScrollViewer VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="2" Grid.ColumnSpan="3">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes" Grid.Column="0">
+            <StackPanel Orientation="Horizontal">
+                <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes">
                     <DataTemplate>
                         <StackPanel>
-                            <Button Grid.Row="0" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
+                            <Button Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
                                 <Image Source="Assets/class_demo.jpg"/>
                             </Button>
-                            <Button Grid.Row="4" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294"  Content="Enter Brian's Demotopia" Click="BergerHyperlinkButton_Click"/>
+                            <Button Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294"  Content="Enter Brian's Demotopia" Click="BergerHyperlinkButton_Click"/>
                         </StackPanel>
                     </DataTemplate>
                 </HubSection>
-                <HubSection x:Uid="MapHeader" Header="Where on campus" Padding="40,40,40,32" Width="428" Grid.Column="1">
+                <HubSection x:Uid="MapHeader" Header="Where on campus" Padding="40,40,40,32" Width="428">
                     <DataTemplate>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -108,7 +109,7 @@
                         </Grid>
                     </DataTemplate>
                 </HubSection>
-                <HubSection x:Uid="Map2Header" Header="Where on campus, version 2" Grid.Column="2">
+                <HubSection x:Uid="Map2Header" Header="Where on campus, version 2">
                     <DataTemplate>
                         <!-- width of 400 -->
                         <StackPanel Orientation="Vertical">
@@ -140,7 +141,7 @@
                         </StackPanel>
                     </DataTemplate>
                 </HubSection>
-            </Grid>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </Page>

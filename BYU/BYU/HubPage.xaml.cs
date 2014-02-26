@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -14,21 +15,25 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Security.Credentials;
+using Common.WebServices.DO.PersonSummary;
+using Common.WebServices.DO;
 using Common.WebServices;
 using Common;
 using BYU.BergerDemos;
-
-// The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=321224
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace BYU
 {
-    /// <summary>
-    /// A page that displays a grouped collection of items.
-    /// </summary>
     public sealed partial class HubPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        private const string userPhotoName = "userPhoto.jpg";
+        private Uri userPhotoUri;
+        PersonSummaryResponse userInfo;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -138,6 +143,90 @@ namespace BYU
             this.Frame.Navigate(typeof(BergerDemoLand));
         }
 
+        private PasswordCredential GetBYUCredentials()
+        {
+            var vault = new Windows.Security.Credentials.PasswordVault();
+            try
+            {
+                var credentialList = vault.FindAllByResource("byu.edu");
+                return credentialList.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
+        private void SetElementEnableStatuses()
+        {
+            var credential = GetBYUCredentials();
+            bool loggedIn = (credential != null);
+            if (loggedIn)
+            {
+                if (userInfo != null)
+                {
+                    this.SignInButton.Content = userInfo.names.preferred_name;
+                }
+                else
+                {
+                    this.SignInButton.Content = credential.UserName;
+                }
+            }
+            else
+            {
+                this.SignInButton.Content = "Sign In";
+            }
+            this.SignInButton.IsEnabled = !loggedIn;
+            //this.UsernameTB.IsEnabled = !loggedIn;
+            //this.PasswordInput.IsEnabled = !loggedIn;
+            //this.LogoutButton.IsEnabled = loggedIn;
+        }
+
+        private async void SignIn_Click(object sender, RoutedEventArgs e)
+        {
+            var signinDialog = new Windows.UI.Popups.MessageDialog("Log in using your BYU NetID credentials.");
+            await signinDialog.ShowAsync();
+            SignInButton.IsEnabled = false;
+            //UsernameTB.IsEnabled = false;
+            //PasswordInput.IsEnabled = false;
+
+            var userName = "username";// UsernameTB.Text;
+            var password = "password";// PasswordInput.Password;
+
+            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
+            WebServiceSession webServiceSession = await Task.Run(() =>
+            {
+                return WebServiceSession.GetSession(userName, password);
+            });
+            if (webServiceSession != null)
+            {
+                this.userInfo = PersonSummaryResponse.GetPersonSummary();
+
+                userPhotoUri = PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                vault.Add(new Windows.Security.Credentials.PasswordCredential(
+                    "byu.edu", "username", "password"));//UsernameTB.Text, PasswordInput.Password));
+            }
+            else
+            {
+                var messageDialog = new MessageDialog("credentials are invalid");
+                await messageDialog.ShowAsync();
+            }
+
+            SetElementEnableStatuses();
+        }
+
+        private void LoadUserPhoto()
+        {
+            if (userPhotoUri != null)
+            {
+                //UserPhoto.Source = new BitmapImage(userPhotoUri);
+            }
+            else
+            {
+                //UserPhoto.Source = null;
+            }
+        }
     }
 }
