@@ -143,6 +143,39 @@ namespace BYU
             this.Frame.Navigate(typeof(BergerDemoLand));
         }
 
+        private async void Login_Click(object sender, RoutedEventArgs e)
+        {
+            SignInButton.IsEnabled = false;
+            LoginNameTextbox.IsEnabled = false;
+            LoginPasswordTextbox.IsEnabled = false;
+
+            var userName = LoginNameTextbox.Text;
+            var password = LoginPasswordTextbox.Password;
+
+            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
+            WebServiceSession webServiceSession = await Task.Run(() =>
+            {
+                return WebServiceSession.GetSession(userName, password);
+            });
+            if (webServiceSession != null)
+            {
+                this.userInfo = PersonSummaryResponse.GetPersonSummary();
+
+                userPhotoUri = PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                vault.Add(new Windows.Security.Credentials.PasswordCredential(
+                    "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
+            }
+            else
+            {
+                var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
+                await messageDialog.ShowAsync();
+            }
+
+            SetElementEnableStatuses();
+        }
+
         private PasswordCredential GetBYUCredentials()
         {
             var vault = new Windows.Security.Credentials.PasswordVault();
@@ -173,52 +206,14 @@ namespace BYU
                     this.UserButton.Content = credential.UserName;
                 }
             }
-            else
-            {
-                this.SignInButton.Content = "Login";
-            }
+            this.LoginNameTextbox.IsEnabled = loggedIn;
+            this.LoginPasswordTextbox.IsEnabled = loggedIn;
             this.SignInButton.IsEnabled = loggedIn;
-            this.UserButton.IsEnabled = loggedIn;
             this.UserButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
             this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
-            this.LoginNameTextbox.IsEnabled = loggedIn;
-            this.LoginPasswordTextbox.IsEnabled = loggedIn;
             //this.LogoutButton.IsEnabled = !loggedIn;
-        }
-
-        private async void Login_Click(object sender, RoutedEventArgs e)
-        {            
-            SignInButton.IsEnabled = false;
-            LoginNameTextbox.IsEnabled = false;
-            LoginPasswordTextbox.IsEnabled = false;
-
-            var userName = LoginNameTextbox.Text;
-            var password = LoginPasswordTextbox.Password;
-
-            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
-            WebServiceSession webServiceSession = await Task.Run(() =>
-            {
-                return WebServiceSession.GetSession(userName, password);
-            });
-            if (webServiceSession != null)
-            {
-                this.userInfo = PersonSummaryResponse.GetPersonSummary();
-
-                userPhotoUri = PersonPhoto.getPhotoUri();
-                LoadUserPhoto();
-                var vault = new Windows.Security.Credentials.PasswordVault();
-                vault.Add(new Windows.Security.Credentials.PasswordCredential(
-                    "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
-            }
-            else
-            {
-                var messageDialog = new MessageDialog("credentials are invalid");
-                await messageDialog.ShowAsync();
-            }
-
-            SetElementEnableStatuses();
         }
 
         private void LoadUserPhoto()
