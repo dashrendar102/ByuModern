@@ -70,11 +70,48 @@ namespace BYU
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
-            this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+            //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
+            //this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+
+            // Restore values stored in session state.
+            if (e.PageState != null){
+                if (e.PageState.ContainsKey("UserObject"))
+                    userInfo = (PersonSummaryResponse)e.PageState["UserObject"];
+                if (e.PageState.ContainsKey("UserPhoto"))
+                {
+                    userPhotoUri = (Uri)e.PageState["UserPhoto"];
+                    LoadUserPhoto();
+                    SetElementEnableStatuses();
+                }
+            }
+
+
+            // Restore values stored in app data.
+            
+            //Just leaving an example below to mimic later on if needed
+            /*Windows.Storage.ApplicationDataContainer roamingSettings =
+                Windows.Storage.ApplicationData.Current.RoamingSettings;
+            if (roamingSettings.Values.ContainsKey("userName"))
+            {
+                nameInput.Text = roamingSettings.Values["userName"].ToString();
+            }*/
+        }
+
+        /// <summary>
+        /// Preserves state associated with this page in case the application is suspended or the
+        /// page is discarded from the navigation cache.  Values must conform to the serialization
+        /// requirements of <see cref="SuspensionManager.SessionState"/>.
+        /// </summary>
+        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
+        /// <param name="e">Event data that provides an empty dictionary to be populated with
+        /// serializable state.</param>
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+            e.PageState["UserObject"] = userInfo;
+            e.PageState["UserPhoto"] = userPhotoUri;
         }
 
         /// <summary>
