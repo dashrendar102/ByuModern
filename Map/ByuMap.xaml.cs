@@ -29,8 +29,6 @@ namespace Map
             this.InitializeComponent();
 
             MapInit = SetupMapAsync();
-
-            GetBuildings();
         }
 
         async Task SetupMapAsync()
