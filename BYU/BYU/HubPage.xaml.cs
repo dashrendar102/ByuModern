@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -14,21 +15,25 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.Security.Credentials;
+using Common.WebServices.DO.PersonSummary;
+using Common.WebServices.DO;
 using Common.WebServices;
 using Common;
 using BYU.BergerDemos;
-
-// The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=321224
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace BYU
 {
-    /// <summary>
-    /// A page that displays a grouped collection of items.
-    /// </summary>
     public sealed partial class HubPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        private const string userPhotoName = "userPhoto.jpg";
+        private Uri userPhotoUri;
+        PersonSummaryResponse userInfo;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -65,11 +70,48 @@ namespace BYU
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
-            this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+            //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
+            //this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+
+            // Restore values stored in session state.
+            if (e.PageState != null){
+                if (e.PageState.ContainsKey("UserObject"))
+                    userInfo = (PersonSummaryResponse)e.PageState["UserObject"];
+                if (e.PageState.ContainsKey("UserPhoto"))
+                {
+                    userPhotoUri = (Uri)e.PageState["UserPhoto"];
+                    LoadUserPhoto();
+                    SetElementEnableStatuses();
+                }
+            }
+
+
+            // Restore values stored in app data.
+            
+            //Just leaving an example below to mimic later on if needed
+            /*Windows.Storage.ApplicationDataContainer roamingSettings =
+                Windows.Storage.ApplicationData.Current.RoamingSettings;
+            if (roamingSettings.Values.ContainsKey("userName"))
+            {
+                nameInput.Text = roamingSettings.Values["userName"].ToString();
+            }*/
+        }
+
+        /// <summary>
+        /// Preserves state associated with this page in case the application is suspended or the
+        /// page is discarded from the navigation cache.  Values must conform to the serialization
+        /// requirements of <see cref="SuspensionManager.SessionState"/>.
+        /// </summary>
+        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
+        /// <param name="e">Event data that provides an empty dictionary to be populated with
+        /// serializable state.</param>
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+            e.PageState["UserObject"] = userInfo;
+            e.PageState["UserPhoto"] = userPhotoUri;
         }
 
         /// <summary>
@@ -138,6 +180,89 @@ namespace BYU
             this.Frame.Navigate(typeof(BergerDemoLand));
         }
 
+        private async void Login_Click(object sender, RoutedEventArgs e)
+        {
+            SignInButton.IsEnabled = false;
+            LoginNameTextbox.IsEnabled = false;
+            LoginPasswordTextbox.IsEnabled = false;
 
+            var userName = LoginNameTextbox.Text;
+            var password = LoginPasswordTextbox.Password;
+
+            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
+            WebServiceSession webServiceSession = await Task.Run(() =>
+            {
+                return WebServiceSession.GetSession(userName, password);
+            });
+            if (webServiceSession != null)
+            {
+                this.userInfo = PersonSummaryResponse.GetPersonSummary();
+
+                userPhotoUri = PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                vault.Add(new Windows.Security.Credentials.PasswordCredential(
+                    "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
+            }
+            else
+            {
+                var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
+                await messageDialog.ShowAsync();
+            }
+
+            SetElementEnableStatuses();
+        }
+
+        private PasswordCredential GetBYUCredentials()
+        {
+            var vault = new Windows.Security.Credentials.PasswordVault();
+            try
+            {
+                var credentialList = vault.FindAllByResource("byu.edu");
+                return credentialList.FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        private void SetElementEnableStatuses()
+        {
+            
+            var credential = GetBYUCredentials();
+            bool loggedIn = (credential != null);
+            if (loggedIn)
+            {
+                if (userInfo != null)
+                {
+                    this.UserButton.Content = userInfo.names.preferred_name;
+                }
+                else
+                {
+                    this.UserButton.Content = credential.UserName;
+                }
+            }
+            this.LoginNameTextbox.IsEnabled = loggedIn;
+            this.LoginPasswordTextbox.IsEnabled = loggedIn;
+            this.SignInButton.IsEnabled = loggedIn;
+            this.UserButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
+            this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            //this.LogoutButton.IsEnabled = !loggedIn;
+        }
+
+        private void LoadUserPhoto()
+        {
+            if (userPhotoUri != null)
+            {
+                UserImage.Source = new BitmapImage(userPhotoUri);
+            }
+            else
+            {
+                UserImage.Source = null;
+            }
+        }
     }
 }
