@@ -188,7 +188,7 @@ namespace BYU
                 var messageDialog = new MessageDialog("Username and Password are invalid. Please try again.");
                 await messageDialog.ShowAsync();
             }
-
+            ProgressBar.Visibility = Visibility.Visible;
             SignInButton.IsEnabled = false;
             LoginNameTextbox.IsEnabled = false;
             LoginPasswordTextbox.IsEnabled = false;
@@ -219,6 +219,7 @@ namespace BYU
             }
 
             SetElementEnableStatuses();
+            ProgressBar.Visibility = Visibility.Collapsed;
         }
 
         private PasswordCredential GetBYUCredentials()
@@ -273,11 +274,11 @@ namespace BYU
             }
         }
 
-        private void PopulateClasses()
+        private async void PopulateClasses()
         {
-            //ClassScheduleResponse classes = ClassScheduleRoot.GetClassSchedule();
+            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
             
-            //ClassesSection.ItemsSource = classes.courseList;
+            ClassesSection.ItemsSource = classes.courseList;
         }
     }
 }
