@@ -36,12 +36,12 @@ namespace Common.WebServices.DO.PersonSummary
         [DataMember]
         public Relationship[] relationships;
 
-        public static PersonSummaryResponse GetPersonSummary()
+        public async static Task<PersonSummaryResponse> GetPersonSummary()
         {
-            WebServiceSession session = WebServiceSession.GetSession();
+            WebServiceSession session = await WebServiceSession.GetSession();
             string personId = session.personId;
 
-            RootObject root = BYUWebServiceHelper.GetObjectFromWebService<RootObject>(BYUWebServiceURLs.GET_PERSONAL_INFO + WebServiceSession.GetSession().personId);
+            RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(BYUWebServiceURLs.GET_PERSONAL_INFO + (await WebServiceSession.GetSession()).personId);
             return root.PersonSummaryService.response;
         }
     }

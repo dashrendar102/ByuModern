@@ -15,11 +15,11 @@ namespace Common.WebServices.DO
         private static Uri photoUri = null;
         private const string userPhotoName = "userPhoto.jpg";
 
-        public static Uri getPhotoUri()
+        public async static Task<Uri> getPhotoUri()
         {
             if (!photoFileExists())
             {
-                using (Stream photoStream = BYUWebServiceHelper.sendAuthenticatedGETRequest(BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + WebServiceSession.GetSession().personId))
+                using (Stream photoStream = await BYUWebServiceHelper.sendAuthenticatedGETRequest(BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId))
                 {
 
                     IAsyncOperation<StorageFile> getPhotoFileAsync = ApplicationData.Current.LocalFolder.CreateFileAsync(userPhotoName, CreationCollisionOption.ReplaceExisting);

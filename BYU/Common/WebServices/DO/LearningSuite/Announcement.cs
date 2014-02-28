@@ -51,9 +51,9 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public string yearTerm;
 
-        public static Announcement[] GetAnnouncements(string courseId)
+        public async static Task<Announcement[]> GetAnnouncements(string courseId)
         {
-            return BYUWebServiceHelper.GetObjectFromWebService<Announcement[]>(BYUWebServiceURLs.GET_ANNOUNCEMENTS + courseId);
+            return await BYUWebServiceHelper.GetObjectFromWebService<Announcement[]>(BYUWebServiceURLs.GET_ANNOUNCEMENTS + courseId);
         }
     }
 }

@@ -17,11 +17,11 @@ namespace Common.WebServices
     {
         private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
 
-        public static string GetNonceAuthHeader()
+        public async static Task<string> GetNonceAuthHeader()
         {
-            WebServiceSession session = WebServiceSession.GetSession();
+            WebServiceSession session = await WebServiceSession.GetSession();
 
-            Stream responseStream = SendPost(BYUWebServiceURLs.GET_NONCE_URL + session.apiKey, null);
+            Stream responseStream = await SendPost(BYUWebServiceURLs.GET_NONCE_URL + session.apiKey, null);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Nonce));
             Nonce nonce = (Nonce)serializer.ReadObject(responseStream);
 
@@ -30,14 +30,14 @@ namespace Common.WebServices
             return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
         }
 
-        public static Stream sendAuthenticatedGETRequest(string url)
+        public async static Task<Stream> sendAuthenticatedGETRequest(string url)
         {
-            return sendAuthenticatedGETRequest(url, null);
+            return await sendAuthenticatedGETRequest(url, null);
         }
 
-        public static Stream sendAuthenticatedGETRequest(string url, string acceptString)
+        public async static Task<Stream> sendAuthenticatedGETRequest(string url, string acceptString)
         {
-            string nonceHeader = GetNonceAuthHeader();
+            string nonceHeader = await GetNonceAuthHeader();
 
             try
             {
@@ -65,19 +65,19 @@ namespace Common.WebServices
             }
         }
 
-        internal static T GetObjectFromWebService<T>(string url)
+        internal async static Task<T> GetObjectFromWebService<T>(string url)
         {
             if(WebServiceSession.GetSession() == null)
             {
                 return default(T);
             }
 
-            Stream responseStream = sendAuthenticatedGETRequest(url);
+            Stream responseStream = await sendAuthenticatedGETRequest(url);
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
             return (T)serializer.ReadObject(responseStream);
         }
 
-        internal static Stream SendPost(string url, string parameters)
+        internal async static Task<Stream> SendPost(string url, string parameters)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             
@@ -86,19 +86,15 @@ namespace Common.WebServices
 
             if (parameters != null)
             {
-                Task<Stream> requestTask = request.GetRequestStreamAsync();
-                requestTask.Wait();
-                using (StreamWriter requestStream = new StreamWriter(requestTask.Result))
+                Stream requestBasicStream = await request.GetRequestStreamAsync();
+                using (StreamWriter requestStream = new StreamWriter(requestBasicStream))
                 {
                     requestStream.Write(parameters);
                 }
                 
             }
 
-            Task<WebResponse> responseTask = request.GetResponseAsync();
-            responseTask.Wait();
-
-            WebResponse response = responseTask.Result;
+            WebResponse response = await request.GetResponseAsync();
 
             return response.GetResponseStream();
         }

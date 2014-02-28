@@ -183,6 +183,12 @@ namespace BYU
 
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
+            if(string.IsNullOrEmpty(LoginNameTextbox.Text) || string.IsNullOrEmpty(LoginPasswordTextbox.Password))
+            {
+                var messageDialog = new MessageDialog("Username and Password are invalid. Please try again.");
+                await messageDialog.ShowAsync();
+            }
+
             SignInButton.IsEnabled = false;
             LoginNameTextbox.IsEnabled = false;
             LoginPasswordTextbox.IsEnabled = false;
@@ -197,9 +203,9 @@ namespace BYU
             });
             if (webServiceSession != null)
             {
-                this.userInfo = PersonSummaryResponse.GetPersonSummary();
+                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
 
-                userPhotoUri = PersonPhoto.getPhotoUri();
+                userPhotoUri = await PersonPhoto.getPhotoUri();
                 LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
