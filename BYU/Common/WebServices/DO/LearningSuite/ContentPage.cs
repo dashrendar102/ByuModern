@@ -28,9 +28,9 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public string title;
 
-        public static ContentPage[] GetContentPages(string courseId)
+        public async static Task<ContentPage[]> GetContentPages(string courseId)
         {
-            return BYUWebServiceHelper.GetObjectFromWebService<ContentPage[]>(BYUWebServiceURLs.GET_CONTENT_PAGES + courseId);
+            return await BYUWebServiceHelper.GetObjectFromWebService<ContentPage[]>(BYUWebServiceURLs.GET_CONTENT_PAGES + courseId);
         }
     }
 }

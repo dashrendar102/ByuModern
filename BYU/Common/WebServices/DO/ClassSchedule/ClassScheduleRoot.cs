@@ -13,14 +13,14 @@ namespace Common.WebServices.DO.ClassSchedule
         [DataMember(Name = "WeeklySchedService")]
         public WeeklySchedService WeeklySchedService { get; set; }
 
-        public static ClassScheduleResponse GetClassSchedule()
+        public async static Task<ClassScheduleResponse> GetClassSchedule()
         {
-            WebServiceSession session = WebServiceSession.GetSession();
+            WebServiceSession session = await WebServiceSession.GetSession();
             Task<string> termTask = TermUtility.TermUtility.getCurrentTerm();
             termTask.Wait();
             string term = termTask.Result;
 
-            ClassScheduleRoot schedule = BYUWebServiceHelper.GetObjectFromWebService<ClassScheduleRoot>(string.Format(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, term));
+            ClassScheduleRoot schedule = await BYUWebServiceHelper.GetObjectFromWebService<ClassScheduleRoot>(string.Format(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, term));
             return schedule.WeeklySchedService.response;
         }
     }

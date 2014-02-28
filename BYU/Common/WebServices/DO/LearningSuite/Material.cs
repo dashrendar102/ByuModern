@@ -56,11 +56,11 @@ namespace Common.WebServices.DO.LearningSuite
         public string usedPrice;
 
         [DataMember]
-        public string vendor;
+        public string vendor { get; set; }
 
-        public static Material[] GetMaterials(string courseId)
+        public static async Task<Material[]> GetMaterials(string courseId)
         {
-            return BYUWebServiceHelper.GetObjectFromWebService<Material[]>(string.Format(BYUWebServiceURLs.GET_MATERIALS, courseId));
+            return await BYUWebServiceHelper.GetObjectFromWebService<Material[]>(string.Format(BYUWebServiceURLs.GET_MATERIALS, courseId));
         }
     }
 }

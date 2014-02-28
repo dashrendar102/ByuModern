@@ -40,9 +40,9 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public string updatedBy;
 
-        public static SystemAnnouncement GetSystemAnnouncement()
+        public async static Task<SystemAnnouncement> GetSystemAnnouncement()
         {
-            return BYUWebServiceHelper.GetObjectFromWebService<SystemAnnouncement>(BYUWebServiceURLs.GET_SYSTEM_ANNOUNCEMENT);
+            return await BYUWebServiceHelper.GetObjectFromWebService<SystemAnnouncement>(BYUWebServiceURLs.GET_SYSTEM_ANNOUNCEMENT);
         }
     }
 }
