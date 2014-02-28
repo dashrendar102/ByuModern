@@ -49,7 +49,7 @@
         </Grid.ChildrenTransitions>
 
         <!-- Define Backgrounds -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="#FF002255"/>
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="White"/>
 
         <Border Grid.Row="1" Grid.ColumnSpan="3">
             <Border.Background>
@@ -68,7 +68,7 @@
                 AutomationProperties.Name="Back"
                 AutomationProperties.AutomationId="BackButton"
                 AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41"/>
-        <Image Source="Assets/Logos/logo_150_150.png" Grid.Column="1"/>
+        <Image Source="Assets/Logos/logo_150_150_blue.png" Grid.Column="1"/>
         <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="2" Margin="0,0,15,0" Visibility="Collapsed"/>
         <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Content="Mike Curtis" Background="#FFB6B6B6" Grid.Column="2" Margin="0,0,130,0" Visibility="Collapsed"/>
         <ScrollViewer VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="2" Grid.ColumnSpan="3">
