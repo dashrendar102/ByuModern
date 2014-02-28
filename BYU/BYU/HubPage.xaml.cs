@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Security.Credentials;
 using Common.WebServices.DO.PersonSummary;
+using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO;
 using Common.WebServices;
 using Common;
@@ -203,6 +204,7 @@ namespace BYU
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
                     "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
+                PopulateClasses();
             }
             else
             {
@@ -263,6 +265,13 @@ namespace BYU
             {
                 UserImage.Source = null;
             }
+        }
+
+        private void PopulateClasses()
+        {
+            //ClassScheduleResponse classes = ClassScheduleRoot.GetClassSchedule();
+            
+            ClassesSection.ItemsSource = classes.courseList;
         }
     }
 }
