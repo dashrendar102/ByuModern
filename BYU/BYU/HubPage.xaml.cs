@@ -271,7 +271,7 @@ namespace BYU
         {
             //ClassScheduleResponse classes = ClassScheduleRoot.GetClassSchedule();
             
-            ClassesSection.ItemsSource = classes.courseList;
+            //ClassesSection.ItemsSource = classes.courseList;
         }
     }
 }
