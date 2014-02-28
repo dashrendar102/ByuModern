@@ -25,20 +25,11 @@ namespace Common.WebServices.DO.TermUtility
                         + date.Day.ToString("00");
             url += "/current_yyt";
 
-            String result = await MakeWebRequest(url);
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(RootObject));
-            byte[] byteArray = Encoding.Unicode.GetBytes(result);
-            MemoryStream stream = new MemoryStream(byteArray);
+            WebServiceSession session = await WebServiceSession.GetSession();
+            string personId = session.personId;
 
-            RootObject root = (RootObject)serializer.ReadObject(stream);
+            RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url);
             return root.ControldateswsService.response.first_date_list().year_term.ToString();
-        }
-
-        internal static async Task<String> MakeWebRequest(String url)
-        {
-            HttpClient http = new System.Net.Http.HttpClient();
-            HttpResponseMessage response = await http.GetAsync(url);
-            return await response.Content.ReadAsStringAsync();
         }
     }
 }

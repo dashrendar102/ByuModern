@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -19,42 +20,34 @@ namespace Common.WebServices.DO
         {
             if (!photoFileExists())
             {
-                using (Stream photoStream = await BYUWebServiceHelper.sendAuthenticatedGETRequest(BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId))
+                string photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId;
+                using (WebResponse response = await BYUWebServiceHelper.sendAuthenticatedGETRequest(photoRequestUrl))
                 {
+                    Stream photoStream = response.GetResponseStream();
 
                     IAsyncOperation<StorageFile> getPhotoFileAsync = ApplicationData.Current.LocalFolder.CreateFileAsync(userPhotoName, CreationCollisionOption.ReplaceExisting);
-                    Task<StorageFile> getPhotoFileTask = getPhotoFileAsync.AsTask<StorageFile>();
-                    getPhotoFileTask.Wait();
-                    StorageFile resultFile = getPhotoFileTask.Result;
+                    StorageFile resultFile = await getPhotoFileAsync.AsTask<StorageFile>();
 
                     IAsyncOperation<IRandomAccessStream> fileStreamAsync = resultFile.OpenAsync(FileAccessMode.ReadWrite);
-                    Task<IRandomAccessStream> fileStreamTask = fileStreamAsync.AsTask<IRandomAccessStream>();
-                    fileStreamTask.Wait();
-                    IRandomAccessStream fileStream = fileStreamTask.Result;
+                    IRandomAccessStream fileStream = await fileStreamAsync.AsTask<IRandomAccessStream>();
 
                     using (Stream writeStream = fileStream.GetOutputStreamAt(0).AsStreamForWrite())
                     {
 
                         byte[] buffer = new byte[1025];
-                        Task<int> bytesReadTask = photoStream.ReadAsync(buffer, 0, 1024);
-                        bytesReadTask.Wait();
-                        int bytesRead = bytesReadTask.Result;
+                        int bytesRead = await photoStream.ReadAsync(buffer, 0, 1024);
 
                         while (bytesRead > 0)
                         {
-                            Task writeTask = writeStream.WriteAsync(buffer, 0, bytesRead);
-                            writeTask.Wait();
+                            await writeStream.WriteAsync(buffer, 0, bytesRead);
 
-                            bytesReadTask = photoStream.ReadAsync(buffer, 0, 1024);
-                            bytesReadTask.Wait();
-                            bytesRead = bytesReadTask.Result;
+                            bytesRead = await photoStream.ReadAsync(buffer, 0, 1024);
                         }
                     }
 
                     photoUri = new Uri(resultFile.Path, UriKind.Absolute);
                     return photoUri;
                 }
-                
             }
             else
             {

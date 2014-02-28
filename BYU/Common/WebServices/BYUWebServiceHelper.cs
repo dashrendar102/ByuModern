@@ -21,21 +21,23 @@ namespace Common.WebServices
         {
             WebServiceSession session = await WebServiceSession.GetSession();
 
-            Stream responseStream = await SendPost(BYUWebServiceURLs.GET_NONCE_URL + session.apiKey, null);
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Nonce));
-            Nonce nonce = (Nonce)serializer.ReadObject(responseStream);
+            using (WebResponse response = await SendPost(BYUWebServiceURLs.GET_NONCE_URL + session.apiKey, null))
+            {
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(Nonce));
+                Nonce nonce = (Nonce)serializer.ReadObject(response.GetResponseStream());
 
-            string nonceHash = GetHmac(session.sharedSecret, nonce.nonceValue);
+                string nonceHash = GetHmac(session.sharedSecret, nonce.nonceValue);
 
-            return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
+                return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
+            }
         }
 
-        public async static Task<Stream> sendAuthenticatedGETRequest(string url)
+        public async static Task<WebResponse> sendAuthenticatedGETRequest(string url)
         {
             return await sendAuthenticatedGETRequest(url, null);
         }
 
-        public async static Task<Stream> sendAuthenticatedGETRequest(string url, string acceptString)
+        public async static Task<WebResponse> sendAuthenticatedGETRequest(string url, string acceptString)
         {
             string nonceHeader = await GetNonceAuthHeader();
 
@@ -43,22 +45,18 @@ namespace Common.WebServices
             {
                 HttpWebRequest request = HttpWebRequest.CreateHttp(url);
                 request.Headers["Authorization"] = nonceHeader;
-                
+
                 if (!string.IsNullOrEmpty(acceptString))
                 {
                     request.Accept = acceptString;
                 }
 
-                Task<WebResponse> responseTask = request.GetResponseAsync();
-                responseTask.Wait();
-
-                WebResponse response = responseTask.Result;
-                return response.GetResponseStream();
+                return await request.GetResponseAsync();
             }
-            catch (WebException ex)
+            catch (WebException)
             {
-                Stream errorStream = ex.Response.GetResponseStream();
-                StreamReader streamReader = new StreamReader(errorStream);
+                //Stream errorStream = ex.Response.GetResponseStream();
+                //StreamReader streamReader = new StreamReader(errorStream);
 
                 //Console.Error.WriteLine(streamReader.ReadToEnd());
                 return null;
@@ -67,36 +65,38 @@ namespace Common.WebServices
 
         internal async static Task<T> GetObjectFromWebService<T>(string url)
         {
-            if(WebServiceSession.GetSession() == null)
+            if (WebServiceSession.GetSession() == null)
             {
                 return default(T);
             }
 
-            Stream responseStream = await sendAuthenticatedGETRequest(url);
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
-            return (T)serializer.ReadObject(responseStream);
+            //use the application/json accept header because we only support JSON parsing in this method
+            using (var response = await sendAuthenticatedGETRequest(url, "application/json"))
+            {
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+                return (T)serializer.ReadObject(response.GetResponseStream());
+            }
         }
 
-        internal async static Task<Stream> SendPost(string url, string parameters)
+        internal async static Task<WebResponse> SendPost(string url, string parameters)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            
+
             request.Method = "POST";
             request.Accept = "application/json";
 
             if (parameters != null)
             {
-                Stream requestBasicStream = await request.GetRequestStreamAsync();
-                using (StreamWriter requestStream = new StreamWriter(requestBasicStream))
+                using (Stream requestStream = await request.GetRequestStreamAsync())
                 {
-                    requestStream.Write(parameters);
+                    using (StreamWriter requestWriter = new StreamWriter(requestStream))
+                    {
+                        requestWriter.Write(parameters);
+                    }
                 }
-                
             }
 
-            WebResponse response = await request.GetResponseAsync();
-
-            return response.GetResponseStream();
+            return await request.GetResponseAsync();
         }
 
         //based on from http://msdn.microsoft.com/en-us/library/windows/apps/windows.security.cryptography.core.macalgorithmprovider.aspx

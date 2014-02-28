@@ -210,7 +210,7 @@ namespace BYU
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
                     "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
-                PopulateClasses();
+                await PopulateClasses();
             }
             else
             {
@@ -252,9 +252,9 @@ namespace BYU
                     this.UserButton.Content = credential.UserName;
                 }
             }
-            this.LoginNameTextbox.IsEnabled = loggedIn;
-            this.LoginPasswordTextbox.IsEnabled = loggedIn;
-            this.SignInButton.IsEnabled = loggedIn;
+            this.LoginNameTextbox.IsEnabled = !loggedIn;
+            this.LoginPasswordTextbox.IsEnabled = !loggedIn;
+            this.SignInButton.IsEnabled = !loggedIn;
             this.UserButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
@@ -274,7 +274,7 @@ namespace BYU
             }
         }
 
-        private async void PopulateClasses()
+        private async Task PopulateClasses()
         {
             ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
             

@@ -15,10 +15,8 @@ namespace Common.WebServices.DO.ClassSchedule
 
         public async static Task<ClassScheduleResponse> GetClassSchedule()
         {
+            string term = await TermUtility.TermUtility.getCurrentTerm();
             WebServiceSession session = await WebServiceSession.GetSession();
-            Task<string> termTask = TermUtility.TermUtility.getCurrentTerm();
-            termTask.Wait();
-            string term = termTask.Result;
 
             ClassScheduleRoot schedule = await BYUWebServiceHelper.GetObjectFromWebService<ClassScheduleRoot>(string.Format(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, term));
             return schedule.WeeklySchedService.response;

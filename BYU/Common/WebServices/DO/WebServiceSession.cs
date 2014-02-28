@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -90,10 +91,11 @@ namespace Common.WebServices.DO
 
                 try
                 {
-                    using (Stream responseStream = await BYUWebServiceHelper.SendPost(BYUWebServiceURLs.GET_WS_SESSION,
-                        "timeout=" + timeout + "&netId=" + netId + "&password=" + password))
+                    string url = BYUWebServiceURLs.GET_WS_SESSION;
+                    string parameters = "timeout=" + timeout + "&netId=" + netId + "&password=" + password;
+                    using (WebResponse response = await BYUWebServiceHelper.SendPost(url, parameters))
                     {
-                        curSession = (WebServiceSession)serializer.ReadObject(responseStream);
+                        curSession = (WebServiceSession)serializer.ReadObject(response.GetResponseStream());
                         return curSession;
                     }
                 }
