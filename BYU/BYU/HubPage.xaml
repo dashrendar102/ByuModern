@@ -93,14 +93,7 @@
                 </StackPanel>
                 
                 <ListView Grid.Column="1" Visibility="Collapsed" Margin="50,30,40,0" x:Name="ClassesSection" ItemsSource="{Binding}" Foreground="Black" FontSize="30">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal" Margin="2">
-                                <TextBlock Text="Name:" Margin="2" />
-                                <TextBlock Text="{Binding course_title}" Margin="2" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                  
                 </ListView>
 
                 <StackPanel Grid.Column="1" Visibility="Collapsed" Margin="50,30,40,0" x:Name="ClassesSection2">

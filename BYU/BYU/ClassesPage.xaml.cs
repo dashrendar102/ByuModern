@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Input;
+using System.Windows;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -15,6 +16,13 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using System.Collections.ObjectModel;
+using Windows.UI;
+using Common.WebServices.DO;
+using Common.WebServices.DO.ClassSchedule;
+using Common.WebServices.DO.TermUtility;
+using Common.WebServices;
+using System.Threading.Tasks;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -28,6 +36,7 @@ namespace BYU
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private ClassScheduleResponse user_classes = null;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -46,12 +55,56 @@ namespace BYU
             get { return this.defaultViewModel; }
         }
 
+        /// <summary>
+        /// Initializes the page and prompts user login.
+        /// </summary>
         public ClassesPage()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
+            selectedClassContent.Visibility = Visibility.Collapsed;
+            this.LoadClasses();           
         }
+
+        /// <summary>
+        /// Requires authentication. Obtains class list from web service and loads menu.
+        /// </summary>
+        private async void LoadClasses()
+        {
+            ObservableCollection<Button> class_buttons = new ObservableCollection<Button>();
+            
+            user_classes = await Task.Run(() => {
+                return ClassScheduleRoot.GetClassSchedule();
+            });
+
+            for (int i = 0; i < user_classes.courseList.Count(); i++)
+            {
+                Button button = new Button();
+                button.Content = user_classes.courseList.ElementAt(i).course;
+                button.Click += ClassClick;
+                button.Height = 70;
+                button.Width = 455;
+                button.FontSize = 24;
+                button.Margin = new Thickness(0);
+                button.Foreground = new SolidColorBrush(Colors.White);
+                button.Background = new SolidColorBrush(Color.FromArgb(255, 00, 34, 85));
+                class_buttons.Add(button);
+            }
+            classList.DataContext = class_buttons;
+
+            // show overview panel
+        }
+       
+        /// <summary>
+        /// Retrieves course information from class list data structure.
+        /// </summary>
+        /// <param name="i"></param>
+        private void loadCourseInfo(int i)
+        {
+
+        }
+
 
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
@@ -93,14 +146,17 @@ namespace BYU
             navigationHelper.OnNavigatedFrom(e);
         }
 
+        #endregion
+
         private void ClassClick(object sender, RoutedEventArgs e)
         {
-            selectedClassContent.ScrollIntoView(selectedClassContent);
-            //ScrollIntoViewAlignment
             Button test = (Button)sender;
+            if (selectedClassTitle.Text.Equals((String)test.Content))
+            {
+                selectedClassContent.Visibility = Visibility.Collapsed;
+            } else selectedClassContent.Visibility = Visibility.Visible;
+
             selectedClassTitle.Text = (String)test.Content;
         }
-
-        #endregion
     }
 }
