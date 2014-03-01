@@ -91,19 +91,21 @@
                     <Button x:Name="SignInButton" Content="Login" Margin="0,20,0,0" HorizontalAlignment="Right" Click="Login_Click"/>
                     <ProgressBar Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,-30,0,0" HorizontalAlignment="Left" Width="185"/>
                 </StackPanel>
-                
-                <ListView Grid.Column="1" Visibility="Collapsed" Margin="50,30,40,0" x:Name="ClassesSection" ItemsSource="{Binding}" Foreground="Black" FontSize="30">
-                  
-                </ListView>
 
-                <StackPanel Grid.Column="1" Visibility="Collapsed" Margin="50,30,40,0" x:Name="ClassesSection2">
-                    <!--<TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <Button Margin="0,20,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                        <Image Source="Assets/class_demo.jpg"/>
-                    </Button>
-                    <Button Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294"  Content="Enter Brian's Demotopia" Click="BergerHyperlinkButton_Click"/>-->
+                <StackPanel x:Name="ClassesSection" Grid.Column="1" Visibility="Collapsed" Margin="50,30,40,0" >
+                    <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <ListView x:Name="ClassesListView" ItemsSource="{Binding}" Margin="0,20,0,0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Button Content="{Binding course}" Click="ClassButton_Click" Width="300" Height="70" FontFamily="Global User Interface" FontSize="24" Foreground="White">
+                                    <Button.Background>
+                                        <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                                    </Button.Background>
+                                </Button>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackPanel>
-
                 <Grid Grid.Column="2" Margin="50,30,40,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>

@@ -279,20 +279,7 @@ namespace BYU
         private async Task PopulateClasses()
         {
             ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
-            ObservableCollection<Button> class_buttons = new ObservableCollection<Button>();
-
-            foreach (ScheduleEntry class_entry in classes.courseList) {
-                Button button = new Button();
-                button.Content = class_entry.course;
-                button.Click += ClassButton_Click;
-                button.Height = 70;
-                button.Width = 300;
-                button.FontSize = 24;
-                button.Margin = new Thickness(0);
-                button.Foreground = new SolidColorBrush(Colors.White);
-                button.Background = new SolidColorBrush(Color.FromArgb(255, 00, 34, 85));
-                class_buttons.Add(button);
-            }
-            ClassesSection.ItemsSource = class_buttons;        }
+            ClassesListView.ItemsSource = new ObservableCollection<ScheduleEntry>(classes.courseList);        
+        }
     }
 }
