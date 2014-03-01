@@ -48,7 +48,7 @@ namespace Map
         {
             return await Task<IEnumerable<ByuMapEntity>>.Run(() =>
             {
-                if (MapInit != null && (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10))))
+                if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
                     var buildings =
                         from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
