@@ -41,7 +41,7 @@ namespace Map
 
         void VenueManager_ActiveVenueChanged(object sender, ActiveVenueChangedEventArgs e)
         {
-            BingMap.VenueManager.ActiveVenue = ByuVenue;
+            ResetView();
         }
 
         public async Task<IEnumerable<ByuMapEntity>> GetBuildings()
@@ -60,14 +60,22 @@ namespace Map
             });
         }
 
+        public async void ResetView()
+        {
+            BingMap.VenueManager.ActiveVenue = ByuVenue;
+            BingMap.SetView(new Bing.Maps.Location(40.2525, -111.6494), 16);
+            var buildings = await GetBuildings();
+            foreach (var building in buildings)
+                DeselectEntity(building);
+        }
+
         ByuMapEntity lastSelected = null;
 
         public void SelectEntity(ByuMapEntity entity)
         {
             if (lastSelected != null)
             {
-                lastSelected.BingEntity.Unhighlight();
-                lastSelected.BingEntity.HideOutline();
+                DeselectEntity(lastSelected);
             }
             
             entity.BingEntity.Highlight();
@@ -76,6 +84,12 @@ namespace Map
             BingMap.SetView(entity.BingEntity.Location, 18.5);
 
             lastSelected = entity;
+        }
+
+        private void DeselectEntity(ByuMapEntity entity)
+        {
+            entity.BingEntity.Unhighlight();
+            entity.BingEntity.HideOutline();
         }
 
     }

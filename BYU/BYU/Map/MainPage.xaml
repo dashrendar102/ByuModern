@@ -40,7 +40,7 @@
             SelectionChanged="ItemListView_SelectionChanged">
             <ListView.Header>
                 <StackPanel Margin ="0, 20, 0, 15">
-                    <TextBlock Text="Buildings" Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="70"/>
+                    <TextBlock Text="Buildings" Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="70" Margin="6"/>
                 </StackPanel>
             </ListView.Header>
             <ListView.ItemTemplate>

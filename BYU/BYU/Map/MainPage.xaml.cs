@@ -154,11 +154,12 @@ namespace Map
         private void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             IList<object> results = ((ListView)sender).SelectedItems;
-            if(results.Count != 0)
+            if (results.Count != 0)
             {
                 ByuMapEntity entity = (ByuMapEntity)results[0];
                 map.SelectEntity(entity);
             }
+            else map.ResetView();
         }
 
         private bool CanGoBack()
