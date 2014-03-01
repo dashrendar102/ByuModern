@@ -168,7 +168,7 @@ namespace BYU
 
         private void ClassButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ClassesPage));
+            this.Frame.Navigate(typeof(ClassesPage), ((Button)sender).Content);
         }
 
         private void MapButton_Clicked(object sender, RoutedEventArgs e)

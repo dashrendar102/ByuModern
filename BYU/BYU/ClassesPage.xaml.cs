@@ -56,15 +56,24 @@ namespace BYU
         }
 
         /// <summary>
-        /// Initializes the page and prompts user login.
+        /// Initializes the page
         /// </summary>
         public ClassesPage()
         {
+            Init();
+            selectedClassContent.Visibility = Visibility.Collapsed; 
+        }
+
+        public ClassesPage(String className){
+            Init();
+            selectedClassTitle.Text = className;
+        }
+
+        private void Init(){
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-            selectedClassContent.Visibility = Visibility.Collapsed;
-            this.LoadClasses();           
+            this.LoadClasses();  
         }
 
         /// <summary>
@@ -139,6 +148,8 @@ namespace BYU
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            var title = e.Parameter as String;
+            selectedClassTitle.Text = title;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
