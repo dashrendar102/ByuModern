@@ -60,10 +60,22 @@ namespace Map
             });
         }
 
+        ByuMapEntity lastSelected = null;
+
         public void SelectEntity(ByuMapEntity entity)
         {
+            if (lastSelected != null)
+            {
+                lastSelected.BingEntity.Unhighlight();
+                lastSelected.BingEntity.HideOutline();
+            }
+            
             entity.BingEntity.Highlight();
             entity.BingEntity.ShowOutline();
+
+            BingMap.SetView(entity.BingEntity.Location, 18.5);
+
+            lastSelected = entity;
         }
 
     }
