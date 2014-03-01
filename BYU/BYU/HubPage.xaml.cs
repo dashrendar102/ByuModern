@@ -174,13 +174,6 @@ namespace BYU
             this.Frame.Navigate(typeof(MapPage));
         }
 
-        private void BergerHyperlinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Demo demo = new Demo();
-            //demo.doDemoStuff();
-            this.Frame.Navigate(typeof(BergerDemoLand));
-        }
-
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
             if(string.IsNullOrEmpty(LoginNameTextbox.Text) || string.IsNullOrEmpty(LoginPasswordTextbox.Password))
@@ -279,6 +272,11 @@ namespace BYU
             ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
             
             ClassesSection.ItemsSource = classes.courseList;
+        }
+
+        private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(BergerDemoLand));
         }
     }
 }
