@@ -87,7 +87,7 @@
                     <TextBlock Text="Username:" Margin="0,20,0,0"/>
                     <TextBox x:Name="LoginNameTextbox" Margin="0,10,0,0" />
                     <TextBlock Text="Password:" Margin="0,20,0,0"/>
-                    <PasswordBox x:Name="LoginPasswordTextbox" Margin="0,10,0,0" IsPasswordRevealButtonEnabled="True" />
+                    <PasswordBox x:Name="LoginPasswordTextbox" Margin="0,10,0,0" IsPasswordRevealButtonEnabled="True" KeyDown="PasswordTextbox_KeyDown" />
                     <Button x:Name="SignInButton" Content="Login" Margin="0,20,0,0" HorizontalAlignment="Right" Click="Login_Click"/>
                     <ProgressBar Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,-30,0,0" HorizontalAlignment="Left" Width="185"/>
                 </StackPanel>

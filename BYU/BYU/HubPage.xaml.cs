@@ -281,5 +281,13 @@ namespace BYU
             ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
             ClassesListView.ItemsSource = new ObservableCollection<ScheduleEntry>(classes.courseList);        
         }
+
+        private void PasswordTextbox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                //AuthenticationManager.Login(LoginNameTextBox.Text, LoginPasswordTextbox.Password);
+            }
+        }
     }
 }
