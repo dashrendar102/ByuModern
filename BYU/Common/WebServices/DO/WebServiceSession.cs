@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -37,7 +38,7 @@ namespace Common.WebServices.DO
             }
         }
 
-        public static WebServiceSession GetSession()
+        public async static Task<WebServiceSession> GetSession()
         {
             if (sessionIsValid())
             {
@@ -52,7 +53,7 @@ namespace Common.WebServices.DO
                     PasswordCredential passwordCredential = credentialList.FirstOrDefault();
                     passwordCredential.RetrievePassword();
 
-                    return GetSession(passwordCredential.UserName, passwordCredential.Password, DEFAULT_TIMEOUT);
+                    return await GetSession(passwordCredential.UserName, passwordCredential.Password, DEFAULT_TIMEOUT);
                 }
                 catch (Exception)
                 {
@@ -61,7 +62,7 @@ namespace Common.WebServices.DO
             }
         }
 
-        public static WebServiceSession GetSession(string netId, string password)
+        public async static Task<WebServiceSession> GetSession(string netId, string password)
         {
             if (sessionIsValid())
             {
@@ -69,7 +70,7 @@ namespace Common.WebServices.DO
             }
             else
             {
-                return GetSession(netId, password, DEFAULT_TIMEOUT);
+                return await GetSession(netId, password, DEFAULT_TIMEOUT);
             }
         }
 
@@ -78,7 +79,7 @@ namespace Common.WebServices.DO
             curSession = null;
         }
 
-        private static WebServiceSession GetSession(string netId, string password, string timeout)
+        private async static Task<WebServiceSession> GetSession(string netId, string password, string timeout)
         {
             if (sessionIsValid())
             {
@@ -90,10 +91,11 @@ namespace Common.WebServices.DO
 
                 try
                 {
-                    using (Stream responseStream = BYUWebServiceHelper.SendPost(BYUWebServiceURLs.GET_WS_SESSION,
-                        "timeout=" + timeout + "&netId=" + netId + "&password=" + password))
+                    string url = BYUWebServiceURLs.GET_WS_SESSION;
+                    string parameters = "timeout=" + timeout + "&netId=" + netId + "&password=" + password;
+                    using (WebResponse response = await BYUWebServiceHelper.SendPost(url, parameters))
                     {
-                        curSession = (WebServiceSession)serializer.ReadObject(responseStream);
+                        curSession = (WebServiceSession)serializer.ReadObject(response.GetResponseStream());
                         return curSession;
                     }
                 }

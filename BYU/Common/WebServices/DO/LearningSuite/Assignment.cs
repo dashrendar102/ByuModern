@@ -129,9 +129,9 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public string zeroScoresDate;
 
-        public static Assignment[] GetAssignments(string courseId)
+        public async static Task<Assignment[]> GetAssignments(string courseId)
         {
-            return BYUWebServiceHelper.GetObjectFromWebService<Assignment[]>(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID + courseId);
+            return await BYUWebServiceHelper.GetObjectFromWebService<Assignment[]>(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID + courseId);
         }
     }
 }

@@ -75,15 +75,15 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember(Name = "sections")]
         public LearningSuiteSection[] sections { get; set; }
 
-        public static LearningSuiteCourse[] GetCourses()
+        public async static Task<LearningSuiteCourse[]> GetCourses()
         {
-            WebServiceSession session = WebServiceSession.GetSession();
+            WebServiceSession session = await WebServiceSession.GetSession();
             
             Task<string> termTask = TermUtility.TermUtility.getCurrentTerm();
             termTask.Wait();
             string curTerm = termTask.Result;
 
-            return BYUWebServiceHelper.GetObjectFromWebService<LearningSuiteCourse[]>(string.Format(BYUWebServiceURLs.GET_LEARNINGSUITE_COURSES, session.personId, curTerm));
+            return await BYUWebServiceHelper.GetObjectFromWebService<LearningSuiteCourse[]>(string.Format(BYUWebServiceURLs.GET_LEARNINGSUITE_COURSES, session.personId, curTerm));
         }
     }
 }

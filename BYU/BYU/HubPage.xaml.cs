@@ -17,12 +17,15 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Security.Credentials;
 using Common.WebServices.DO.PersonSummary;
+using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO;
 using Common.WebServices;
 using Common;
 using BYU.BergerDemos;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Collections.ObjectModel;
+using Windows.UI;
 
 namespace BYU
 {
@@ -70,22 +73,20 @@ namespace BYU
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
             //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
             //this.DefaultViewModel["Section3Items"] = sampleDataGroup;
 
             // Restore values stored in session state.
-            if (e.PageState != null){
-                if (e.PageState.ContainsKey("UserObject"))
-                    userInfo = (PersonSummaryResponse)e.PageState["UserObject"];
-                if (e.PageState.ContainsKey("UserPhoto"))
-                {
-                    userPhotoUri = (Uri)e.PageState["UserPhoto"];
-                    LoadUserPhoto();
-                    SetElementEnableStatuses();
-                }
+            if (e.PageState != null)
+            {
+                userInfo = await PersonSummaryResponse.GetPersonSummary(); 
+                userPhotoUri = await PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                await PopulateClasses();
+                SetElementEnableStatuses();
             }
 
 
@@ -165,7 +166,7 @@ namespace BYU
 
         private void ClassButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(ClassesPage));
+            this.Frame.Navigate(typeof(ClassesPage), ((Button)sender).Content);
         }
 
         private void MapButton_Clicked(object sender, RoutedEventArgs e)
@@ -182,6 +183,12 @@ namespace BYU
 
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
+            if(string.IsNullOrEmpty(LoginNameTextbox.Text) || string.IsNullOrEmpty(LoginPasswordTextbox.Password))
+            {
+                var messageDialog = new MessageDialog("Username and Password are invalid. Please try again.");
+                await messageDialog.ShowAsync();
+            }
+            ProgressBar.Visibility = Visibility.Visible;
             SignInButton.IsEnabled = false;
             LoginNameTextbox.IsEnabled = false;
             LoginPasswordTextbox.IsEnabled = false;
@@ -196,13 +203,14 @@ namespace BYU
             });
             if (webServiceSession != null)
             {
-                this.userInfo = PersonSummaryResponse.GetPersonSummary();
+                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
 
-                userPhotoUri = PersonPhoto.getPhotoUri();
+                userPhotoUri = await PersonPhoto.getPhotoUri();
                 LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
                     "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
+                await PopulateClasses();
             }
             else
             {
@@ -211,6 +219,7 @@ namespace BYU
             }
 
             SetElementEnableStatuses();
+            ProgressBar.Visibility = Visibility.Collapsed;
         }
 
         private PasswordCredential GetBYUCredentials()
@@ -243,9 +252,9 @@ namespace BYU
                     this.UserButton.Content = credential.UserName;
                 }
             }
-            this.LoginNameTextbox.IsEnabled = loggedIn;
-            this.LoginPasswordTextbox.IsEnabled = loggedIn;
-            this.SignInButton.IsEnabled = loggedIn;
+            this.LoginNameTextbox.IsEnabled = !loggedIn;
+            this.LoginPasswordTextbox.IsEnabled = !loggedIn;
+            this.SignInButton.IsEnabled = !loggedIn;
             this.UserButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
@@ -262,6 +271,20 @@ namespace BYU
             else
             {
                 UserImage.Source = null;
+            }
+        }
+
+        private async Task PopulateClasses()
+        {
+            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
+            ClassesListView.ItemsSource = new ObservableCollection<ScheduleEntry>(classes.courseList);        
+        }
+
+        private void PasswordTextbox_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                //AuthenticationManager.Login(LoginNameTextBox.Text, LoginPasswordTextbox.Password);
             }
         }
     }

@@ -63,6 +63,7 @@ namespace Map
         public void SelectEntity(ByuMapEntity entity)
         {
             entity.BingEntity.Highlight();
+            entity.BingEntity.ShowOutline();
         }
 
     }

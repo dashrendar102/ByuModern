@@ -139,6 +139,16 @@ namespace BYU.BergerDemos
 
         #endregion
 
+        private Task<WebServiceSession> test()
+        {
+            //do intensive stuff
+            return Task.Run<WebServiceSession>(() =>
+            {
+                //do stuff
+                return WebServiceSession.GetSession();
+            });
+        }
+
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             ProgressBar.Visibility = Windows.UI.Xaml.Visibility.Visible;
@@ -150,15 +160,17 @@ namespace BYU.BergerDemos
             var password = PasswordInput.Password;
 
             //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
+            var task = test();
+            var foo = await test();
             WebServiceSession webServiceSession = await Task.Run(() =>
             {
                 return WebServiceSession.GetSession(userName, password);
             });
             if (webServiceSession != null)
             {
-                this.userInfo = PersonSummaryResponse.GetPersonSummary();
+                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
 
-                userPhotoUri = PersonPhoto.getPhotoUri();
+                userPhotoUri = await PersonPhoto.getPhotoUri();
                 LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(

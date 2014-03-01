@@ -157,21 +157,25 @@
     <Content Include="Assets\campus_buildings.jpg" />
     <Content Include="Assets\class_demo.jpg" />
     <Content Include="Assets\defaultPhoto.png" />
+    <Content Include="Assets\Logos\logo_200_95_blue.png" />
     <Content Include="Assets\Logos\logo_150_150.png" />
+    <Content Include="Assets\Logos\logo_150_150_blue.png" />
     <Content Include="Assets\Logos\logo_24_24.png" />
     <Content Include="Assets\Logos\logo_30_30.png" />
     <Content Include="Assets\Logos\logo_310_150.png" />
     <Content Include="Assets\Logos\logo_310_310.png" />
     <Content Include="Assets\Logos\logo_50_50.png" />
     <Content Include="Assets\Logos\logo_70_70.png" />
+    <Content Include="Assets\Logos\SplashScreen.png" />
     <Content Include="Assets\Logos\Splash_620_300.png" />
+    <Content Include="Assets\messing_with_background.png" />
     <Content Include="Assets\parking_lots.jpg" />
     <Content Include="DataModel\SampleData.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
-    <Content Include="Assets\Logos\SplashScreen.png" />
+    <Content Include="Assets\Logos\SplashScreenBlue.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />

@@ -51,25 +51,25 @@ namespace Common
             }
         }
 
-        private void getAssignmentsByCourseID(string courseID)
+        private async void getAssignmentsByCourseID(string courseID)
         {
-            Assignment[] assignments = Assignment.GetAssignments(courseID);
+            Assignment[] assignments = await Assignment.GetAssignments(courseID);
             assignments.ToString();
         }
 
-        private ClassScheduleResponse getStudentSchedule()
+        private async Task<ClassScheduleResponse> getStudentSchedule()
         {
-            WebServiceSession session = WebServiceSession.GetSession();
+            WebServiceSession session = await WebServiceSession.GetSession();
             Task<string> termTask = TermUtility.getCurrentTerm();
             termTask.Wait();
             string term = termTask.Result;
 
-            return ClassScheduleRoot.GetClassSchedule();
+            return await ClassScheduleRoot.GetClassSchedule();
         }
 
-        private void jsonTest()
+        private async void jsonTest()
         {
-            ClassScheduleResponse schedule = getStudentSchedule();
+            ClassScheduleResponse schedule = await getStudentSchedule();
             ScheduleEntry sampleCourse = schedule.courseList[0];
             BYUCalendar cal = new BYUCalendar("Course Schedule", "My Current Courses");
             cal.AddCourse(sampleCourse);
