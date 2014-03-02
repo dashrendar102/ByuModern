@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Common.WebServices.DO.TermUtility
 {
     [DataContract]
-    internal class Response
+    internal class BYUTermControlDates
     {
         [DataMember]
         private List<DateList> dl;

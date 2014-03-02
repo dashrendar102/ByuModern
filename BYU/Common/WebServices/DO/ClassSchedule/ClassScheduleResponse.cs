@@ -34,6 +34,6 @@ namespace Common.WebServices.DO.ClassSchedule
         public string enrolled { get; set; }
 
         [DataMember(Name = "schedule_table")]
-        public ScheduleEntry[] courseList { get; set; }
+        public CourseInformation[] courseList { get; set; }
     }
 }

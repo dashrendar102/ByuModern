@@ -11,25 +11,41 @@ namespace Common.WebServices.DO.TermUtility
 {
     public class TermUtility
     {
-        internal static String base_url = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/asofdate/";
-            
+
+
         public static async Task<String> getCurrentTerm()
         {
             return await getTerm(DateTime.Now);
         }
 
-        public static async Task<String> getTerm(DateTime date)
+        private static string getDateStr(DateTime date)
         {
-            String url = base_url + date.Year.ToString("0000")
+            return date.Year.ToString("0000")
                         + date.Month.ToString("00")
                         + date.Day.ToString("00");
-            url += "/current_yyt";
+        }
+
+        public static async Task<String> getTerm(DateTime date)
+        {
+            string url = String.Format(BYUWebServiceURLs.GET_CONTROL_DATES, getDateStr(date));
 
             WebServiceSession session = await WebServiceSession.GetSession();
             string personId = session.personId;
 
             RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url);
             return root.ControldateswsService.response.first_date_list().year_term.ToString();
+        }
+
+        internal static async Task<BYUTermControlDates> GetCurrentControlDates()
+        {
+            DateTime date = DateTime.Now;
+            string url = String.Format(BYUWebServiceURLs.GET_CONTROL_DATES, getDateStr(date));
+
+            WebServiceSession session = await WebServiceSession.GetSession();
+            string personId = session.personId;
+
+            var root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url);
+            return root.ControldateswsService.response;
         }
     }
 }

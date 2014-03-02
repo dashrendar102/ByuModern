@@ -67,13 +67,13 @@ namespace Common
             return await ClassScheduleRoot.GetClassSchedule();
         }
 
-        private async void jsonTest()
-        {
-            ClassScheduleResponse schedule = await getStudentSchedule();
-            ScheduleEntry sampleCourse = schedule.courseList[0];
-            BYUCalendar cal = new BYUCalendar("Course Schedule", "My Current Courses");
-            cal.AddCourse(sampleCourse);
-        }
+        //private async void jsonTest()
+        //{
+        //    ClassScheduleResponse schedule = await getStudentSchedule();
+        //    CourseInformation sampleCourse = schedule.courseList[0];
+        //    BYUCalendar cal = new BYUCalendar("Course Schedule", "My Current Courses");
+        //    cal.AddCourse(sampleCourse);
+        //}
 
     }
 }

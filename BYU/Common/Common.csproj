@@ -101,22 +101,12 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <ProjectReference Include="..\ScheduleWidgetClassLibWin8\ScheduleWidgetClassLibWin8\ScheduleWidgetClassLibWin8.csproj">
-      <Project>{d5648a3d-5432-4fc7-9467-c19684c1518c}</Project>
-      <Name>ScheduleWidgetClassLibWin8</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\InvalidCredentialsException.cs" />
-    <Compile Include="Calendar\Calendar.cs" />
+    <Compile Include="Calendar\AppointmentGenerator.cs" />
     <Compile Include="Calendar\Constants.cs" />
-    <Compile Include="Calendar\NodaDateRange.cs" />
-    <Compile Include="Calendar\RecurringScheduledEvent.cs" />
-    <Compile Include="Calendar\ScheduledEvent.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
-    <Compile Include="Calendar\WeeklyRecurrenceInfo.cs" />
+    <Compile Include="Calendar\Win8CalendarClient.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleResponse.cs" />
@@ -150,7 +140,7 @@
     <Compile Include="WebServices\DO\PersonSummary\StudentInformation.cs" />
     <Compile Include="WebServices\DO\TermUtility\ControldateswsService.cs" />
     <Compile Include="WebServices\DO\TermUtility\DateList.cs" />
-    <Compile Include="WebServices\DO\TermUtility\Response.cs" />
+    <Compile Include="WebServices\DO\TermUtility\BYUTermControlDates.cs" />
     <Compile Include="WebServices\DO\TermUtility\RootObject.cs" />
     <Compile Include="WebServices\DO\TermUtility\TermUtility.cs" />
     <Compile Include="WebServices\DO\Nonce.cs" />

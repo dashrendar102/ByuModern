@@ -175,13 +175,6 @@ namespace BYU
             this.Frame.Navigate(typeof(MapPage));
         }
 
-        private void BergerHyperlinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            //Demo demo = new Demo();
-            //demo.doDemoStuff();
-            this.Frame.Navigate(typeof(BergerDemoLand));
-        }
-
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
             var netID = LoginNameTextbox.Text;
@@ -269,7 +262,7 @@ namespace BYU
         private async Task PopulateClasses()
         {
             ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
-            ClassesListView.ItemsSource = new ObservableCollection<ScheduleEntry>(classes.courseList);        
+            ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
         }
 
         private void PasswordTextbox_KeyDown(object sender, KeyRoutedEventArgs e)
@@ -278,6 +271,11 @@ namespace BYU
             {
                 //AuthenticationManager.Login(LoginNameTextBox.Text, LoginPasswordTextbox.Password);
             }
+        }
+
+        private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(BergerDemoLand));
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Common.WebServices.DO.ClassSchedule
 {
     [DataContract]
-    public class ScheduleEntry
+    public class CourseInformation
     {
         [DataMember(Name = "sequence")]
         public string sequence { get; set; }
