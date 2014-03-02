@@ -24,12 +24,20 @@ namespace Common.CalendarLand
 
         }
 
-		public Period NodaPeriod
-		{
-			get
-			{
-				return Period.Between(StartTime, EndTime);
-			}
-		}
+        public Period NodaPeriod
+        {
+            get
+            {
+                return Period.Between(StartTime, EndTime);
+            }
+        }
+
+        public TimeSpan TimeSpan
+        {
+            get
+            {
+                return NodaPeriod.ToDuration().ToTimeSpan();
+            }
+        }
     }
 }

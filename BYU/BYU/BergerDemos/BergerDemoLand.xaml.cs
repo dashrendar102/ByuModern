@@ -15,6 +15,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Common.CalendarLand;
+using Common.WebServices.DO.ClassSchedule;
+using System.Threading.Tasks;
+using Common.WebServices.DO.TermUtility;
+using Common.Calendar;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -31,21 +36,28 @@ namespace BYU.BergerDemos
             this.Frame.Navigate(typeof(AuthDemoPage));
         }
 
-        public async void Win8CalPermissions_Click(Object sender, RoutedEventArgs e)
+        private async void CalendarExportDemoButton_Click(object sender, RoutedEventArgs e)
         {
-            BergerDemo demo = new BergerDemo();
-            var status = await demo.getCalendarPermissions();
-            // Create the message dialog and set its content
-            var messageDialog = new MessageDialog("" + status);
-            await messageDialog.ShowAsync();
+            string yearTerm = await TermUtility.getCurrentTerm();
+            AppointmentGenerator generator = new AppointmentGenerator();
+            ClassScheduleResponse schedule = await ClassScheduleRoot.GetClassSchedule();
+            CourseInformation sampleCourse = schedule.courseList[0];
+            var appointment = await generator.GenerateAppointment(sampleCourse);
+
+            var rect = GetElementRect(sender as FrameworkElement);
+            String appointmentId = await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Windows.UI.Popups.Placement.Default);
+            appointmentId.ToString();
         }
 
+        //taken from http://code.msdn.microsoft.com/windowsapps/Appointments-API-sample-2b55c76e
+        private Windows.Foundation.Rect GetElementRect(FrameworkElement element)
+        {
+            Windows.UI.Xaml.Media.GeneralTransform buttonTransform = element.TransformToVisual(null);
+            Windows.Foundation.Point point = buttonTransform.TransformPoint(new Windows.Foundation.Point());
+            return new Windows.Foundation.Rect(point, new Windows.Foundation.Size(element.ActualWidth, element.ActualHeight));
+        }
 
-
-
-
-
-
+        //auto-generated code
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -125,5 +137,6 @@ namespace BYU.BergerDemos
         }
 
         #endregion
+
     }
 }

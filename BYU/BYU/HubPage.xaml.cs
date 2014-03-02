@@ -24,6 +24,8 @@ using Common;
 using BYU.BergerDemos;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
+using System.Collections.ObjectModel;
+using Windows.UI;
 
 namespace BYU
 {
@@ -270,8 +272,21 @@ namespace BYU
         private async Task PopulateClasses()
         {
             ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
-            
-            ClassesSection.ItemsSource = classes.courseList;
+            ObservableCollection<Button> class_buttons = new ObservableCollection<Button>();
+
+            foreach (CourseInformation class_entry in classes.courseList) {
+                Button button = new Button();
+                button.Content = class_entry.course;
+                button.Click += ClassButton_Click;
+                button.Height = 70;
+                button.Width = 300;
+                button.FontSize = 24;
+                button.Margin = new Thickness(0);
+                button.Foreground = new SolidColorBrush(Colors.White);
+                button.Background = new SolidColorBrush(Color.FromArgb(255, 00, 34, 85));
+                class_buttons.Add(button);
+            }
+            ClassesSection.ItemsSource = class_buttons;
         }
 
         private void BergerDemoButton_Click(object sender, RoutedEventArgs e)

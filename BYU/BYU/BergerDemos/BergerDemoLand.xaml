@@ -47,6 +47,6 @@
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
         <Button Content="BYU Authentication Demo" HorizontalAlignment="Left" Margin="79,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="BYUAuthDemo_Click"/>
-        <Button Content="Get Win8 Calendar Permissions" HorizontalAlignment="Left" Margin="79,49,0,0" Grid.Row="1" VerticalAlignment="Top" Click="Win8CalPermissions_Click"/>
+        <Button Content="Export one of my classes to win8 calendar" Name="CalendarExportDemoButton" HorizontalAlignment="Left" Margin="80,50,0,0" Grid.Row="1" VerticalAlignment="Top" Click="CalendarExportDemoButton_Click"/>
     </Grid>
 </Page>

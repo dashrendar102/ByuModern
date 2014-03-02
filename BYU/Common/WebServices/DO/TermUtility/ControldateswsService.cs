@@ -11,9 +11,9 @@ namespace Common.WebServices.DO.TermUtility
     internal class ControldateswsService
     {
         [DataMember]
-        private Response resp;
+        private BYUTermControlDates resp;
 
         [DataMember]
-        public Response response { get { return resp; } set { resp = value; } }
+        public BYUTermControlDates response { get { return resp; } set { resp = value; } }
     }
 }

@@ -23,6 +23,7 @@ namespace Common.WebServices
         internal const string GET_MATERIALS = "https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/material/courseID/{0}/includeBooklist/true";
         internal const string GET_SYLLABI = "https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/syllabus/courseID/";
         internal const string GET_SYSTEM_ANNOUNCEMENT = "https://ws.byu.edu/rest/v1.0/learningsuite/announcements/sysannouncement/student-anno";
+        internal const string GET_CONTROL_DATES = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/asofdate/{0}/current_yyt";
 
         // This functionality is replaced by String.Format(string toFormat, string param1, string param2, ...)
         // where each parameter after the first replaces indexed sections in the string like this: "...{0}...{1}...{2}...".
