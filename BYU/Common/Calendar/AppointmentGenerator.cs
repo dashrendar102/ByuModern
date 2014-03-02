@@ -1,4 +1,4 @@
-﻿using Common.CalendarLand;
+﻿using Common.Calendar;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.TermUtility;
 using NodaTime;
@@ -18,8 +18,7 @@ namespace Common.Calendar
         {
             get
             {
-                var timeZone = DateTimeZoneProviders.Tzdb["MST"];
-                return timeZone.GetUtcOffset(SystemClock.Instance.Now).ToTimeSpan();
+                return Constants.BYUTimeZone.GetUtcOffset(SystemClock.Instance.Now).ToTimeSpan();
             }
         }
 
@@ -70,9 +69,7 @@ namespace Common.Calendar
             Appointment appointment = new Appointment();
             appointment.Subject = course.course + " - " + course.course_title;
             appointment.Location = course.room + " " + course.building;
-            //appointment.Details = "Taught by " + course.instructor;
-            //TimeZoneInfo.Utc.ge
-            //aptmt.
+            appointment.Details = "Taught by " + course.instructor;
 
             TimeRange timeRange = new TimeRange(course.class_period);
             var bob = await TermUtility.GetCurrentControlDates();
@@ -87,10 +84,11 @@ namespace Common.Calendar
 
             appointment.BusyStatus = Windows.ApplicationModel.Appointments.AppointmentBusyStatus.Busy;
 
-            var organizer = new Windows.ApplicationModel.Appointments.AppointmentOrganizer();
-            organizer.DisplayName = course.instructor;
-            organizer.Address = " ";
-            appointment.Organizer = organizer;
+            //this might be desirable, but it is not as apparent to the user as the details field is
+            //var organizer = new Windows.ApplicationModel.Appointments.AppointmentOrganizer();
+            //organizer.DisplayName = course.instructor;
+            //organizer.Address = " ";
+            //appointment.Organizer = organizer;
 
             appointment.Recurrence = GenerateCourseRecurrence(course, endDate);
 

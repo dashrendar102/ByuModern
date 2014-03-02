@@ -15,7 +15,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Common.CalendarLand;
+using Common.Calendar;
 using Common.WebServices.DO.ClassSchedule;
 using System.Threading.Tasks;
 using Common.WebServices.DO.TermUtility;

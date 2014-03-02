@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.CalendarLand
+namespace Common.Calendar
 {
 	internal class Constants
 	{
