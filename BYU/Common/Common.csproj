@@ -107,6 +107,7 @@
     <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\Win8CalendarClient.cs" />
+    <Compile Include="Storage\WebCache.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleResponse.cs" />

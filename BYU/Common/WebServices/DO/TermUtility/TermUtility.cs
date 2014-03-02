@@ -32,7 +32,7 @@ namespace Common.WebServices.DO.TermUtility
             WebServiceSession session = await WebServiceSession.GetSession();
             string personId = session.personId;
 
-            RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url);
+            RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url, authenticate: false);
             return root.ControldateswsService.response.first_date_list().year_term.ToString();
         }
 
