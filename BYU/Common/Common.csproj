@@ -108,6 +108,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticationManager.cs" />
+    <Compile Include="Authentication\InvalidCredentialsException.cs" />
     <Compile Include="Calendar\Calendar.cs" />
     <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\NodaDateRange.cs" />

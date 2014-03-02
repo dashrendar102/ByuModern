@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Security.Credentials;
+using Common.Authentication;
 using Common.WebServices.DO.PersonSummary;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO;
@@ -183,23 +184,28 @@ namespace BYU
 
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
-            if(string.IsNullOrEmpty(LoginNameTextbox.Text) || string.IsNullOrEmpty(LoginPasswordTextbox.Password))
-            {
-                var messageDialog = new MessageDialog("Username and Password are invalid. Please try again.");
-                await messageDialog.ShowAsync();
-            }
-            ProgressBar.Visibility = Visibility.Visible;
-            SignInButton.IsEnabled = false;
-            LoginNameTextbox.IsEnabled = false;
-            LoginPasswordTextbox.IsEnabled = false;
-
-            var userName = LoginNameTextbox.Text;
+            var netID = LoginNameTextbox.Text;
             var password = LoginPasswordTextbox.Password;
+
+            try
+            {
+                ProgressBar.Visibility = Visibility.Visible;
+                SignInButton.IsEnabled = false;
+                LoginNameTextbox.IsEnabled = false;
+                LoginPasswordTextbox.IsEnabled = false;
+                AuthenticationManager.Login(netID, password);
+            }
+            catch (InvalidCredentialsException exception) 
+            {
+                var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
+                messageDialog.ShowAsync();
+                return;
+            }
 
             //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
             WebServiceSession webServiceSession = await Task.Run(() =>
             {
-                return WebServiceSession.GetSession(userName, password);
+                return WebServiceSession.GetSession(netID, password);
             });
             if (webServiceSession != null)
             {
@@ -222,25 +228,11 @@ namespace BYU
             ProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private PasswordCredential GetBYUCredentials()
-        {
-            var vault = new Windows.Security.Credentials.PasswordVault();
-            try
-            {
-                var credentialList = vault.FindAllByResource("byu.edu");
-                return credentialList.FirstOrDefault();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         private void SetElementEnableStatuses()
         {
             
-            var credential = GetBYUCredentials();
-            bool loggedIn = (credential != null);
+            var credential = AuthenticationManager.credential;
+            bool loggedIn = AuthenticationManager.LoggedIn();
             if (loggedIn)
             {
                 if (userInfo != null)
