@@ -148,8 +148,8 @@ namespace BYU
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            var title = e.Parameter as String;
-            selectedClassTitle.Text = title;
+            /*var title = e.Parameter as String;
+            selectedClassTitle.Text = title;*/
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

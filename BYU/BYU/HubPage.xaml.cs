@@ -61,6 +61,7 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
+            SetElementEnableStatuses();
         }
 
         /// <summary>
@@ -165,20 +166,20 @@ namespace BYU
         #endregion
 
 
-        private void ClassButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(ClassesPage), ((Button)sender).Content);
-        }
-
         private void MapButton_Clicked(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MapPage));
         }
 
-        private async void Login_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var netID = LoginNameTextbox.Text;
-            var password = LoginPasswordTextbox.Password;
+            DoLogin();
+        }
+
+        private async void DoLogin()
+        {
+            var netID = this.LoginNameTextbox.Text;
+            var password = this.LoginPasswordTextbox.Password;
 
             try
             {
@@ -188,7 +189,7 @@ namespace BYU
                 LoginPasswordTextbox.IsEnabled = false;
                 AuthenticationManager.Login(netID, password);
             }
-            catch (InvalidCredentialsException exception) 
+            catch (InvalidCredentialsException exception)
             {
                 var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
                 messageDialog.ShowAsync();
@@ -244,7 +245,6 @@ namespace BYU
             this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
             this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
-            //this.LogoutButton.IsEnabled = !loggedIn;
         }
 
         private void LoadUserPhoto()
@@ -265,17 +265,22 @@ namespace BYU
             ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
         }
 
-        private void PasswordTextbox_KeyDown(object sender, KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                //AuthenticationManager.Login(LoginNameTextBox.Text, LoginPasswordTextbox.Password);
-            }
-        }
-
         private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BergerDemoLand));
+        }
+
+        private void PasswordTextbox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter && !this.LoginNameTextbox.Text.Equals(""))
+            {
+                DoLogin();
+            }
+        }
+
+        private void ClassButton_Click(object sender, ItemClickEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ClassesPage));
         }
     }
 }
