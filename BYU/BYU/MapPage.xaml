@@ -28,13 +28,15 @@
         </Grid.ColumnDefinitions>
 
 
-        <TextBlock x:Name="pageTitle" Text="Map" Style="{StaticResource HeaderTextBlockStyle}" Margin="69,10,10,694"/>
+        <TextBlock x:Name="pageTitle" Text="Map" Style="{StaticResource HeaderTextBlockStyle}" Margin="69,10,10,694" Foreground="White" />
         <Button x:Name="backButton" Margin="10,10,0,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         VerticalAlignment="Top"
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
+                        AutomationProperties.ItemType="Navigation Button"
+                        
+                        Foreground="White" />
         <ListView
             x:Name="itemListView"
             AutomationProperties.AutomationId="ItemsListView"
@@ -49,7 +51,7 @@
             SelectionChanged="ItemListView_SelectionChanged">
             <ListView.Header>
                 <StackPanel Margin ="0, 0, 0, 15">
-                    <TextBlock Text="Buildings" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="70" Margin="6"/>
+                    <TextBlock Text="Buildings" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="70" Margin="6" Foreground="White" />
                 </StackPanel>
             </ListView.Header>
             <ListView.ItemTemplate>
@@ -60,7 +62,7 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="1" Margin="10,0,0,0">
-                            <TextBlock Text="{Binding Name}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="40"/>
+                            <TextBlock Text="{Binding Name}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="40" Foreground="White" />
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
