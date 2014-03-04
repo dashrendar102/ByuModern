@@ -117,34 +117,9 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackPanel>
-                <Grid Grid.Column="2" Margin="50,30,40,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Where on campus" Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="0" Grid.ColumnSpan="2"/>
-                    <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
-                        <Image Source="Assets/campus_buildings.jpg"/>
-                    </Button>
-                    <Button Grid.Row="1" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
-                        <Image Source="Assets/blank_map_tile.jpg"/>
-                    </Button>
-                    <Button Grid.Row="2" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
-                        <Image Source="Assets/blank_map_tile.jpg"/>
-                    </Button>
-                    <Button Grid.Row="2" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
-                        <Image Source="Assets/parking_lots.jpg"/>
-                    </Button>
-                </Grid>
-
+                
                 <!-- width of 400 -->
-                <StackPanel Orientation="Vertical" Grid.Column="3" Margin="50,30,40,0">
+                <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,30,40,0">
                     <TextBlock Text="Where on campus 2" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <Grid Margin="0,20,0,0">
                         <Grid.ColumnDefinitions>
@@ -173,7 +148,7 @@
                         </Button>
                     </Grid>
                 </StackPanel>
-                <StackPanel Name="DevLinksPanel" Orientation="Vertical" Grid.Column="4" Margin="50,30,40,0">
+                <StackPanel Name="DevLinksPanel" Orientation="Vertical" Grid.Column="3" Margin="50,30,40,0">
                     <TextBlock Text="Dev Links" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <Button Content="Berger Demos" Name="BergerDemoButton" HorizontalAlignment="Left" Margin="79,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="BergerDemoButton_Click"/>
                 </StackPanel>
