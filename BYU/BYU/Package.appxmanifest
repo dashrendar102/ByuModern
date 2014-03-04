@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="e3124d5b-e96a-456b-8108-6d295f3dfe8a" Publisher="CN=Jeff" Version="1.0.0.0" />
+  <Identity Name="51648Dr.KsMinionArmy.BrighamYoungUniversity" Publisher="CN=6FC52E2A-8F1C-4978-AAE3-B2CB5D128F7E" Version="1.1.0.0" />
   <Properties>
-    <DisplayName>BYU</DisplayName>
-    <PublisherDisplayName>Jeff</PublisherDisplayName>
-    <Logo>Assets\StoreLogo.png</Logo>
+    <DisplayName>Brigham Young University</DisplayName>
+    <PublisherDisplayName>Dr. K's Minion Army</PublisherDisplayName>
+    <Logo>Assets\Logos\logo_50_50.png</Logo>
   </Properties>
   <Prerequisites>
     <OSMinVersion>6.3.0</OSMinVersion>
@@ -15,8 +15,14 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BYU.App">
-      <m2:VisualElements DisplayName="BYU" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="BYU" ForegroundText="light" BackgroundColor="#464646">
-        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#002255" />
+      <m2:VisualElements DisplayName="Brigham Young University" Square150x150Logo="Assets\Logos\logo_150_150.png" Square30x30Logo="Assets\Logos\logo_30_30.png" Description="BYU" ForegroundText="light" BackgroundColor="#002255">
+        <m2:DefaultTile Square310x310Logo="Assets\Logos\logo_310_310.png" Wide310x150Logo="Assets\Logos\logo_310_150.png" Square70x70Logo="Assets\Logos\logo_70_70.png">
+        </m2:DefaultTile>
+        <m2:SplashScreen Image="Assets\Logos\SplashScreen.png" BackgroundColor="#FFFFFF" />
+        <m2:InitialRotationPreference>
+          <m2:Rotation Preference="landscape" />
+          <m2:Rotation Preference="landscapeFlipped" />
+        </m2:InitialRotationPreference>
       </m2:VisualElements>
     </Application>
   </Applications>
