@@ -283,5 +283,10 @@ namespace BYU
         {
             this.Frame.Navigate(typeof(ClassesPage));
         }
+
+        private void UserButton_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.UI.ApplicationSettings.SettingsPane.Show();
+        }
     }
 }
