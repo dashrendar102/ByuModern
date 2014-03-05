@@ -182,6 +182,7 @@ namespace BYU
             var netID = this.LoginNameTextbox.Text;
             var password = this.LoginPasswordTextbox.Password;
 
+            bool success = false;
             try
             {
                 ProgressBar.Visibility = Visibility.Visible;
@@ -189,11 +190,14 @@ namespace BYU
                 LoginNameTextbox.IsEnabled = false;
                 LoginPasswordTextbox.IsEnabled = false;
                 AuthenticationManager.Login(netID, password);
+                success = true;
             }
-            catch (InvalidCredentialsException exception)
+            catch (InvalidCredentialsException){ }
+
+            if (!success)
             {
                 var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
-                messageDialog.ShowAsync();
+                await messageDialog.ShowAsync();
                 return;
             }
 
