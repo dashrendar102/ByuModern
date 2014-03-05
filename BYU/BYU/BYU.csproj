@@ -182,6 +182,13 @@
     <Content Include="Assets\Logos\logo_70_70.png" />
     <Content Include="Assets\Logos\SplashScreen.png" />
     <Content Include="Assets\Logos\Splash_620_300.png" />
+    <Content Include="Assets\Logos\Temp\logo_150_150.png" />
+    <Content Include="Assets\Logos\Temp\logo_30_30.png" />
+    <Content Include="Assets\Logos\Temp\logo_310_150.png" />
+    <Content Include="Assets\Logos\Temp\logo_310_310.png" />
+    <Content Include="Assets\Logos\Temp\logo_50_50.png" />
+    <Content Include="Assets\Logos\Temp\logo_70_70.png" />
+    <Content Include="Assets\Logos\Temp\SplashScreen.png" />
     <Content Include="Assets\messing_with_background.png" />
     <Content Include="Assets\parking_lots.jpg" />
     <Content Include="DataModel\SampleData.json" />
