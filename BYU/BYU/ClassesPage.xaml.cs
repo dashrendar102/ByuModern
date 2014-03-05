@@ -61,12 +61,12 @@ namespace BYU
         public ClassesPage()
         {
             Init();
-            selectedClassContent.Visibility = Visibility.Collapsed; 
+            //selectedClassContent.Visibility = Visibility.Collapsed; 
         }
 
         public ClassesPage(String className){
             Init();
-            selectedClassTitle.Text = className;
+            //selectedClassTitle.Text = className;
         }
 
         private void Init(){
@@ -81,26 +81,8 @@ namespace BYU
         /// </summary>
         private async void LoadClasses()
         {
-            ObservableCollection<Button> class_buttons = new ObservableCollection<Button>();
-            
-            user_classes = await Task.Run(() => {
-                return ClassScheduleRoot.GetClassSchedule();
-            });
-
-            for (int i = 0; i < user_classes.courseList.Count(); i++)
-            {
-                Button button = new Button();
-                button.Content = user_classes.courseList.ElementAt(i).course;
-                button.Click += ClassClick;
-                button.Height = 70;
-                button.Width = 455;
-                button.FontSize = 24;
-                button.Margin = new Thickness(0);
-                button.Foreground = new SolidColorBrush(Colors.White);
-                button.Background = new SolidColorBrush(Color.FromArgb(255, 00, 34, 85));
-                class_buttons.Add(button);
-            }
-            classList.DataContext = class_buttons;
+            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
+            ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList); 
 
             // show overview panel
         }
@@ -159,15 +141,16 @@ namespace BYU
 
         #endregion
 
-        private void ClassClick(object sender, RoutedEventArgs e)
+        private void ClassButton_Click(object sender, ItemClickEventArgs e)
         {
-            Button test = (Button)sender;
+            /*Button test = (Button)sender;
             if (selectedClassTitle.Text.Equals((String)test.Content))
             {
                 selectedClassContent.Visibility = Visibility.Collapsed;
-            } else selectedClassContent.Visibility = Visibility.Visible;
+            }
+            else selectedClassContent.Visibility = Visibility.Visible;
 
-            selectedClassTitle.Text = (String)test.Content;
+            selectedClassTitle.Text = (String)test.Content;*/
         }
     }
 }

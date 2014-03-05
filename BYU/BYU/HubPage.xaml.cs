@@ -27,6 +27,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
+using Map;
 
 namespace BYU
 {
@@ -181,6 +182,7 @@ namespace BYU
             var netID = this.LoginNameTextbox.Text;
             var password = this.LoginPasswordTextbox.Password;
 
+            bool success = false;
             try
             {
                 ProgressBar.Visibility = Visibility.Visible;
@@ -188,11 +190,14 @@ namespace BYU
                 LoginNameTextbox.IsEnabled = false;
                 LoginPasswordTextbox.IsEnabled = false;
                 AuthenticationManager.Login(netID, password);
+                success = true;
             }
-            catch (InvalidCredentialsException exception)
+            catch (InvalidCredentialsException){ }
+
+            if (!success)
             {
                 var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
-                messageDialog.ShowAsync();
+                await messageDialog.ShowAsync();
                 return;
             }
 
@@ -281,6 +286,11 @@ namespace BYU
         private void ClassButton_Click(object sender, ItemClickEventArgs e)
         {
             this.Frame.Navigate(typeof(ClassesPage));
+        }
+
+        private void UserButton_Click(object sender, RoutedEventArgs e)
+        {
+            Windows.UI.ApplicationSettings.SettingsPane.Show();
         }
     }
 }

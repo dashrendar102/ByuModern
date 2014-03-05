@@ -182,6 +182,13 @@
     <Content Include="Assets\Logos\logo_70_70.png" />
     <Content Include="Assets\Logos\SplashScreen.png" />
     <Content Include="Assets\Logos\Splash_620_300.png" />
+    <Content Include="Assets\Logos\Temp\logo_150_150.png" />
+    <Content Include="Assets\Logos\Temp\logo_30_30.png" />
+    <Content Include="Assets\Logos\Temp\logo_310_150.png" />
+    <Content Include="Assets\Logos\Temp\logo_310_310.png" />
+    <Content Include="Assets\Logos\Temp\logo_50_50.png" />
+    <Content Include="Assets\Logos\Temp\logo_70_70.png" />
+    <Content Include="Assets\Logos\Temp\SplashScreen.png" />
     <Content Include="Assets\messing_with_background.png" />
     <Content Include="Assets\parking_lots.jpg" />
     <Content Include="DataModel\SampleData.json" />
@@ -224,14 +231,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="Bing.Maps.Xaml, Version=1.313.0825.0">
+      <Name>Bing Maps for C#, C++, or Visual Basic</Name>
+    </SDKReference>
     <SDKReference Include="LiveSDKXAML, Version=5.5">
       <Name>Live SDK</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{c72002e9-fa71-4b6d-9fb4-2db41d0ed8c0}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="Map\Map.csproj">
+      <Project>{4ba1e10b-1a12-4ff4-b97e-ac828c996ded}</Project>
+      <Name>Map</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
