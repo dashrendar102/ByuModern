@@ -1,10 +1,12 @@
 ﻿using BYU.Common;
 using Common.Authentication;
+using Common.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -150,9 +152,10 @@ namespace BYU
             flyout.Show();
         }
 
-        public void LogoutSettingHandler()
+        public async Task LogoutSettingHandler()
         {
             AuthenticationManager.Logout();
+            await WebCache.Instance.ClearCache();
         }
     }
 }

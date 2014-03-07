@@ -41,7 +41,7 @@ namespace Common.WebServices.DO
             {
                 return false;
             }
-            return await FileHelper.FileExists(userPhotoName);
+            return await WebCache.Instance.IsCached(userPhotoName);
         }
     }
 }

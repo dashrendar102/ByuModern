@@ -16,7 +16,7 @@ namespace Common.Storage
     {
         private static int BUFFER_SIZE_BYTES = 1024;
 
-        public static StorageFolder StorageFolder
+        public static StorageFolder RoamingFolder
         {
             get
             {
@@ -24,24 +24,25 @@ namespace Common.Storage
             }
         }
 
-        public static Uri StorageFolderPath
+        public static StorageFolder LocalFolder
         {
             get
             {
-                return new Uri(StorageFolder.Path);
+                return ApplicationData.Current.LocalFolder;
             }
         }
 
-        public static Uri GetFileUri(string filename)
+        // returns a subfolder of the main storage folder, creating it if needed
+        internal static async Task<StorageFolder> GetFolder(StorageFolder parent, string folderName)
         {
-            return new Uri(StorageFolderPath, filename);
+            return await parent.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFile> GetFile(string filename)
+        public static async Task<StorageFile> GetFile(StorageFolder folder, string filename)
         {
             try
             {
-                var file = await StorageFolder.GetFileAsync(filename);
+                var file = await folder.GetFileAsync(filename);
                 return file;
             }
             catch (Exception)
@@ -50,9 +51,9 @@ namespace Common.Storage
             }
         }
 
-        public static async Task<StorageFile> Save(string filename, Stream dataStream, bool encrypt = true)
+        public static async Task<StorageFile> Save(StorageFolder folder, string filename, Stream dataStream, bool encrypt = true)
         {
-            var file = await StorageFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+            var file = await folder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
 
             byte[] buffer = new byte[BUFFER_SIZE_BYTES];
 
@@ -80,11 +81,11 @@ namespace Common.Storage
             return file;
         }
 
-        public static async void DeleteFile(string filename)
+        public static async Task DeleteFile(StorageFolder folder, string filename)
         {
             try
             {
-                var file = await GetFile(filename);
+                var file = await GetFile(folder, filename);
                 if (file != null)
                 {
                     await file.DeleteAsync();
@@ -96,15 +97,10 @@ namespace Common.Storage
             }
         }
 
-        public static async Task<Stream> OpenReadOnlyFileStream(string filename, bool decrypt = true)
+        public static async Task<Stream> OpenReadOnlyFileStream(StorageFolder folder, string filename, bool decrypt = true)
         {
-            return await OpenFileStream(filename);
-        }
-
-        public static async Task<Stream> OpenFileStream(string filename, bool decrypt = true)
-        {
-            var file = await GetFile(filename);
-            return await OpenReadOnlyFileStream(file);
+            var file = await GetFile(folder, filename);
+            return await OpenReadOnlyFileStream(file, decrypt);
         }
 
         public static async Task<Stream> OpenReadOnlyFileStream(StorageFile file, bool decrypt = true)
@@ -131,9 +127,9 @@ namespace Common.Storage
             }
         }
 
-        public static async Task<bool> FileExists(string filename)
+        public static async Task<bool> FileExists(StorageFolder folder, string filename)
         {
-            return (await GetFile(filename)) != null;
+            return (await GetFile(folder, filename)) != null;
         }
     }
 }

@@ -28,6 +28,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
 using Map;
+using Windows.Storage;
 
 namespace BYU
 {
@@ -91,6 +92,7 @@ namespace BYU
                 await PopulateClasses();
                 SetElementEnableStatuses();
             }
+
 
 
             // Restore values stored in app data.

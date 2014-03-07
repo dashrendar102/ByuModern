@@ -48,5 +48,6 @@
         </Grid>
         <Button Content="BYU Authentication Demo" HorizontalAlignment="Left" Margin="79,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="BYUAuthDemo_Click"/>
         <Button Content="Export one of my classes to win8 calendar" Name="CalendarExportDemoButton" HorizontalAlignment="Left" Margin="80,50,0,0" Grid.Row="1" VerticalAlignment="Top" Click="CalendarExportDemoButton_Click"/>
+        <Button Content="Clear Cache" Name="ClearCacheButton" HorizontalAlignment="Left" Margin="80,113,0,0" Grid.Row="1" VerticalAlignment="Top" Click="ClearCacheButton_Click"/>
     </Grid>
 </Page>
