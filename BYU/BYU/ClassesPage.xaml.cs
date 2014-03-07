@@ -64,8 +64,6 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-            this.LoadClasses();  
-            //selectedClassContent.Visibility = Visibility.Collapsed; 
         }
 
         /// <summary>
