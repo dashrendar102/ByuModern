@@ -37,6 +37,7 @@ namespace BYU
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private ClassScheduleResponse user_classes = null;
+        private CourseInformation selectedCourse = null;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -60,20 +61,11 @@ namespace BYU
         /// </summary>
         public ClassesPage()
         {
-            Init();
-            //selectedClassContent.Visibility = Visibility.Collapsed; 
-        }
-
-        public ClassesPage(String className){
-            Init();
-            //selectedClassTitle.Text = className;
-        }
-
-        private void Init(){
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.LoadClasses();  
+            //selectedClassContent.Visibility = Visibility.Collapsed; 
         }
 
         /// <summary>
@@ -81,10 +73,15 @@ namespace BYU
         /// </summary>
         private async void LoadClasses()
         {
-            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
-            ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList); 
-
-            // show overview panel
+            ClassScheduleResponse response = await ClassScheduleRoot.GetClassSchedule();
+            ObservableCollection<CourseInformation> courses = new ObservableCollection<CourseInformation>(response.courseList);
+            ClassesListView.ItemsSource = courses;
+            foreach (CourseInformation course in courses){
+                if (course.curriculum_id == selectedCourse.curriculum_id)
+                {
+                    ClassesListView.SelectedItem = course;
+                }
+            }
         }
        
         /// <summary>
@@ -111,8 +108,6 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var item = await SampleDataSource.GetItemAsync((String)e.NavigationParameter);
-            this.DefaultViewModel["Item"] = item;
         }
 
         #region NavigationHelper registration
@@ -130,8 +125,8 @@ namespace BYU
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            /*var title = e.Parameter as String;
-            selectedClassTitle.Text = title;*/
+            this.selectedCourse = e.Parameter as CourseInformation;
+            LoadClasses();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -140,8 +135,8 @@ namespace BYU
         }
 
         #endregion
-
-        private void ClassButton_Click(object sender, ItemClickEventArgs e)
+        
+        private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
             /*Button test = (Button)sender;
             if (selectedClassTitle.Text.Equals((String)test.Content))

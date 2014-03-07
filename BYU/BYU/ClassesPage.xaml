@@ -69,7 +69,7 @@
 
                 <StackPanel x:Name="ClassesSection" Grid.Column="1" Margin="100,30,40,0" >
                     <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ListView x:Name="ClassesListView" ItemsSource="{Binding}" Margin="0,20,0,0" SelectionMode="None" IsItemClickEnabled="True" ItemClick="ClassButton_Click">
+                    <ListView x:Name="ClassesListView" ItemsSource="{Binding}" Margin="0,20,0,0" SelectionChanged="ClassButton_Click">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Width="300">

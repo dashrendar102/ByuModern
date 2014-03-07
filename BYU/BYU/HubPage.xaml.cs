@@ -287,7 +287,7 @@ namespace BYU
 
         private void ClassButton_Click(object sender, ItemClickEventArgs e)
         {
-            this.Frame.Navigate(typeof(ClassesPage));
+            this.Frame.Navigate(typeof(ClassesPage), ((CourseInformation)e.ClickedItem));
         }
 
         private void UserButton_Click(object sender, RoutedEventArgs e)
