@@ -30,21 +30,21 @@ namespace Common.Storage
             return CryptographicBuffer.EncodeToHexString(hashed);
         }
 
-        internal async Task<Stream> GetCachedFileStream(string url)
+        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true)
         {
             string fileName = TransformURLToFilename(url);
-            return await FileHelper.OpenReadOnlyFileStream(fileName);
+            return await FileHelper.OpenReadOnlyFileStream(fileName, decrypt);
         }
 
-        internal async Task<StorageFile> Cache(string url, Stream dataStream)
+        internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)
         {
             string fileName = TransformURLToFilename(url);
-            return await Download(fileName, dataStream);
+            return await Download(fileName, dataStream, encrypt);
         }
 
-        internal async Task<StorageFile> Download(string filename, Stream dataStream)
+        internal async Task<StorageFile> Download(string filename, Stream dataStream, bool encrypt = true)
         {
-            return await FileHelper.Save(filename, dataStream);
+            return await FileHelper.Save(filename, dataStream, encrypt);
         }
 
         private static WebCache instance;

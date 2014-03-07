@@ -25,7 +25,7 @@ namespace Common.WebServices.DO
                 using (WebResponse response = await BYUWebServiceHelper.sendGETRequest(photoRequestUrl))
                 {
                     Stream photoStream = response.GetResponseStream();
-                    StorageFile file = await WebCache.Instance.Download(userPhotoName, photoStream);
+                    StorageFile file = await WebCache.Instance.Download(userPhotoName, photoStream, encrypt: false);
                     return new Uri(file.Path, UriKind.Absolute);
                 }
             }

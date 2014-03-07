@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Security.Cryptography.DataProtection;
 
 namespace Common.Storage
 {
@@ -42,27 +43,37 @@ namespace Common.Storage
             {
                 var file = await StorageFolder.GetFileAsync(filename);
                 return file;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
-                 return null;
+                return null;
             }
         }
 
-        public static async Task<StorageFile> Save(string filename, Stream dataStream)
+        public static async Task<StorageFile> Save(string filename, Stream dataStream, bool encrypt = true)
         {
             var file = await StorageFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-            
+
             byte[] buffer = new byte[BUFFER_SIZE_BYTES];
 
             using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
             {
-                int bytesRead = await dataStream.ReadAsync(buffer, 0, 1024);
-                while (bytesRead > 0)
+                if (encrypt)
                 {
-                    await fileStream.WriteAsync(buffer.AsBuffer(0, bytesRead));
-                    //await fileStream.WriteAsync(buffer, 0, bytesRead);
+                    var encrypter = new DataProtectionProvider("LOCAL=user");
+                    var istream = dataStream.AsInputStream();
+                    await encrypter.ProtectStreamAsync(istream, fileStream);
+                    await fileStream.FlushAsync();
+                }
+                else
+                {
+                    int bytesRead = await dataStream.ReadAsync(buffer, 0, 1024);
+                    while (bytesRead > 0)
+                    {
+                        await fileStream.WriteAsync(buffer.AsBuffer(0, bytesRead));
 
-                    bytesRead = await dataStream.ReadAsync(buffer, 0, BUFFER_SIZE_BYTES);
+                        bytesRead = await dataStream.ReadAsync(buffer, 0, BUFFER_SIZE_BYTES);
+                    }
                 }
             }
 
@@ -85,42 +96,39 @@ namespace Common.Storage
             }
         }
 
-        public static async Task<Stream> OpenReadOnlyFileStream(string filename)
+        public static async Task<Stream> OpenReadOnlyFileStream(string filename, bool decrypt = true)
         {
-            return await OpenFileStream(filename, FileAccessMode.Read);
+            return await OpenFileStream(filename);
         }
 
-        public static async Task<Stream> OpenReadOnlyFileStream(StorageFile file)
-        {
-            return await OpenFileStream(file, FileAccessMode.Read);
-        }
-
-        public static async Task<Stream> OpenWritableFileStream(StorageFile file)
-        {
-            return await OpenFileStream(file, FileAccessMode.ReadWrite);
-        }
-
-        public static async Task<Stream> OpenWritableFileStream(string filename)
-        {
-            return await OpenFileStream(filename, FileAccessMode.ReadWrite);
-        }
-
-        public static async Task<Stream> OpenFileStream(string filename, FileAccessMode accessMode)
+        public static async Task<Stream> OpenFileStream(string filename, bool decrypt = true)
         {
             var file = await GetFile(filename);
-            return await OpenFileStream(file, accessMode);
+            return await OpenReadOnlyFileStream(file);
         }
 
-        public static async Task<Stream> OpenFileStream(StorageFile file, FileAccessMode accessMode)
+        public static async Task<Stream> OpenReadOnlyFileStream(StorageFile file, bool decrypt = true)
         {
             if (file == null)
             {
                 return null;
             }
+            var fileStream = await file.OpenAsync(FileAccessMode.Read);
+            if (decrypt)
+            {
+                var decrypter = new DataProtectionProvider();
 
-            var stream = await file.OpenAsync(accessMode);
-
-            return stream.AsStream();
+                // Create a random access stream to contain the decrypted data.
+                InMemoryRandomAccessStream unprotectedDataStream = new InMemoryRandomAccessStream();
+                IOutputStream dest = unprotectedDataStream.GetOutputStreamAt(0);
+                await decrypter.UnprotectStreamAsync(fileStream, dest);
+                await dest.FlushAsync();
+                return unprotectedDataStream.GetInputStreamAt(0).AsStreamForRead();
+            }
+            else
+            {
+                return fileStream.AsStream();
+            }
         }
 
         public static async Task<bool> FileExists(string filename)
