@@ -90,6 +90,42 @@
                         </ListView.ItemTemplate>
                     </ListView>
                 </StackPanel>
+                <StackPanel x:Name="SelectedClassContent" Margin="366,30,-644,0" >
+                    <GridView x:Name="SelectedClassSummary" ItemsSource="{Binding}" Visibility="Visible" Height="605" Margin="149,0,0,0">
+                        <GridView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding course}" Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text=" - Section " Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text="{Binding section}" Margin="5,0,0,5" Foreground="Black" FontSize="20"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding course_title}" Foreground="Black" FontSize="20"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Height="20">
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Instructor: " Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text="{Binding instructor}" Margin="5,0,0,5" Foreground="Black" FontSize="20"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Time: " Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text="{Binding class_period}" Margin="5,0,0,5" Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text=" " Margin ="5,0,0,5" Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text="{Binding days}" Margin="5,0,0,5" Foreground="Black" FontSize="20"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Location: " Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text="{Binding room}" Margin="5,0,0,5" Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text=" " Margin ="5,0,0,5" Foreground="Black" FontSize="20"/>
+                                        <TextBlock Text="{Binding building}" Margin="0,0,0,5" Foreground="Black" FontSize="20"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                </StackPanel>
             </Grid>
         </ScrollViewer>
     </Grid>

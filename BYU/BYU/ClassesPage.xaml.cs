@@ -36,9 +36,10 @@ namespace BYU
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private ClassScheduleResponse user_classes = null;
         private CourseInformation selectedCourse = null;
-
+        private ObservableCollection<CourseInformation> selected_class_list = 
+                    new ObservableCollection<CourseInformation>();
+        
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
         /// process lifetime management
@@ -83,16 +84,6 @@ namespace BYU
         }
        
         /// <summary>
-        /// Retrieves course information from class list data structure.
-        /// </summary>
-        /// <param name="i"></param>
-        private void loadCourseInfo(int i)
-        {
-
-        }
-
-
-        /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
         /// </summary>
@@ -133,17 +124,13 @@ namespace BYU
         }
 
         #endregion
-        
+
         private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            /*Button test = (Button)sender;
-            if (selectedClassTitle.Text.Equals((String)test.Content))
-            {
-                selectedClassContent.Visibility = Visibility.Collapsed;
-            }
-            else selectedClassContent.Visibility = Visibility.Visible;
-
-            selectedClassTitle.Text = (String)test.Content;*/
+            selectedCourse = (CourseInformation)e.AddedItems[0];
+            selected_class_list.Clear();
+            selected_class_list.Add(selectedCourse);
+            SelectedClassSummary.ItemsSource = selected_class_list;
         }
     }
 }
