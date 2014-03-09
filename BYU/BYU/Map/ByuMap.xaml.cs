@@ -21,14 +21,22 @@ namespace Map
 {
     public sealed partial class ByuMap : UserControl
     {
+
         private VenueMap ByuVenue;
         Task MapInit = null;
 
         public ByuMap()
         {
             this.InitializeComponent();
+            this.SizeChanged += ByuMap_SizeChanged;
 
             MapInit = SetupMapAsync();
+        }
+
+        void ByuMap_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.Height = e.NewSize.Height;
+            this.ResetView();
         }
 
         async Task SetupMapAsync()
@@ -60,10 +68,18 @@ namespace Map
             });
         }
 
+        private double Zoom
+        {
+            get
+            {
+                return this.Height / 325 + 13.6308;
+            }
+        }
+
         public async void ResetView()
         {
             BingMap.VenueManager.ActiveVenue = ByuVenue;
-            BingMap.SetView(new Bing.Maps.Location(40.2525, -111.6494), 16);
+            BingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
             var buildings = await GetBuildings();
             foreach (var building in buildings)
                 DeselectEntity(building);
