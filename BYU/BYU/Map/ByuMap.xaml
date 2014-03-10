@@ -11,7 +11,7 @@
     d:DesignWidth="400">
     
     <UserControl.Resources>
-        <x:Double x:Key="Latitude">40.250215</x:Double>
+        <x:Double x:Key="Latitude">40.2489</x:Double>
         <x:Double x:Key="Longitude">-111.649333</x:Double>
     </UserControl.Resources>
     
@@ -21,5 +21,6 @@
                 <bm:Location Latitude="{StaticResource Latitude}" Longitude="{StaticResource Longitude}" />
             </bm:Map.Center>
         </bm:Map>
+        <Button Content="Reset View" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Button_Click" Background="White" BorderBrush="#FFCCCCCC" Foreground="Black" BorderThickness="1" Margin="0,7,90,0" />
     </Grid>
 </UserControl>
