@@ -49,7 +49,7 @@
                 AutomationProperties.Name="Back"
                 AutomationProperties.AutomationId="BackButton"
                 AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"/>
-        <Image Source="Assets/Logos/logo_200_95_blue.png" Grid.Column="1"/>
+        <Image Source="Assets/Logos/Temp/logo_225_95_blue.png" Grid.Column="1"/>
         <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="2" Margin="0,10,15,10" Visibility="Collapsed"/>
         <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Background="#FFB6B6B6" Grid.Column="2" Margin="0,60,130,37" Visibility="Collapsed" Height="31"/>
         <ScrollViewer ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="3">

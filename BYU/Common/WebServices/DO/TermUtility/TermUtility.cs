@@ -29,9 +29,6 @@ namespace Common.WebServices.DO.TermUtility
         {
             string url = String.Format(BYUWebServiceURLs.GET_CONTROL_DATES, getDateStr(date));
 
-            WebServiceSession session = await WebServiceSession.GetSession();
-            string personId = session.personId;
-
             RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url, authenticate: false);
             return root.ControldateswsService.response.first_date_list().year_term.ToString();
         }

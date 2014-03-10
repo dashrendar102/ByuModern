@@ -26,13 +26,11 @@ namespace Common.WebServices.DO
                 {
                     Stream photoStream = response.GetResponseStream();
                     StorageFile file = await WebCache.Instance.Download(userPhotoName, photoStream, encrypt: false);
-                    return new Uri(file.Path, UriKind.Absolute);
+                    photoUri = new Uri(file.Path, UriKind.Absolute);
                 }
             }
-            else
-            {
-                return photoUri;
-            }
+
+            return photoUri;
         }
 
         private static async Task<bool> photoFileExists()
@@ -41,7 +39,8 @@ namespace Common.WebServices.DO
             {
                 return false;
             }
-            return await WebCache.Instance.IsCached(userPhotoName);
+            //return await WebCache.Instance.IsCached(userPhotoName);
+            return await WebCache.Instance.IsDownloaded(userPhotoName);
         }
     }
 }

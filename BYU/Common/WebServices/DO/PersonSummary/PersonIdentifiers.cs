@@ -22,7 +22,8 @@ namespace Common.WebServices.DO.PersonSummary
         [DataMember]
         public string net_id;
 
-        [DataMember]
-        public string ssn;
+        // We're ignoring this data field for privacy reasons.
+        /*[DataMember]
+        public string ssn;*/
     }
 }

@@ -11,9 +11,6 @@ namespace Common.WebServices.DO.TermUtility
     internal class RootObject
     {
         [DataMember]
-        private ControldateswsService service;
-
-        [DataMember]
-        public ControldateswsService ControldateswsService { get { return service; } set { service = value; } }
+        public ControldateswsService ControldateswsService { get; set; }
     }
 }

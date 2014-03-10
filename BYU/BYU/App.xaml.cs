@@ -31,6 +31,7 @@ namespace BYU
     {
         private SettingsCommand loginSetting;
         private SettingsCommand logoutSetting;
+        private string firstNavState;
 
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
@@ -98,6 +99,7 @@ namespace BYU
             }
             // Ensure the current window is active
             Window.Current.Activate();
+            firstNavState = ((Frame)Window.Current.Content).GetNavigationState();
         }
 
         /// <summary>
@@ -156,6 +158,7 @@ namespace BYU
         {
             AuthenticationManager.Logout();
             await WebCache.Instance.ClearCache();
+            ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
         }
     }
 }
