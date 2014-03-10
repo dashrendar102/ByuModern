@@ -72,7 +72,11 @@ namespace Map
         {
             get
             {
-                return this.Height / 325 + 13.6308;
+                //Linear formula for figuring out a good starting zoom, based on the height of the control
+                //Reduce the denominator on the left to increase the zoom per pixel of height increase
+                //Increase the number on the right to increase the baseline zoom
+                //Zoom should be at least 16 to make buildings clickable
+                return Math.Max(this.Height / 475 + 14.25, 16);
             }
         }
 
@@ -106,6 +110,11 @@ namespace Map
         {
             entity.BingEntity.Unhighlight();
             entity.BingEntity.HideOutline();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ResetView();
         }
 
     }
