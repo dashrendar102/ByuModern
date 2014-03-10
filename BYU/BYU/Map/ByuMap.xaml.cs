@@ -19,11 +19,15 @@ using Windows.UI.Xaml.Navigation;
 
 namespace Map
 {
+    public delegate void MapEntitySelectedEventArgs(object sender, ByuMapEntity selected);
+
     public sealed partial class ByuMap : UserControl
     {
 
         private VenueMap ByuVenue;
         Task MapInit = null;
+        //This event has a default empty method so that we don't have to null check the event before firing it
+        public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => {};
 
         public ByuMap()
         {
@@ -45,6 +49,14 @@ namespace Map
             BingMap.VenueManager.ActiveVenue = ByuVenue;
 
             BingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
+            BingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
+        }
+
+        void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
+        {
+            var buildings = GetBuildingsSync();
+            var building = buildings.SingleOrDefault(b => b.BingEntity == e.VenueEntity);
+            MapEntitySelected(this, building);
         }
 
         void VenueManager_ActiveVenueChanged(object sender, ActiveVenueChangedEventArgs e)
@@ -58,14 +70,20 @@ namespace Map
             {
                 if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
-                    var buildings =
-                        from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
-                        where !String.IsNullOrWhiteSpace(ve.Name)
-                        select new ByuMapEntity(ve.Name, ve.Description, ve);
-                    return buildings;
+                    return GetBuildingsSync();
                 }
                 else throw new TimeoutException("Could not load maps data");
             });
+        }
+
+        //Only call this if you are certain the Venue has been loaded
+        private IEnumerable<ByuMapEntity> GetBuildingsSync()
+        {
+            var buildings =
+                from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
+                where !String.IsNullOrWhiteSpace(ve.Name)
+                select new ByuMapEntity(ve.Name, ve.Description, ve);
+            return buildings;
         }
 
         private double Zoom
