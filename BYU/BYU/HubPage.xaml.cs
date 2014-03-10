@@ -86,10 +86,14 @@ namespace BYU
             // Restore values stored in session state.
             if (e.PageState != null)
             {
-                userInfo = await PersonSummaryResponse.GetPersonSummary(); 
-                userPhotoUri = await PersonPhoto.getPhotoUri();
-                LoadUserPhoto();
-                await PopulateClasses();
+                if (AuthenticationManager.LoggedIn())
+                {
+                    userInfo = await PersonSummaryResponse.GetPersonSummary();
+                    userPhotoUri = await PersonPhoto.getPhotoUri();
+                    LoadUserPhoto();
+                    await PopulateClasses();
+                }
+
                 SetElementEnableStatuses();
             }
 
