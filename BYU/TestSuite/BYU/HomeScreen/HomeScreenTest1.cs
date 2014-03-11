@@ -25,10 +25,5 @@ namespace TestSuite
         public void Logout()
         {
         }
-
-        [TestMethod]
-        public void Login()
-        {
-        }
     }
 }
