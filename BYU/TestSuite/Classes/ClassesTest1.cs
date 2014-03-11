@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 namespace TestSuite
 {
     [TestClass]
-    public class UnitTest1
+    public class ClassesTest1
     {
         [TestMethod]
         public void TestMethod1()
