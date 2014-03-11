@@ -143,6 +143,7 @@
     <Folder Include="Common\Calendar\" />
     <Folder Include="Common\Extensions\" />
     <Folder Include="Common\Storage\" />
+    <Folder Include="Map\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BYU\BYU.csproj">
