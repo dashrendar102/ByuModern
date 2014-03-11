@@ -8,7 +8,7 @@ using Common.WebServices;
 namespace TestSuite
 {
     [TestClass]
-    public class ClassesTest1
+    public class CamelCaseNameMatchingConverterTest1
     {
         [TestMethod]
         public void TestMethod1()

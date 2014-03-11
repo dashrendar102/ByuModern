@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 namespace TestSuite
 {
     [TestClass]
-    public class ClassesTest1
+    public class CamelCaseNameMatchingConverterTest
     {
         [TestMethod]
         public void TestMethod1()
