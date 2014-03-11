@@ -115,6 +115,7 @@
     <Compile Include="BYU\Classes\ClassesTest1.cs" />
     <Compile Include="BYU\HomeScreen\HomeScreenTest1.cs" />
     <Compile Include="BYU\Maps\MapsTest1.cs" />
+    <Compile Include="Common\WebServices\CamelCaseNameMatchingConverterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -142,7 +143,20 @@
     <Folder Include="Common\Calendar\" />
     <Folder Include="Common\Extensions\" />
     <Folder Include="Common\Storage\" />
-    <Folder Include="Common\WebServices\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BYU\BYU.csproj">
+      <Project>{c70bb8a0-dd8c-4d9a-9014-a770e2e82192}</Project>
+      <Name>BYU</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BYU\Map\Map.csproj">
+      <Project>{4ba1e10b-1a12-4ff4-b97e-ac828c996ded}</Project>
+      <Name>Map</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{c72002e9-fa71-4b6d-9fb4-2db41d0ed8c0}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
