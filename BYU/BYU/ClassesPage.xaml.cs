@@ -23,6 +23,7 @@ using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.TermUtility;
 using Common.WebServices;
 using System.Threading.Tasks;
+using Common.Calendar;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -131,6 +132,26 @@ namespace BYU
             selected_class_list.Clear();
             selected_class_list.Add(selectedCourse);
             SelectedClassSummary.ItemsSource = selected_class_list;
+        }
+
+        private async void btnAddClass_Click(object sender, RoutedEventArgs e)
+        {
+            string yearTerm = await TermUtility.getCurrentTerm();
+            
+            AppointmentGenerator generator = new AppointmentGenerator();
+            var appointment = await generator.GenerateAppointment(selectedCourse);
+
+            var rect = GetElementRect(sender as FrameworkElement);
+            String appointmentId = await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Windows.UI.Popups.Placement.Default);
+            appointmentId.ToString();
+        }
+
+        //taken from http://code.msdn.microsoft.com/windowsapps/Appointments-API-sample-2b55c76e
+        private Windows.Foundation.Rect GetElementRect(FrameworkElement element)
+        {
+            Windows.UI.Xaml.Media.GeneralTransform buttonTransform = element.TransformToVisual(null);
+            Windows.Foundation.Point point = buttonTransform.TransformPoint(new Windows.Foundation.Point());
+            return new Windows.Foundation.Rect(point, new Windows.Foundation.Size(element.ActualWidth, element.ActualHeight));
         }
     }
 }
