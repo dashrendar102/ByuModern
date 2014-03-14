@@ -212,17 +212,18 @@ namespace BYU.BergerDemos
             }
         }
 
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             var credential = GetBYUCredentials();
             this.userInfo = null;
 
             if (credential != null)
             {
+                var clearCacheTask = WebCache.Instance.ClearCache();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Remove(credential);
-                FileHelper.DeleteFile(userPhotoName);
                 userPhotoUri = null;
+                await clearCacheTask;
                 LoadUserPhoto();
             }
             SetElementEnableStatuses();

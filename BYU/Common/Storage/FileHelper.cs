@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.Security.Cryptography.DataProtection;
 
 namespace Common.Storage
 {
@@ -15,7 +16,7 @@ namespace Common.Storage
     {
         private static int BUFFER_SIZE_BYTES = 1024;
 
-        public static StorageFolder StorageFolder
+        public static StorageFolder RoamingFolder
         {
             get
             {
@@ -23,57 +24,67 @@ namespace Common.Storage
             }
         }
 
-        public static Uri StorageFolderPath
+        public static StorageFolder LocalFolder
         {
             get
             {
-                return new Uri(StorageFolder.Path);
+                return ApplicationData.Current.LocalFolder;
             }
         }
 
-        public static Uri GetFileUri(string filename)
+        // returns a subfolder of the main storage folder, creating it if needed
+        internal static async Task<StorageFolder> GetFolder(StorageFolder parent, string folderName)
         {
-            return new Uri(StorageFolderPath, filename);
+            return await parent.CreateFolderAsync(folderName, CreationCollisionOption.OpenIfExists);
         }
 
-        public static async Task<StorageFile> GetFile(string filename)
+        public static async Task<StorageFile> GetFile(StorageFolder folder, string filename)
         {
             try
             {
-                var file = await StorageFolder.GetFileAsync(filename);
+                var file = await folder.GetFileAsync(filename);
                 return file;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
-                 return null;
+                return null;
             }
         }
 
-        public static async Task<StorageFile> Save(string filename, Stream dataStream)
+        public static async Task<StorageFile> Save(StorageFolder folder, string filename, Stream dataStream, bool encrypt = true)
         {
-            var file = await StorageFolder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
-            
+            var file = await folder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+
             byte[] buffer = new byte[BUFFER_SIZE_BYTES];
 
             using (var fileStream = await file.OpenAsync(FileAccessMode.ReadWrite))
             {
-                int bytesRead = await dataStream.ReadAsync(buffer, 0, 1024);
-                while (bytesRead > 0)
+                if (encrypt)
                 {
-                    await fileStream.WriteAsync(buffer.AsBuffer(0, bytesRead));
-                    //await fileStream.WriteAsync(buffer, 0, bytesRead);
+                    var encrypter = new DataProtectionProvider("LOCAL=user");
+                    var istream = dataStream.AsInputStream();
+                    await encrypter.ProtectStreamAsync(istream, fileStream);
+                }
+                else
+                {
+                    int bytesRead = await dataStream.ReadAsync(buffer, 0, 1024);
+                    while (bytesRead > 0)
+                    {
+                        await fileStream.WriteAsync(buffer.AsBuffer(0, bytesRead));
 
-                    bytesRead = await dataStream.ReadAsync(buffer, 0, BUFFER_SIZE_BYTES);
+                        bytesRead = await dataStream.ReadAsync(buffer, 0, BUFFER_SIZE_BYTES);
+                    }
                 }
             }
 
             return file;
         }
 
-        public static async void DeleteFile(string filename)
+        public static async Task DeleteFile(StorageFolder folder, string filename)
         {
             try
             {
-                var file = await GetFile(filename);
+                var file = await GetFile(folder, filename);
                 if (file != null)
                 {
                     await file.DeleteAsync();
@@ -85,47 +96,39 @@ namespace Common.Storage
             }
         }
 
-        public static async Task<Stream> OpenReadOnlyFileStream(string filename)
+        public static async Task<Stream> OpenReadOnlyFileStream(StorageFolder folder, string filename, bool decrypt = true)
         {
-            return await OpenFileStream(filename, FileAccessMode.Read);
+            var file = await GetFile(folder, filename);
+            return await OpenReadOnlyFileStream(file, decrypt);
         }
 
-        public static async Task<Stream> OpenReadOnlyFileStream(StorageFile file)
-        {
-            return await OpenFileStream(file, FileAccessMode.Read);
-        }
-
-        public static async Task<Stream> OpenWritableFileStream(StorageFile file)
-        {
-            return await OpenFileStream(file, FileAccessMode.ReadWrite);
-        }
-
-        public static async Task<Stream> OpenWritableFileStream(string filename)
-        {
-            return await OpenFileStream(filename, FileAccessMode.ReadWrite);
-        }
-
-        public static async Task<Stream> OpenFileStream(string filename, FileAccessMode accessMode)
-        {
-            var file = await GetFile(filename);
-            return await OpenFileStream(file, accessMode);
-        }
-
-        public static async Task<Stream> OpenFileStream(StorageFile file, FileAccessMode accessMode)
+        public static async Task<Stream> OpenReadOnlyFileStream(StorageFile file, bool decrypt = true)
         {
             if (file == null)
             {
                 return null;
             }
+            var fileStream = await file.OpenAsync(FileAccessMode.Read);
+            if (decrypt)
+            {
+                var decrypter = new DataProtectionProvider();
 
-            var stream = await file.OpenAsync(accessMode);
-
-            return stream.AsStream();
+                // Create a random access stream to contain the decrypted data.
+                InMemoryRandomAccessStream unprotectedDataStream = new InMemoryRandomAccessStream();
+                IOutputStream dest = unprotectedDataStream.GetOutputStreamAt(0);
+                await decrypter.UnprotectStreamAsync(fileStream, dest);
+                await dest.FlushAsync();
+                return unprotectedDataStream.GetInputStreamAt(0).AsStreamForRead();
+            }
+            else
+            {
+                return fileStream.AsStream();
+            }
         }
 
-        public static async Task<bool> FileExists(string filename)
+        public static async Task<bool> FileExists(StorageFolder folder, string filename)
         {
-            return (await GetFile(filename)) != null;
+            return (await GetFile(folder, filename)) != null;
         }
     }
 }

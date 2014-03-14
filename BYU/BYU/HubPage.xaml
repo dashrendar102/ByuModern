@@ -7,10 +7,11 @@
     xmlns:local="using:BYU"
     xmlns:data="using:BYU.Data"
     xmlns:common="using:BYU.Common"
-    xmlns:Map="using:Map"
+    xmlns:Map="using:Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="pageRoot_Loaded">
 
     <!--<Page.Resources>
         <DataTemplate x:Key="Standard310x260ItemTemplate">
@@ -108,26 +109,28 @@
 
                 <StackPanel x:Name="ClassesSection" Grid.Column="1" Visibility="Collapsed" Margin="100,30,40,0" >
                     <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ListView x:Name="ClassesListView" ItemsSource="{Binding}" Margin="0,20,0,0" SelectionMode="None" IsItemClickEnabled="True" ItemClick="ClassButton_Click">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Width="300">
-                                    <StackPanel.Background>
-                                        <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
-                                    </StackPanel.Background>
-                                    <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                        <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
-                                        <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
-                                        <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                    <ScrollViewer Height="524" Margin="0,20,0,0" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
+                        <ListView x:Name="ClassesListView" ItemsSource="{Binding}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="ClassButton_Click">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="300">
+                                        <StackPanel.Background>
+                                            <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                                        </StackPanel.Background>
+                                        <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                            <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                            <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="5,0,0,5">
+                                            <TextBlock Text="{Binding days}" Foreground="White"/>
+                                            <TextBlock Text="{Binding class_period}" Foreground="White" Margin="4,0,0,0"/>
+                                        </StackPanel>
                                     </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Margin="5,0,0,5">
-                                        <TextBlock Text="{Binding days}" Foreground="White"/>
-                                        <TextBlock Text="{Binding class_period}" Foreground="White" Margin="4,0,0,0"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
                 </StackPanel>
                 
                 <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,30,40,0">

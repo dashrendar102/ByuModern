@@ -11,23 +11,16 @@ namespace Common.WebServices.DO.TermUtility
     [DataContract]
     internal class DateList
     {
-        [DataMember]
-        private string yt;
-
-        [DataMember]
         private string sd;
 
-        [DataMember]
         private string ed;
 
-        [DataMember]
         private DateTime start;
 
-        [DataMember]
         private DateTime end;
 
         [DataMember]
-        public string year_term { get { return yt; } set { yt = value; } }
+        public string year_term { get; set; }
 
         [DataMember]
         public string start_date

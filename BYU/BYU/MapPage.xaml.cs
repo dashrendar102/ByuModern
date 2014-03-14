@@ -15,7 +15,10 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Map;
+using Common;
+using Windows.UI.Xaml.Shapes;
+using Bing.Maps;
+using Common.WebServices.DO.ParkingLots;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -65,6 +68,7 @@ namespace BYU
             // to change from showing two panes to showing a single pane
             Window.Current.SizeChanged += Window_SizeChanged;
             this.InvalidateVisualState();
+
         }
 
         /// <summary>
@@ -81,9 +85,10 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             var buildings = await map.GetBuildings();
+            var parkingLots = await ParkingLot.getAllLots();
             buildings = buildings.OrderBy(building => building.Name);
             this.DefaultViewModel["Items"] = buildings;
-
+            
             if (e.PageState == null)
             {
                 this.itemListView.SelectedItem = null;
@@ -104,6 +109,7 @@ namespace BYU
                 }
             }
         }
+
 
         /// <summary>
         /// Preserves state associated with this page in case the application is suspended or the

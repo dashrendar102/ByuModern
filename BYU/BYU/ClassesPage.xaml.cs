@@ -23,6 +23,7 @@ using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.TermUtility;
 using Common.WebServices;
 using System.Threading.Tasks;
+using Common.Calendar;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -36,8 +37,10 @@ namespace BYU
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private ClassScheduleResponse user_classes = null;
-
+        private CourseInformation selectedCourse = null;
+        private ObservableCollection<CourseInformation> selected_class_list = 
+                    new ObservableCollection<CourseInformation>();
+        
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
         /// process lifetime management
@@ -60,20 +63,9 @@ namespace BYU
         /// </summary>
         public ClassesPage()
         {
-            Init();
-            //selectedClassContent.Visibility = Visibility.Collapsed; 
-        }
-
-        public ClassesPage(String className){
-            Init();
-            //selectedClassTitle.Text = className;
-        }
-
-        private void Init(){
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-            this.LoadClasses();  
         }
 
         /// <summary>
@@ -81,22 +73,17 @@ namespace BYU
         /// </summary>
         private async void LoadClasses()
         {
-            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
-            ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList); 
-
-            // show overview panel
+            ClassScheduleResponse response = await ClassScheduleRoot.GetClassSchedule();
+            ObservableCollection<CourseInformation> courses = new ObservableCollection<CourseInformation>(response.courseList);
+            ClassesListView.ItemsSource = courses;
+            foreach (CourseInformation course in courses){
+                if (course.curriculum_id == selectedCourse.curriculum_id)
+                {
+                    ClassesListView.SelectedItem = course;
+                }
+            }
         }
        
-        /// <summary>
-        /// Retrieves course information from class list data structure.
-        /// </summary>
-        /// <param name="i"></param>
-        private void loadCourseInfo(int i)
-        {
-
-        }
-
-
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -111,8 +98,6 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var item = await SampleDataSource.GetItemAsync((String)e.NavigationParameter);
-            this.DefaultViewModel["Item"] = item;
         }
 
         #region NavigationHelper registration
@@ -130,8 +115,8 @@ namespace BYU
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            /*var title = e.Parameter as String;
-            selectedClassTitle.Text = title;*/
+            this.selectedCourse = e.Parameter as CourseInformation;
+            LoadClasses();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -141,16 +126,32 @@ namespace BYU
 
         #endregion
 
-        private void ClassButton_Click(object sender, ItemClickEventArgs e)
+        private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            /*Button test = (Button)sender;
-            if (selectedClassTitle.Text.Equals((String)test.Content))
-            {
-                selectedClassContent.Visibility = Visibility.Collapsed;
-            }
-            else selectedClassContent.Visibility = Visibility.Visible;
+            selectedCourse = (CourseInformation)e.AddedItems[0];
+            selected_class_list.Clear();
+            selected_class_list.Add(selectedCourse);
+            SelectedClassSummary.ItemsSource = selected_class_list;
+        }
 
-            selectedClassTitle.Text = (String)test.Content;*/
+        private async void btnAddClass_Click(object sender, RoutedEventArgs e)
+        {
+            string yearTerm = await TermUtility.getCurrentTerm();
+            
+            AppointmentGenerator generator = new AppointmentGenerator();
+            var appointment = await generator.GenerateAppointment(selectedCourse);
+
+            var rect = GetElementRect(sender as FrameworkElement);
+            String appointmentId = await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Windows.UI.Popups.Placement.Default);
+            appointmentId.ToString();
+        }
+
+        //taken from http://code.msdn.microsoft.com/windowsapps/Appointments-API-sample-2b55c76e
+        private Windows.Foundation.Rect GetElementRect(FrameworkElement element)
+        {
+            Windows.UI.Xaml.Media.GeneralTransform buttonTransform = element.TransformToVisual(null);
+            Windows.Foundation.Point point = buttonTransform.TransformPoint(new Windows.Foundation.Point());
+            return new Windows.Foundation.Rect(point, new Windows.Foundation.Size(element.ActualWidth, element.ActualHeight));
         }
     }
 }

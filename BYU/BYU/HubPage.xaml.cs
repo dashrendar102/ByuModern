@@ -27,7 +27,8 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
-using Map;
+using Common;
+using Windows.Storage;
 
 namespace BYU
 {
@@ -62,7 +63,6 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-            SetElementEnableStatuses();
         }
 
         /// <summary>
@@ -85,12 +85,17 @@ namespace BYU
             // Restore values stored in session state.
             if (e.PageState != null)
             {
-                userInfo = await PersonSummaryResponse.GetPersonSummary(); 
-                userPhotoUri = await PersonPhoto.getPhotoUri();
-                LoadUserPhoto();
-                await PopulateClasses();
+                if (AuthenticationManager.LoggedIn())
+                {
+                    userInfo = await PersonSummaryResponse.GetPersonSummary();
+                    userPhotoUri = await PersonPhoto.getPhotoUri();
+                    LoadUserPhoto();
+                    await PopulateClasses();
+                }
+
                 SetElementEnableStatuses();
             }
+
 
 
             // Restore values stored in app data.
@@ -189,8 +194,9 @@ namespace BYU
                 SignInButton.IsEnabled = false;
                 LoginNameTextbox.IsEnabled = false;
                 LoginPasswordTextbox.IsEnabled = false;
-                AuthenticationManager.Login(netID, password);
-                success = true;
+                //AuthenticationManager.Login(netID, password);
+                WebServiceSession session = await WebServiceSession.GetSession(netID, password);
+                success = session != null;
             }
             catch (InvalidCredentialsException){ }
 
@@ -198,6 +204,10 @@ namespace BYU
             {
                 var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
                 await messageDialog.ShowAsync();
+                ProgressBar.Visibility = Visibility.Collapsed;
+                SignInButton.IsEnabled = true;
+                LoginNameTextbox.IsEnabled = true;
+                LoginPasswordTextbox.IsEnabled = true;
                 return;
             }
 
@@ -229,9 +239,8 @@ namespace BYU
 
         private void SetElementEnableStatuses()
         {
-            
-            var credential = AuthenticationManager.credential;
             bool loggedIn = AuthenticationManager.LoggedIn();
+            var credential = AuthenticationManager.credential;
             if (loggedIn)
             {
                 if (userInfo != null)
@@ -285,12 +294,24 @@ namespace BYU
 
         private void ClassButton_Click(object sender, ItemClickEventArgs e)
         {
-            this.Frame.Navigate(typeof(ClassesPage));
+            this.Frame.Navigate(typeof(ClassesPage), ((CourseInformation)e.ClickedItem));
         }
 
         private void UserButton_Click(object sender, RoutedEventArgs e)
         {
             Windows.UI.ApplicationSettings.SettingsPane.Show();
+        }
+
+        private async void pageRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (AuthenticationManager.LoggedIn())
+            {
+                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
+                userPhotoUri = await PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                await PopulateClasses();
+            }
+            SetElementEnableStatuses();
         }
     }
 }

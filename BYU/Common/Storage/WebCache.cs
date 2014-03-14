@@ -11,8 +11,20 @@ using Windows.Storage.Streams;
 
 namespace Common.Storage
 {
-    internal class WebCache
+    public class WebCache
     {
+        private StorageFolder cacheFolder;
+        private async Task<StorageFolder> GetCacheFolder()
+        {
+            if (cacheFolder == null)
+            {
+                cacheFolder = await FileHelper.LocalFolder.CreateFolderAsync(cacheFolderName, CreationCollisionOption.OpenIfExists);
+                return null;
+            }
+            return cacheFolder;
+        }
+        private const string cacheFolderName = "webcache";
+
         //this prevents illegal filename characters like '/' at the expense of filename intelligibility.
         private string TransformURLToFilename(string url)
         {
@@ -30,21 +42,50 @@ namespace Common.Storage
             return CryptographicBuffer.EncodeToHexString(hashed);
         }
 
-        internal async Task<Stream> GetCachedFileStream(string url)
+        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true)
         {
             string fileName = TransformURLToFilename(url);
-            return await FileHelper.OpenReadOnlyFileStream(fileName);
+            return await FileHelper.OpenReadOnlyFileStream(await GetCacheFolder(), fileName, decrypt);
         }
 
-        internal async Task<StorageFile> Cache(string url, Stream dataStream)
+        internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)
         {
             string fileName = TransformURLToFilename(url);
-            return await Download(fileName, dataStream);
+            return await Download(fileName, dataStream, encrypt);
         }
 
-        internal async Task<StorageFile> Download(string filename, Stream dataStream)
+        internal async Task<StorageFile> Download(string filename, Stream dataStream, bool encrypt = true)
         {
-            return await FileHelper.Save(filename, dataStream);
+            return await FileHelper.Save(await GetCacheFolder(), filename, dataStream, encrypt);
+        }
+
+        internal async Task<bool> IsCached(string url)
+        {
+            string filename = TransformURLToFilename(url);
+            return await IsDownloaded(filename);
+        }
+
+        internal Task<bool> IsDownloaded(string filename)
+        {
+            return FileHelper.FileExists(cacheFolder, filename);
+        }
+
+        public async Task ClearCache()
+        {
+            if (cacheFolder != null)
+            {
+                await cacheFolder.DeleteAsync();
+            }
+        }
+
+        internal async Task DeleteCachedItem(string url)
+        {
+            await DeleteDownloadedItem(TransformURLToFilename(url));
+        }
+
+        internal async Task DeleteDownloadedItem(string filename)
+        {
+            await FileHelper.DeleteFile(cacheFolder, filename);
         }
 
         private static WebCache instance;
@@ -61,7 +102,6 @@ namespace Common.Storage
         }
         private WebCache()
         {
-
         }
     }
 }
