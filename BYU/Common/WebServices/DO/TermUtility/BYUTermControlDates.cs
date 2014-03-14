@@ -11,15 +11,12 @@ namespace Common.WebServices.DO.TermUtility
     internal class BYUTermControlDates
     {
         [DataMember]
-        private List<DateList> dl;
-    
-        [DataMember]
-        public List<DateList> date_list { get { return dl; } set { dl = value; } }
+        public List<DateList> date_list { get; set; }
 
         public DateList first_date_list()
         {
-            if (dl.Count > 0)
-                return dl.ElementAt(0);
+            if (date_list.Count > 0)
+                return date_list.ElementAt(0);
             else return null;
         }
     }

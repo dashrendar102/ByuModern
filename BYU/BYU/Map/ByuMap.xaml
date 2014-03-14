@@ -10,13 +10,19 @@
     d:DesignHeight="300"
     d:DesignWidth="400">
     
+    <UserControl.Resources>
+        <x:Double x:Key="Latitude">40.2489</x:Double>
+        <x:Double x:Key="Longitude">-111.649333</x:Double>
+    </UserControl.Resources>
+    
     <Grid>
         <bm:Map Name="BingMap" Credentials="AiitZcq02L7zbTAdAWg08RHQ53otcBhv7tSeojdBRhZPpi-p-JNijWtC9STmiJjO" ZoomLevel="16">
             <bm:Map.Center>
-                <bm:Location Latitude="40.2525" Longitude="-111.6494" />
+                <bm:Location Latitude="{StaticResource Latitude}" Longitude="{StaticResource Longitude}" />
             </bm:Map.Center>
 
         </bm:Map>
+        <Button Content="Reset View" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Button_Click" Background="White" BorderBrush="#FFCCCCCC" Foreground="Black" BorderThickness="1" Margin="0,7,90,0" />
     </Grid>
     
 </UserControl>

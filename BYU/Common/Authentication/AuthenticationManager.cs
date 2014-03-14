@@ -69,7 +69,26 @@ namespace Common.Authentication
 
         static public Boolean LoggedIn()
         {
-            return credential != null;
+            if (credential != null)
+            {
+                return true;
+            }
+            else
+            {
+                try
+                {
+                    PasswordVault vault = new Windows.Security.Credentials.PasswordVault();
+                    IReadOnlyList<PasswordCredential> credentialList = vault.FindAllByResource("byu.edu");
+                    credential = credentialList.FirstOrDefault();
+
+                    return credential != null;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            //return credential != null;
         }
     }
 }

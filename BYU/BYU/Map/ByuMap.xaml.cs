@@ -1,9 +1,4 @@
-﻿using Bing.Maps;
-using Bing.Maps.VenueMaps;
-using Common;
-using Common.WebServices;
-using Common.WebServices.DO;
-using Common.WebServices.DO.ParkingLots;
+﻿using Bing.Maps.VenueMaps;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,18 +17,30 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Common
+namespace Map
 {
+    public delegate void MapEntitySelectedEventArgs(object sender, ByuMapEntity selected);
+
     public sealed partial class ByuMap : UserControl
     {
+
         private VenueMap ByuVenue;
         Task MapInit = null;
+        //This event has a default empty method so that we don't have to null check the event before firing it
+        public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => {};
 
         public ByuMap()
         {
             this.InitializeComponent();
+            this.SizeChanged += ByuMap_SizeChanged;
 
             MapInit = SetupMapAsync();
+        }
+
+        void ByuMap_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.Height = e.NewSize.Height;
+            this.ResetView();
         }
 
         async Task SetupMapAsync()
@@ -42,6 +49,14 @@ namespace Common
             BingMap.VenueManager.ActiveVenue = ByuVenue;
 
             BingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
+            BingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
+        }
+
+        void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
+        {
+            var buildings = GetBuildingsSync();
+            var building = buildings.SingleOrDefault(b => b.BingEntity == e.VenueEntity);
+            MapEntitySelected(this, building);
         }
 
         void VenueManager_ActiveVenueChanged(object sender, ActiveVenueChangedEventArgs e)
@@ -55,14 +70,32 @@ namespace Common
             {
                 if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
+                    return GetBuildingsSync();
+                }
+                else throw new TimeoutException("Could not load maps data");
+            });
+        }
+
+        //Only call this if you are certain the Venue has been loaded
+        private IEnumerable<ByuMapEntity> GetBuildingsSync()
+        {
                     var buildings =
                         from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
                         where !String.IsNullOrWhiteSpace(ve.Name)
                         select new ByuMapEntity(ve.Name, ve.Description, ve);
                     return buildings;
                 }
-                else throw new TimeoutException("Could not load maps data");
-            });
+
+        private double Zoom
+        {
+            get
+            {
+                //Linear formula for figuring out a good starting zoom, based on the height of the control
+                //Reduce the denominator on the left to increase the zoom per pixel of height increase
+                //Increase the number on the right to increase the baseline zoom
+                //Zoom should be at least 16 to make buildings clickable
+                return Math.Max(this.Height / 475 + 14.25, 16);
+            }
         }
 
         public void drawPolygon()
@@ -112,7 +145,7 @@ namespace Common
         public async void ResetView()
         {
             BingMap.VenueManager.ActiveVenue = ByuVenue;
-            BingMap.SetView(new Bing.Maps.Location(40.2525, -111.6494), 16);
+            BingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
             var buildings = await GetBuildings();
             foreach (var building in buildings)
                 DeselectEntity(building);
@@ -139,6 +172,11 @@ namespace Common
         {
             entity.BingEntity.Unhighlight();
             entity.BingEntity.HideOutline();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ResetView();
         }
 
     }
