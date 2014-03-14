@@ -1,4 +1,6 @@
-﻿using Bing.Maps.VenueMaps;
+﻿using Bing.Maps;
+using Bing.Maps.VenueMaps;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Map
+namespace Common
 {
     public delegate void MapEntitySelectedEventArgs(object sender, ByuMapEntity selected);
 

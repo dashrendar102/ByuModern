@@ -19,7 +19,6 @@ using Common.Calendar;
 using Common.WebServices.DO.ClassSchedule;
 using System.Threading.Tasks;
 using Common.WebServices.DO.TermUtility;
-using Common.Calendar;
 using Common.Storage;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
@@ -139,9 +138,9 @@ namespace BYU.BergerDemos
 
         #endregion
 
-        private void ClearCacheButton_Click(object sender, RoutedEventArgs e)
+        private async void ClearCacheButton_Click(object sender, RoutedEventArgs e)
         {
-            WebCache.Instance.ClearCache();
+            await WebCache.Instance.ClearCache();
         }
 
     }

@@ -64,7 +64,6 @@ namespace Common.Storage
                     var encrypter = new DataProtectionProvider("LOCAL=user");
                     var istream = dataStream.AsInputStream();
                     await encrypter.ProtectStreamAsync(istream, fileStream);
-                    await fileStream.FlushAsync();
                 }
                 else
                 {
