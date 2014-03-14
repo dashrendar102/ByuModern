@@ -19,6 +19,7 @@ namespace Common.Storage
             if (cacheFolder == null)
             {
                 cacheFolder = await FileHelper.LocalFolder.CreateFolderAsync(cacheFolderName, CreationCollisionOption.OpenIfExists);
+                return null;
             }
             return cacheFolder;
         }

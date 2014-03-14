@@ -27,7 +27,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
-using Map;
+using Common;
 using Windows.Storage;
 
 namespace BYU

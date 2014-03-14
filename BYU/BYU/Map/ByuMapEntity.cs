@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Map
+namespace Common
 {
     public class ByuMapEntity
     {
