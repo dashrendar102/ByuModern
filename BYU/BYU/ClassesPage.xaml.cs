@@ -66,6 +66,13 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
+
+        }
+
+        private void SetSelectedCourse(CourseInformation newCourse)
+        {
+            selectedCourse = newCourse;
+            SelectedClassContent.DataContext = selectedCourse;
         }
 
         /// <summary>
@@ -115,7 +122,7 @@ namespace BYU
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            this.selectedCourse = e.Parameter as CourseInformation;
+            SetSelectedCourse(e.Parameter as CourseInformation);
             LoadClasses();
         }
 
@@ -128,10 +135,7 @@ namespace BYU
 
         private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            selectedCourse = (CourseInformation)e.AddedItems[0];
-            selected_class_list.Clear();
-            selected_class_list.Add(selectedCourse);
-            SelectedClassSummary.ItemsSource = selected_class_list;
+            SetSelectedCourse((CourseInformation)e.AddedItems[0]);
         }
 
         private async void btnAddClass_Click(object sender, RoutedEventArgs e)
