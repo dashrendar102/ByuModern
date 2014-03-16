@@ -80,6 +80,34 @@ namespace Common.Storage
             return file;
         }
 
+        public static async Task SaveStringToFile(StorageFolder folder, string filename, string contents, bool encrypt = true)
+        {
+            var file = await folder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
+
+            using (var dataStream = GenerateStreamFromString(contents)) {
+                await Save(folder, filename, dataStream, encrypt);
+            }
+        }
+
+        public static async Task<string> ReadStringFromFile(StorageFolder folder, string filename, bool decrypt = true)
+        {
+            try
+            {
+
+            StorageFile file = await GetFile(folder, filename);
+            using (Stream fileStream = await OpenReadOnlyFileStream(file, decrypt))
+            {
+                StreamReader streamReader = new StreamReader(fileStream);
+                return streamReader.ReadToEnd();
+            }
+            }
+            catch (Exception e)
+            {
+                e.GetBaseException();
+                return null;
+            }
+        }
+
         public static async Task DeleteFile(StorageFolder folder, string filename)
         {
             try
@@ -129,6 +157,17 @@ namespace Common.Storage
         public static async Task<bool> FileExists(StorageFolder folder, string filename)
         {
             return (await GetFile(folder, filename)) != null;
+        }
+
+        //courtesy of http://stackoverflow.com/questions/1879395/how-to-generate-a-stream-from-a-string
+        public static Stream GenerateStreamFromString(string s)
+        {
+            MemoryStream stream = new MemoryStream();
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
     }
 }
