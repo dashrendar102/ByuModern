@@ -16,19 +16,7 @@ namespace Common.Calendar
 {
     public class AppointmentGenerator
     {
-        private TimeSpan BYUTimeZoneOffset
-        {
-            get
-            {
-                Instant now = Instant.FromDateTimeUtc(DateTime.UtcNow);
-                var dt = now.InZone(Constants.BYUTimeZone);
-                var ts = dt.Offset.ToTimeSpan();
-                Instant otherNow = SystemClock.Instance.Now;
-                var offset = Constants.BYUTimeZone.GetUtcOffset(SystemClock.Instance.Now);
-                return Constants.BYUTimeZone.GetUtcOffset(SystemClock.Instance.Now).ToTimeSpan();
-            }
-        }
-
+        //uses the BYU timezone
         private DateTimeOffset CreateDateTimeOffset(LocalDate date, LocalTime time)
         {
             var localDateTime = date + time;
