@@ -13,7 +13,7 @@ namespace Common.WebServices.DO.ClassSchedule
         [DataMember(Name = "WeeklySchedService")]
         public WeeklySchedService WeeklySchedService { get; set; }
 
-        public async static Task<ClassScheduleResponse> GetClassSchedule()
+        public async static Task<CourseScheduleInformation> GetClassSchedule()
         {
             string term = await TermUtility.TermUtility.getCurrentTerm();
             WebServiceSession session = await WebServiceSession.GetSession();

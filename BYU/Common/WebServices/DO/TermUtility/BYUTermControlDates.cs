@@ -11,13 +11,11 @@ namespace Common.WebServices.DO.TermUtility
     internal class BYUTermControlDates
     {
         [DataMember]
-        public List<DateList> date_list { get; set; }
+        public List<DateRange> date_list { get; set; }
 
-        public DateList first_date_list()
+        public DateRange GetDateRangeByType(DateType dateType)
         {
-            if (date_list.Count > 0)
-                return date_list.ElementAt(0);
-            else return null;
+            return date_list.Where(dr => dr.date_type.Equals(dateType.ToString(), StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
         }
     }
 }

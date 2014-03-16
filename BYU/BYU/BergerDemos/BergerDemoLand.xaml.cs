@@ -40,9 +40,9 @@ namespace BYU.BergerDemos
         {
             string yearTerm = await TermUtility.getCurrentTerm();
             AppointmentGenerator generator = new AppointmentGenerator();
-            ClassScheduleResponse schedule = await ClassScheduleRoot.GetClassSchedule();
+            CourseScheduleInformation schedule = await ClassScheduleRoot.GetClassSchedule();
             CourseInformation sampleCourse = schedule.courseList[0];
-            var appointment = await generator.GenerateAppointment(sampleCourse);
+            var appointment = await generator.GenerateAppointment(schedule, sampleCourse);
 
             var rect = GetElementRect(sender as FrameworkElement);
             String appointmentId = await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Windows.UI.Popups.Placement.Default);

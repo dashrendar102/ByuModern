@@ -9,6 +9,7 @@ namespace Common.Calendar
 {
 	internal class Constants
 	{
-        internal static DateTimeZone BYUTimeZone = NodaTime.DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Denver");
+        internal static DateTimeZone BYUTimeZone = NodaTime.DateTimeZoneProviders.Tzdb.GetZoneOrNull("US/Mountain");
+        
 	}
 }

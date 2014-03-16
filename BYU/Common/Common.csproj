@@ -107,6 +107,7 @@
     <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\Win8CalendarClient.cs" />
+    <Compile Include="WebServices\DateTypes.cs" />
     <Compile Include="WebServices\DO\ParkingLots\ParkingLot.cs" />
     <Compile Include="WebServices\DO\ParkingLots\ParkingLotRequest.cs" />
     <Compile Include="WebServices\DO\ParkingLots\ParkingLotResponse.cs" />

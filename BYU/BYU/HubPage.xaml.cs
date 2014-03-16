@@ -27,7 +27,6 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
-using Common;
 using Windows.Storage;
 
 namespace BYU
@@ -275,7 +274,7 @@ namespace BYU
 
         private async Task PopulateClasses()
         {
-            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
+            CourseScheduleInformation classes = await ClassScheduleRoot.GetClassSchedule();
             ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
         }
 

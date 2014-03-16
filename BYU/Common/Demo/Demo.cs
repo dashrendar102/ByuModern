@@ -57,7 +57,7 @@ namespace Common
             assignments.ToString();
         }
 
-        private async Task<ClassScheduleResponse> getStudentSchedule()
+        private async Task<CourseScheduleInformation> getStudentSchedule()
         {
             WebServiceSession session = await WebServiceSession.GetSession();
             Task<string> termTask = TermUtility.getCurrentTerm();
