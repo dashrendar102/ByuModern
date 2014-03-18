@@ -115,7 +115,7 @@
   <ItemGroup>
     <Compile Include="BYU\Classes\ClassesTest1.cs" />
     <Compile Include="BYU\HomeScreen\HomeScreenTest1.cs" />
-    <Compile Include="BYU\Maps\MapsTest1.cs" />
+    <Compile Include="BYU\Maps\MapsTests.cs" />
     <Compile Include="Common\WebServices\CamelCaseNameMatchingConverterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
