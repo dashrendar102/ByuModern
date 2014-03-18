@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Common;
+using Common.WebServices.DO.ParkingLots;
+using System.Threading.Tasks;
 
 namespace TestSuite
 {
@@ -32,6 +34,16 @@ namespace TestSuite
             Assert.IsNotNull(talmageBuilding);
 
             map.SelectEntity(talmageBuilding);
+        }
+
+        [TestMethod]
+        public void TestGetParkingLots()
+        {
+            Task<ParkingLotResponse[]> getLotsTask = ParkingLot.getAllLots();
+            getLotsTask.Wait();
+            ParkingLotResponse[] lots = getLotsTask.Result;
+            var lotsFound = from l in lots where l.Name.Contains("Lot") select l;
+            Assert.IsTrue(lotsFound.Count() > 0);
         }
     }
 }
