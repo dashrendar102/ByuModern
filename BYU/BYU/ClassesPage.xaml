@@ -87,36 +87,38 @@
                 <StackPanel x:Name="SelectedClassContent" Grid.Column="1" Margin="40,30,0,0">
                     <TextBlock Text="Summary" Style="{StaticResource SubheaderTextBlockStyle}"/>
 
-                    <StackPanel Margin="5,20,20,20" Height="550">
+                    <StackPanel Margin="0,15,0,30" Height="220" Width="400">
                         <StackPanel.Background>
                             <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                         </StackPanel.Background>
-                        <StackPanel Orientation="Horizontal" Margin="5,5,5,0">
-                            <TextBlock Text="{Binding course}" Foreground="White" FontSize="24"/>
-                            <TextBlock Text=" - Section " Foreground="White" FontSize="24"/>
-                            <TextBlock Text="{Binding section}" Margin="5,0,0,5" Foreground="White" FontSize="24"/>
+                        <StackPanel Orientation="Horizontal" Margin="15,15,5,0">
+                            <TextBlock Text="{Binding course}" Foreground="White" FontSize="20"/>
+                            <TextBlock Text=" - Section " Foreground="White" FontSize="20"/>
+                            <TextBlock Text="{Binding section}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="5,0">
-                            <TextBlock Text="{Binding course_title}" Foreground="White" FontSize="20"/>
+                        <StackPanel Orientation="Horizontal" Margin="15,0,5,20">
+                            <TextBlock Text="{Binding course_title}" Foreground="White" FontSize="16"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="5,0">
-                            <TextBlock Text="Instructor: " Foreground="White" FontSize="20"/>
-                            <TextBlock Text="{Binding instructor}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Instructor: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding instructor}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="5,0">
-                            <TextBlock Text="Time: " Foreground="White" FontSize="20"/>
-                            <TextBlock Text="{Binding class_period}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
-                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="20"/>
-                            <TextBlock Text="{Binding days}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Time: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding class_period}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding days}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="5,0">
-                            <TextBlock Text="Location: " Foreground="White" FontSize="20"/>
-                            <TextBlock Text="{Binding room}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
-                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="20"/>
-                            <TextBlock Text="{Binding building}" Margin="0,0,0,5" Foreground="White" FontSize="20"/>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Location: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding room}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding building}" Margin="0,0,0,5" Foreground="White" FontSize="16"/>
                         </StackPanel>
-                        <Button x:Name="btnAddClass" Content="Add To Calendar" Click="btnAddClass_Click" Margin="5"/>
+                        <Button x:Name="btnAddClass" Content="Add To Calendar" Click="btnAddClass_Click" Margin="15,15"/>
                     </StackPanel>
+                    <TextBlock Text="Announcements" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <ScrollViewer Height="278" Margin="0,15,0,0"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
