@@ -46,7 +46,7 @@ namespace Map
 
         public async Task<IEnumerable<ByuMapEntity>> GetBuildings()
         {
-            await Task<IEnumerable<ByuMapEntity>>.Run(() =>
+            return await Task<IEnumerable<ByuMapEntity>>.Run(() =>
             {
                 if (MapInit != null && (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10))))
                 {
@@ -58,12 +58,12 @@ namespace Map
                 }
                 else throw new TimeoutException("Could not load maps data");
             });
-            throw new TimeoutException("Could not load maps data");
         }
 
         public void SelectEntity(ByuMapEntity entity)
         {
             entity.BingEntity.Highlight();
+            entity.BingEntity.ShowOutline();
         }
 
     }
