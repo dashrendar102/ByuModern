@@ -39,5 +39,8 @@ namespace Common.WebServices.DO.IdCard
 
         [DataMember]
         public bool lost_stolen { get; set; }
+
+        [DataMember]
+        public IdCardRoles id_card_roles { get; set; }
     }
 }

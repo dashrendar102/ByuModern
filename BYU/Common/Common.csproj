@@ -110,6 +110,8 @@
     <Compile Include="WebServices\DateTypes.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardRequest.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardResponse.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardRole.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardRoles.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardRoot.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardService.cs" />
     <Compile Include="WebServices\DO\ParkingLots\ParkingLot.cs" />
