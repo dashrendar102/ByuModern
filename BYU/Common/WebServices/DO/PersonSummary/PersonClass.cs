@@ -11,12 +11,12 @@ namespace Common.WebServices.DO.PersonSummary
     public class PersonClass
     {
         [DataMember]
-        public string teaching_area;
+        public string teaching_area { get; set; }
 
         [DataMember]
-        public string catalog_entry;
+        public string catalog_entry { get; set; }
 
         [DataMember]
-        public string instructor;
+        public string instructor { get; set; }
     }
 }

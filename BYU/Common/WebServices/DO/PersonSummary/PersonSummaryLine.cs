@@ -11,54 +11,54 @@ namespace Common.WebServices.DO.PersonSummary
     public class PersonSummaryLine
     {
         [DataMember]
-        public string email;
+        public string email { get; set; }
 
         [DataMember]
-        public string name;
+        public string name { get; set; }
 
         [DataMember]
-        public string suffix;
+        public string suffix { get; set; }
 
         [DataMember]
-        public string net_id;
+        public string net_id { get; set; }
 
         [DataMember]
-        public string byu_id;
+        public string byu_id { get; set; }
 
         [DataMember]
-        public string person_id;
+        public string person_id { get; set; }
 
         [DataMember]
-        public string date_of_birth;
+        public string date_of_birth { get; set; }
 
         [DataMember]
-        public string gender;
+        public string gender { get; set; }
 
         [DataMember]
-        public string student_role;
+        public string student_role { get; set; }
 
         [DataMember]
-        public string employee_role;
+        public string employee_role { get; set; }
 
         [DataMember]
-        public bool academic_record;
+        public bool academic_record { get; set; }
 
         [DataMember]
-        public bool is_employee;
+        public bool is_employee { get; set; }
 
         [DataMember]
-        public bool non_person_organization;
+        public bool non_person_organization { get; set; }
 
         [DataMember]
-        public bool restricted;
+        public bool restricted { get; set; }
 
         [DataMember]
-        public bool deceased;
+        public bool deceased { get; set; }
 
         [DataMember]
-        public bool merge_pending;
+        public bool merge_pending { get; set; }
 
         [DataMember]
-        public string new_byu_id;
+        public string new_byu_id { get; set; }
     }
 }

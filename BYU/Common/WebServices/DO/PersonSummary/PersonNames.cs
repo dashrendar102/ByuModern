@@ -11,9 +11,9 @@ namespace Common.WebServices.DO.PersonSummary
     public class PersonNames
     {
         [DataMember]
-        public string preferred_name;
+        public string preferred_name { get; set; }
 
         [DataMember]
-        public string complete_name;
+        public string complete_name { get; set; }
     }
 }
