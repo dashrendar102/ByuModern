@@ -298,7 +298,8 @@ namespace BYU
 
         private void UserButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.ApplicationSettings.SettingsPane.Show();
+            //Windows.UI.ApplicationSettings.SettingsPane.Show();
+            this.Frame.Navigate(typeof(UserProfile), userInfo);
         }
 
         private async void pageRoot_Loaded(object sender, RoutedEventArgs e)
