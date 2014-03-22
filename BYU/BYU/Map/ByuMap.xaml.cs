@@ -50,11 +50,11 @@ namespace Common
 
         async Task SetupMapAsync()
         {
-            ByuVenue = await this.BingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
-            BingMap.VenueManager.ActiveVenue = ByuVenue;
+            ByuVenue = await this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
+            this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
 
-            BingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
-            BingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
+            this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
+            this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
         }
 
         void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
@@ -125,7 +125,7 @@ namespace Common
             MapShapeLayer parkingLayer = new MapShapeLayer();
             MapPolygon myPolygon = getPolygon();
             parkingLayer.Shapes.Add(myPolygon);
-            BingMap.ShapeLayers.Add(parkingLayer);
+            this.MyBingMap.ShapeLayers.Add(parkingLayer);
 
         }
 
@@ -165,8 +165,8 @@ namespace Common
 
         public async void ResetView()
         {
-            BingMap.VenueManager.ActiveVenue = ByuVenue;
-            BingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
+            this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
+            this.MyBingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
             var buildings = await GetBuildings();
             foreach (var building in buildings)
             {
@@ -186,7 +186,7 @@ namespace Common
             entity.BingEntity.Highlight();
             entity.BingEntity.ShowOutline();
 
-            BingMap.SetView(entity.BingEntity.Location, 18.5);
+            this.MyBingMap.SetView(entity.BingEntity.Location, 18.5);
 
             lastSelected = entity;
         }

@@ -21,8 +21,8 @@ namespace TestSuite
         public void Login()
         {
             HubPage page = new BYU.HubPage();
-            string netId = "asdf"; // TODO need a test user/pass
-            string pass = "asdf";
+            //string netId = "asdf"; // TODO need a test user/pass
+            //string pass = "asdf";
             // TODO assert login succeeded
         }
 

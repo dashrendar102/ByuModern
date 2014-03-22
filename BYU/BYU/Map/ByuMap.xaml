@@ -15,8 +15,8 @@
         <x:Double x:Key="Longitude">-111.649333</x:Double>
     </UserControl.Resources>
     
-    <Grid>
-        <bm:Map Name="BingMap" Credentials="AiitZcq02L7zbTAdAWg08RHQ53otcBhv7tSeojdBRhZPpi-p-JNijWtC9STmiJjO" ZoomLevel="16">
+    <Grid x:Name="MapGrid">
+        <bm:Map x:Name="MyBingMap" Credentials="AiitZcq02L7zbTAdAWg08RHQ53otcBhv7tSeojdBRhZPpi-p-JNijWtC9STmiJjO" ZoomLevel="16">
             <bm:Map.Center>
                 <bm:Location Latitude="{StaticResource Latitude}" Longitude="{StaticResource Longitude}" />
             </bm:Map.Center>

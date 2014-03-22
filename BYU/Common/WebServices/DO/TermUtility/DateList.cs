@@ -55,7 +55,7 @@ namespace Common.WebServices.DO.TermUtility
         }
 
         [DataMember]
-        public string date_type;
+        public string date_type { get; set; }
 
         public LocalDate StartDate { get; private set; }
         public LocalDate EndDate { get; private set; }

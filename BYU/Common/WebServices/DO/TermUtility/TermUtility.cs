@@ -33,7 +33,8 @@ namespace Common.WebServices.DO.TermUtility
             return dateRange.year_term;
         }
 
-        private static string getDateTypesCSV(DateType[] dateTypes) {
+        private static string getDateTypesCSV(DateType[] dateTypes)
+        {
             string[] dateTypeNames = dateTypes.Select(dt => dt.ToString()).ToArray();
             return string.Join(",", dateTypeNames);
         }
@@ -53,17 +54,6 @@ namespace Common.WebServices.DO.TermUtility
             var root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url);
             return root.ControldateswsService.response;
         }
-
-        internal static async Task<BYUTermControlDates> GetCurrentControlDates()
-        {
-            DateTime date = DateTime.Now;
-            string url = String.Format(BYUWebServiceURLs.GET_CONTROL_DATES, getDateStr(date));
-
-            WebServiceSession session = await WebServiceSession.GetSession();
-            string personId = session.personId;
-
-            var root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(url);
-            return root.ControldateswsService.response;
-        }
     }
 }
+

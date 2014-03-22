@@ -87,7 +87,7 @@ namespace Common.Storage
 
                 //await FileHelper.SaveStringToFile(cacheFolder, fileName, json2, encrypt);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return;
             }
@@ -107,7 +107,7 @@ namespace Common.Storage
                 return default(T);
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return default(T);
             }
