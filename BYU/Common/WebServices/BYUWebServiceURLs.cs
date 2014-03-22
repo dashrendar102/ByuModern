@@ -23,8 +23,10 @@ namespace Common.WebServices
         internal const string GET_MATERIALS = "https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/material/courseID/{0}/includeBooklist/true";
         internal const string GET_SYLLABI = "https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/syllabus/courseID/";
         internal const string GET_SYSTEM_ANNOUNCEMENT = "https://ws.byu.edu/rest/v1.0/learningsuite/announcements/sysannouncement/student-anno";
-        internal const string GET_CONTROL_DATES = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/asofdate/{0}/current_yyt";
-
+        internal const string GET_CONTROL_DATES_BY_DATE = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/asofdate/{0}/{1}";
+        internal const string GET_PARKING_LOTS = "https://soaregistry.byu.edu/services/rest/v2/map/ParkingLots";
+        internal const string GET_CONTROL_DATES_BY_YEAR_TERM = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/yearterm/{0}/{1}";
+        
         // This functionality is replaced by String.Format(string toFormat, string param1, string param2, ...)
         // where each parameter after the first replaces indexed sections in the string like this: "...{0}...{1}...{2}...".
         // For example: string.Format("Hello {0}, how are you {1}", "Bob", "today?") returns "Hello Bob, how are you today?".
@@ -36,5 +38,6 @@ namespace Common.WebServices
             }
             return result;
         }*/
+
     }
 }

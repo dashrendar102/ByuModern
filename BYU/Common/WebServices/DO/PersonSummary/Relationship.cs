@@ -11,24 +11,24 @@ namespace Common.WebServices.DO.PersonSummary
     public class Relationship
     {
         [DataMember]
-        public string type;
+        public string type { get; set; }
 
         [DataMember]
-        public string person_id;
+        public string person_id { get; set; }
 
         [DataMember]
-        public string name;
+        public string name { get; set; }
 
         [DataMember]
-        public bool deceased;
+        public bool deceased { get; set; }
 
         [DataMember]
-        public string employee;
+        public string employee { get; set; }
 
         [DataMember]
-        public string student;
+        public string student { get; set; }
 
         [DataMember]
-        public string affiliation;
+        public string affiliation { get; set; }
     }
 }

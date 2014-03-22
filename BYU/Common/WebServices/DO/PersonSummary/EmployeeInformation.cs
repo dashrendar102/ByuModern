@@ -11,15 +11,15 @@ namespace Common.WebServices.DO.PersonSummary
     public class EmployeeInformation
     {
         [DataMember]
-        public string employee_role;
+        public string employee_role { get; set; }
 
         [DataMember]
-        public string department;
+        public string department { get; set; }
 
         [DataMember]
-        public string job_title;
+        public string job_title { get; set; }
 
         [DataMember]
-        public EmployeeDateHired date_hired;
+        public EmployeeDateHired date_hired { get; set; }
     }
 }

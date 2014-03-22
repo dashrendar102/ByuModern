@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.Security.Credentials;
+using Common.Authentication;
 using Common.WebServices.DO.PersonSummary;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO;
@@ -26,6 +27,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
+using Windows.Storage;
 
 namespace BYU
 {
@@ -73,23 +75,26 @@ namespace BYU
         /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
         /// a dictionary of state preserved by this page during an earlier
         /// session.  The state will be null the first time a page is visited.</param>
-        private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
+        private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
             //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
             //this.DefaultViewModel["Section3Items"] = sampleDataGroup;
 
             // Restore values stored in session state.
-            if (e.PageState != null){
-                if (e.PageState.ContainsKey("UserObject"))
-                    userInfo = (PersonSummaryResponse)e.PageState["UserObject"];
-                if (e.PageState.ContainsKey("UserPhoto"))
+            if (e.PageState != null)
+            {
+                if (AuthenticationManager.LoggedIn())
                 {
-                    userPhotoUri = (Uri)e.PageState["UserPhoto"];
+                    userInfo = await PersonSummaryResponse.GetPersonSummary();
+                    userPhotoUri = await PersonPhoto.getPhotoUri();
                     LoadUserPhoto();
-                    SetElementEnableStatuses();
+                    await PopulateClasses();
                 }
+
+                SetElementEnableStatuses();
             }
+
 
 
             // Restore values stored in app data.
@@ -166,11 +171,6 @@ namespace BYU
         #endregion
 
 
-        private void ClassButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(ClassesPage));
-        }
-
         private void MapButton_Clicked(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MapPage));
@@ -178,23 +178,42 @@ namespace BYU
 
         private async void Login_Click(object sender, RoutedEventArgs e)
         {
-            if(string.IsNullOrEmpty(LoginNameTextbox.Text) || string.IsNullOrEmpty(LoginPasswordTextbox.Password))
-            {
-                var messageDialog = new MessageDialog("Username and Password are invalid. Please try again.");
-                await messageDialog.ShowAsync();
-            }
-            ProgressBar.Visibility = Visibility.Visible;
-            SignInButton.IsEnabled = false;
-            LoginNameTextbox.IsEnabled = false;
-            LoginPasswordTextbox.IsEnabled = false;
+            DoLogin();
+        }
 
-            var userName = LoginNameTextbox.Text;
-            var password = LoginPasswordTextbox.Password;
+        private async void DoLogin()
+        {
+            var netID = this.LoginNameTextbox.Text;
+            var password = this.LoginPasswordTextbox.Password;
+
+            bool success = false;
+            try
+            {
+                ProgressBar.Visibility = Visibility.Visible;
+                SignInButton.IsEnabled = false;
+                LoginNameTextbox.IsEnabled = false;
+                LoginPasswordTextbox.IsEnabled = false;
+                //AuthenticationManager.Login(netID, password);
+                WebServiceSession session = await WebServiceSession.GetSession(netID, password);
+                success = session != null;
+            }
+            catch (InvalidCredentialsException){ }
+
+            if (!success)
+            {
+                var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
+                await messageDialog.ShowAsync();
+                ProgressBar.Visibility = Visibility.Collapsed;
+                SignInButton.IsEnabled = true;
+                LoginNameTextbox.IsEnabled = true;
+                LoginPasswordTextbox.IsEnabled = true;
+                return;
+            }
 
             //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
             WebServiceSession webServiceSession = await Task.Run(() =>
             {
-                return WebServiceSession.GetSession(userName, password);
+                return WebServiceSession.GetSession(netID, password);
             });
             if (webServiceSession != null)
             {
@@ -217,25 +236,10 @@ namespace BYU
             ProgressBar.Visibility = Visibility.Collapsed;
         }
 
-        private PasswordCredential GetBYUCredentials()
-        {
-            var vault = new Windows.Security.Credentials.PasswordVault();
-            try
-            {
-                var credentialList = vault.FindAllByResource("byu.edu");
-                return credentialList.FirstOrDefault();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         private void SetElementEnableStatuses()
         {
-            
-            var credential = GetBYUCredentials();
-            bool loggedIn = (credential != null);
+            bool loggedIn = AuthenticationManager.LoggedIn();
+            var credential = AuthenticationManager.credential;
             if (loggedIn)
             {
                 if (userInfo != null)
@@ -254,7 +258,6 @@ namespace BYU
             this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
             this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
-            //this.LogoutButton.IsEnabled = !loggedIn;
         }
 
         private void LoadUserPhoto()
@@ -271,27 +274,45 @@ namespace BYU
 
         private async Task PopulateClasses()
         {
-            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
-            ObservableCollection<Button> class_buttons = new ObservableCollection<Button>();
-
-            foreach (CourseInformation class_entry in classes.courseList) {
-                Button button = new Button();
-                button.Content = class_entry.course;
-                button.Click += ClassButton_Click;
-                button.Height = 70;
-                button.Width = 300;
-                button.FontSize = 24;
-                button.Margin = new Thickness(0);
-                button.Foreground = new SolidColorBrush(Colors.White);
-                button.Background = new SolidColorBrush(Color.FromArgb(255, 00, 34, 85));
-                class_buttons.Add(button);
-            }
-            ClassesSection.ItemsSource = class_buttons;
+            CourseScheduleInformation classes = await ClassScheduleRoot.GetClassSchedule();
+            ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
         }
 
         private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(BergerDemoLand));
+        }
+
+        private void PasswordTextbox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter && !this.LoginNameTextbox.Text.Equals(""))
+            {
+                DoLogin();
+            }
+        }
+
+        private void ClassButton_Click(object sender, ItemClickEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ClassesPage), ((CourseInformation)e.ClickedItem));
+        }
+
+        private void UserButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Windows.UI.ApplicationSettings.SettingsPane.Show();
+            this.Frame.Navigate(typeof(UserProfile), userInfo);
+        }
+
+        private async void pageRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (AuthenticationManager.LoggedIn())
+            {
+                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
+                userPhotoUri = await PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                await PopulateClasses();
+            }
+
+            SetElementEnableStatuses();
         }
     }
 }

@@ -1,7 +1,9 @@
-﻿using Common.CalendarLand;
+﻿﻿using Common.Calendar;
+using Common.WebServices;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.TermUtility;
 using NodaTime;
+using NodaTime.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,19 +16,12 @@ namespace Common.Calendar
 {
     public class AppointmentGenerator
     {
-        private TimeSpan BYUTimeZoneOffset
+        //uses the BYU timezone
+        private DateTimeOffset CreateDateTimeOffset(LocalDate date, LocalTime time)
         {
-            get
-            {
-                var timeZone = DateTimeZoneProviders.Tzdb["MST"];
-                return timeZone.GetUtcOffset(SystemClock.Instance.Now).ToTimeSpan();
-            }
-        }
-
-        private DateTimeOffset CreateDateTimeOffset(DateTime date, LocalTime time)
-        {
-            DateTimeOffset result = new DateTimeOffset(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second, BYUTimeZoneOffset);
-            return result;
+            var localDateTime = date + time;
+            var zonedDateTime = Constants.BYUTimeZone.AtStrictly(localDateTime);
+            return zonedDateTime.ToDateTimeOffset();
         }
 
         private AppointmentRecurrence GenerateCourseRecurrence(CourseInformation course, DateTimeOffset endDate)
@@ -65,34 +60,35 @@ namespace Common.Calendar
             return recurrence;
         }
 
-        public async Task<Appointment> GenerateAppointment(CourseInformation course)
+        public async Task<Appointment> GenerateAppointment(CourseScheduleInformation scheduleInfo, CourseInformation course)
         {
             Appointment appointment = new Appointment();
             appointment.Subject = course.course + " - " + course.course_title;
             appointment.Location = course.room + " " + course.building;
-            //appointment.Details = "Taught by " + course.instructor;
-            //TimeZoneInfo.Utc.ge
-            //aptmt.
+            appointment.Details = "Taught by " + course.instructor;
 
             TimeRange timeRange = new TimeRange(course.class_period);
-            var bob = await TermUtility.GetCurrentControlDates();
-            var startDate = bob.first_date_list().term_start_date();
-            var endDate = bob.first_date_list().term_end_date();
+            string yearTerm = scheduleInfo.year_term;
+
+            var semesterControlDates = await TermUtility.GetControlDatesByYearTerm(yearTerm, DateType.Semester);
+            var semesterDateRange = semesterControlDates.GetDateRangeByType(DateType.Semester);
+            var startDate = semesterDateRange.StartDate;
+            var endDate = semesterDateRange.EndDate;
 
             DateTimeOffset start = CreateDateTimeOffset(startDate, timeRange.StartTime);
             DateTimeOffset end = CreateDateTimeOffset(endDate, timeRange.EndTime);
 
             appointment.StartTime = start;
             appointment.Duration = timeRange.TimeSpan;
+            appointment.BusyStatus = AppointmentBusyStatus.Busy;
 
-            appointment.BusyStatus = Windows.ApplicationModel.Appointments.AppointmentBusyStatus.Busy;
+            //this might be desirable, but it is not as apparent to the user as the details field is
+            //var organizer = new AppointmentOrganizer();
+            //organizer.DisplayName = course.instructor;
+            //organizer.Address = " ";
+            //appointment.Organizer = organizer;
 
-            var organizer = new Windows.ApplicationModel.Appointments.AppointmentOrganizer();
-            organizer.DisplayName = course.instructor;
-            organizer.Address = " ";
-            appointment.Organizer = organizer;
-
-            appointment.Recurrence = GenerateCourseRecurrence(course, endDate);
+            appointment.Recurrence = GenerateCourseRecurrence(course, end);
 
             return appointment;
         }

@@ -11,33 +11,33 @@ namespace Common.WebServices.DO.PersonSummary
     public class PersonalInformation
     {
         [DataMember]
-        public string date_of_birth;
+        public string date_of_birth { get; set; }
 
         [DataMember]
-        public int age;
+        public int age { get; set; }
 
         [DataMember]
-        public string ethnicity;
+        public string ethnicity { get; set; }
 
         [DataMember]
-        public string gender;
+        public string gender { get; set; }
 
         [DataMember]
-        public string marital_status;
+        public string marital_status { get; set; }
 
         [DataMember]
-        public string citizenship;
+        public string citizenship { get; set; }
 
         [DataMember]
-        public string home_town;
+        public string home_town { get; set; }
 
         [DataMember]
-        public string religion;
+        public string religion { get; set; }
 
         [DataMember]
-        public bool deceased;
+        public bool deceased { get; set; }
 
         [DataMember]
-        public bool restricted_record;
+        public bool restricted_record { get; set; }
     }
 }

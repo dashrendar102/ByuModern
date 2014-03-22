@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.Storage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,64 +19,28 @@ namespace Common.WebServices.DO
 
         public async static Task<Uri> getPhotoUri()
         {
-            if (!photoFileExists())
+            if (!(await photoFileExists()))
             {
                 string photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId;
-                using (WebResponse response = await BYUWebServiceHelper.sendAuthenticatedGETRequest(photoRequestUrl))
+                using (WebResponse response = await BYUWebServiceHelper.sendGETRequest(photoRequestUrl))
                 {
                     Stream photoStream = response.GetResponseStream();
-
-                    IAsyncOperation<StorageFile> getPhotoFileAsync = ApplicationData.Current.LocalFolder.CreateFileAsync(userPhotoName, CreationCollisionOption.ReplaceExisting);
-                    StorageFile resultFile = await getPhotoFileAsync.AsTask<StorageFile>();
-
-                    IAsyncOperation<IRandomAccessStream> fileStreamAsync = resultFile.OpenAsync(FileAccessMode.ReadWrite);
-                    IRandomAccessStream fileStream = await fileStreamAsync.AsTask<IRandomAccessStream>();
-
-                    using (Stream writeStream = fileStream.GetOutputStreamAt(0).AsStreamForWrite())
-                    {
-
-                        byte[] buffer = new byte[1025];
-                        int bytesRead = await photoStream.ReadAsync(buffer, 0, 1024);
-
-                        while (bytesRead > 0)
-                        {
-                            await writeStream.WriteAsync(buffer, 0, bytesRead);
-
-                            bytesRead = await photoStream.ReadAsync(buffer, 0, 1024);
-                        }
-                    }
-
-                    photoUri = new Uri(resultFile.Path, UriKind.Absolute);
-                    return photoUri;
+                    StorageFile file = await WebCache.Instance.Download(userPhotoName, photoStream, encrypt: false);
+                    photoUri = new Uri(file.Path, UriKind.Absolute);
                 }
             }
-            else
-            {
-                return photoUri;
-            }
+
+            return photoUri;
         }
 
-        private static bool photoFileExists()
+        private static async Task<bool> photoFileExists()
         {
             if (photoUri == null)
             {
                 return false;
             }
-
-            try
-            {
-                IAsyncOperation<StorageFile> getPhotoFileAsync = ApplicationData.Current.LocalFolder.GetFileAsync(userPhotoName);
-                Task<StorageFile> getPhotoFileTask = getPhotoFileAsync.AsTask<StorageFile>();
-                getPhotoFileTask.Wait();
-                StorageFile resultFile = getPhotoFileTask.Result;
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
+            //return await WebCache.Instance.IsCached(userPhotoName);
+            return await WebCache.Instance.IsDownloaded(userPhotoName);
         }
     }
 }

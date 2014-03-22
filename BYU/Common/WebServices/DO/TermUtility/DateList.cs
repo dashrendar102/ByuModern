@@ -5,52 +5,59 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using NodaTime;
+using NodaTime.Text;
 
 namespace Common.WebServices.DO.TermUtility
 {
     [DataContract]
-    internal class DateList
+    internal class DateRange
     {
-        [DataMember]
-        private string yt;
+        private string startDateString;
 
-        [DataMember]
-        private string sd;
+        private string endDateString;
 
+        private const string dateFormat = "yyyyMMdd";
+        
         [DataMember]
-        private string ed;
+        public string year_term { get; set; }
 
-        [DataMember]
-        private DateTime start;
-
-        [DataMember]
-        private DateTime end;
-
-        [DataMember]
-        public string year_term { get { return yt; } set { yt = value; } }
+        private static LocalDatePattern DatePattern
+        {
+            get
+            {
+                return LocalDatePattern.Create(dateFormat, CultureInfo.InvariantCulture);
+            }
+        }
 
         [DataMember]
         public string start_date
         {
-            get { return sd; }
+            get { return startDateString; }
             set
             {
-                sd = value;
-                start = DateTime.ParseExact(sd, "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                startDateString = value;
+                var startDateStr = startDateString.Split(' ')[0];    //time is midnight, not needed
+                StartDate = DatePattern.Parse(startDateStr).Value;
             }
         }
 
         [DataMember]
         public string end_date
         {
-            get { return ed; }
+            get { return endDateString; }
             set
             {
-                ed = value;
-                end = DateTime.ParseExact(ed, "yyyyMMdd HH:mm:ss", CultureInfo.InvariantCulture);
+                endDateString = value;
+                var endDateStr = endDateString.Split(' ')[0];    //time is midnight, not needed
+                EndDate = DatePattern.Parse(endDateStr).Value;
             }
         }
-        public DateTime term_start_date() { return start; }
-        public DateTime term_end_date() { return end; }
+
+        [DataMember]
+        public string date_type;
+
+        public LocalDate StartDate { get; private set; }
+        public LocalDate EndDate { get; private set; }
     }
 }

@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Common.CalendarLand
+namespace Common.Calendar
 {
 	internal class Constants
 	{
-        internal static DateTimeZone BYUTimeZone = NodaTime.DateTimeZoneProviders.Tzdb.GetZoneOrNull("America/Denver");
+        internal static DateTimeZone BYUTimeZone = NodaTime.DateTimeZoneProviders.Tzdb.GetZoneOrNull("US/Mountain");
+        
 	}
 }

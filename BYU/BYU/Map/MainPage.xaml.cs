@@ -12,11 +12,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Map.Common;
+using Common.Common;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
-namespace Map
+namespace Common
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -154,11 +154,12 @@ namespace Map
         private void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             IList<object> results = ((ListView)sender).SelectedItems;
-            if(results.Count != 0)
+            if (results.Count != 0)
             {
                 ByuMapEntity entity = (ByuMapEntity)results[0];
                 map.SelectEntity(entity);
             }
+            else map.ResetView();
         }
 
         private bool CanGoBack()

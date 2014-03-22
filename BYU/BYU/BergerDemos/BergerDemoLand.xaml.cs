@@ -15,11 +15,11 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Common.CalendarLand;
+using Common.Calendar;
 using Common.WebServices.DO.ClassSchedule;
 using System.Threading.Tasks;
 using Common.WebServices.DO.TermUtility;
-using Common.Calendar;
+using Common.Storage;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -40,9 +40,9 @@ namespace BYU.BergerDemos
         {
             string yearTerm = await TermUtility.getCurrentTerm();
             AppointmentGenerator generator = new AppointmentGenerator();
-            ClassScheduleResponse schedule = await ClassScheduleRoot.GetClassSchedule();
+            CourseScheduleInformation schedule = await ClassScheduleRoot.GetClassSchedule();
             CourseInformation sampleCourse = schedule.courseList[0];
-            var appointment = await generator.GenerateAppointment(sampleCourse);
+            var appointment = await generator.GenerateAppointment(schedule, sampleCourse);
 
             var rect = GetElementRect(sender as FrameworkElement);
             String appointmentId = await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Windows.UI.Popups.Placement.Default);
@@ -138,5 +138,9 @@ namespace BYU.BergerDemos
 
         #endregion
 
+        private async void ClearCacheButton_Click(object sender, RoutedEventArgs e)
+        {
+            await WebCache.Instance.ClearCache();
+        }
     }
 }

@@ -1,5 +1,4 @@
-﻿<Page
-    x:Name="pageRoot"
+﻿<Page x:Name="pageRoot"
     x:Class="BYU.ClassesPage"
     DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -12,58 +11,116 @@
     mc:Ignorable="d">
 
     <!--
-        This grid acts as a root panel for the page that defines two rows:
-        * Row 0 contains the back button and page title
-        * Row 1 contains the rest of the page layout
-    -->
-    <Grid Background="#FF1D1D1D"
-        DataContext="{Binding Item}"
-        d:DataContext="{Binding Groups[0].Items[0], Source={d:DesignData Source=/DataModel/SampleData.json, Type=data:SampleDataSource}}">
+    This grid acts as a root panel for the page.
+  -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="120"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
 
-        <!--
-            TODO: Content should be placed within the following grid 
-                  to show details for the current item
-        -->
-    <!--
-            TODO: Content should be placed within the following grid 
-                  to show details for the current item
-        -->
-        <Grid Grid.Row="1" x:Name="contentRegion" Margin="0,10,0,-10" Background="#FFB0B0B0">
-        	<ListBox x:Name="classList" HorizontalAlignment="Left" Height="608" Margin="91,-2,0,0" VerticalAlignment="Top" Width="488" Background="Transparent">
-                <Button Content="AH 100" Height="82" Width="465" FontSize="32" Background="#FF002255" Click="ClassClick"/>
-                <Button Content="C S 428" Height="82" Width="466" FontSize="32" Background="#FF002255" Click="ClassClick"/>
-                <Button Content="BIO 100" Height="82" Width="469" FontSize="32" Background="#FF002255" Click="ClassClick"/>
-                <Button Content="MUSIC 117" Height="82" Width="467" FontSize="32" Background="#FF002255" Click="ClassClick"/>
-                <Button Content="WRTG 150" Height="82" Width="467" FontSize="32" Background="#FF002255" Click="ClassClick"/>
-        	</ListBox>
-        	<GridView x:Name="selectedClassContent" HorizontalAlignment="Left" Height="628" Margin="582,0,0,0" VerticalAlignment="Top" Width="450" Background="Gray">
-        		<TextBlock x:Name="selectedClassTitle" Height="80" TextWrapping="Wrap" Width="300" FontSize="32" Margin="15,15,0,0"/>
-        	</GridView>
-        </Grid>
+        <!-- Define Backgrounds -->
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="White"/>
 
-        <!-- Back button and page title -->
-        <Grid x:Name="classesPageHeader">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                        Style="{StaticResource NavigationBackButtonNormalStyle}"
-                        VerticalAlignment="Top"
-                        AutomationProperties.Name="Back"
-                        AutomationProperties.AutomationId="BackButton"
-                        AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="My Classes" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-        </Grid>
+        <Border Grid.Row="1" Grid.ColumnSpan="3">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFE0EDF9" Offset="1"/>
+                    <GradientStop Color="White"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <!-- button and page title -->
+        <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                Margin="20,42,0,0" 
+                VerticalAlignment="Top"
+                Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                AutomationProperties.Name="Back"
+                AutomationProperties.AutomationId="BackButton"
+                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"/>
+        <Image Source="Assets/Logos/Temp/logo_225_95_blue.png" Grid.Column="1"/>
+        <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="2" Margin="0,10,15,10" Visibility="Collapsed"/>
+        <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Background="#FFB6B6B6" Grid.Column="2" Margin="0,60,130,37" Visibility="Collapsed" Height="31"/>
+        <ScrollViewer ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel x:Name="ClassesSection" Grid.Column="0" Margin="100,30,40,0" >
+                    <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <ScrollViewer Height="524" Margin="0,20,0,0" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
+                        <ListView x:Name="ClassesListView" ItemsSource="{Binding}" SelectionChanged="ClassButton_Click">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="300">
+                                        <StackPanel.Background>
+                                            <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                                        </StackPanel.Background>
+                                        <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                            <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                            <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="5,0,0,5">
+                                            <TextBlock Text="{Binding days}" Foreground="White"/>
+                                            <TextBlock Text="{Binding class_period}" Foreground="White" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+                </StackPanel>
+                <StackPanel x:Name="SelectedClassContent" Grid.Column="1" Margin="40,30,0,0">
+                    <TextBlock Text="Summary" Style="{StaticResource SubheaderTextBlockStyle}"/>
+
+                    <StackPanel Margin="0,15,0,30" Height="220" Width="400">
+                        <StackPanel.Background>
+                            <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                        </StackPanel.Background>
+                        <StackPanel Orientation="Horizontal" Margin="15,15,5,0">
+                            <TextBlock Text="{Binding course}" Foreground="White" FontSize="20"/>
+                            <TextBlock Text=" - Section " Foreground="White" FontSize="20"/>
+                            <TextBlock Text="{Binding section}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0,5,20">
+                            <TextBlock Text="{Binding course_title}" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Instructor: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding instructor}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Time: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding class_period}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding days}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Location: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding room}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding building}" Margin="0,0,0,5" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <Button x:Name="btnAddClass" Content="Add To Calendar" Click="btnAddClass_Click" Margin="15,15"/>
+                    </StackPanel>
+                    <TextBlock Text="Announcements" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <ScrollViewer Height="278" Margin="0,15,0,0"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

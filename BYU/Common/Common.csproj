@@ -101,10 +101,18 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthenticationManager.cs" />
+    <Compile Include="Authentication\InvalidCredentialsException.cs" />
     <Compile Include="Calendar\AppointmentGenerator.cs" />
     <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\Win8CalendarClient.cs" />
+    <Compile Include="WebServices\DateTypes.cs" />
+    <Compile Include="WebServices\DO\ParkingLots\ParkingLot.cs" />
+    <Compile Include="WebServices\DO\ParkingLots\ParkingLotRequest.cs" />
+    <Compile Include="WebServices\DO\ParkingLots\ParkingLotResponse.cs" />
+    <Compile Include="WebServices\DO\ParkingLots\ParkingService.cs" />
+    <Compile Include="Storage\WebCache.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleResponse.cs" />
@@ -172,7 +180,6 @@
       <Name>Live SDK</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

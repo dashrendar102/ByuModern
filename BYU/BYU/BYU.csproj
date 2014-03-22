@@ -111,8 +111,14 @@
     <Compile Include="BergerDemos\BergerDemoLand.xaml.cs">
       <DependentUpon>BergerDemoLand.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BYUSettingsFlyout.xaml.cs">
+      <DependentUpon>BYUSettingsFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HubPage.xaml.cs">
       <DependentUpon>HubPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginSettingFlyout.xaml.cs">
+      <DependentUpon>LoginSettingFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="MapPage.xaml.cs">
       <DependentUpon>MapPage.xaml</DependentUpon>
@@ -129,17 +135,32 @@
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="UserProfile.xaml.cs">
+      <DependentUpon>UserProfile.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Page Include="UserProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <None Include="Package.StoreAssociation.xml" />
     <Page Include="BergerDemos\AuthDemoPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="BergerDemos\BergerDemoLand.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BYUSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoginSettingFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -162,6 +183,8 @@
     <Content Include="Assets\campus_buildings.jpg" />
     <Content Include="Assets\class_demo.jpg" />
     <Content Include="Assets\defaultPhoto.png" />
+    <Content Include="Assets\idCard.png" />
+    <Content Include="Assets\Logos\logo_200_95_blue.png" />
     <Content Include="Assets\Logos\logo_150_150.png" />
     <Content Include="Assets\Logos\logo_150_150_blue.png" />
     <Content Include="Assets\Logos\logo_24_24.png" />
@@ -172,6 +195,15 @@
     <Content Include="Assets\Logos\logo_70_70.png" />
     <Content Include="Assets\Logos\SplashScreen.png" />
     <Content Include="Assets\Logos\Splash_620_300.png" />
+    <Content Include="Assets\Logos\Temp\logo_150_150.png" />
+    <Content Include="Assets\Logos\Temp\logo_225_95_blue.png" />
+    <Content Include="Assets\Logos\Temp\logo_30_30.png" />
+    <Content Include="Assets\Logos\Temp\logo_310_150.png" />
+    <Content Include="Assets\Logos\Temp\logo_310_310.png" />
+    <Content Include="Assets\Logos\Temp\logo_50_50.png" />
+    <Content Include="Assets\Logos\Temp\logo_70_70.png" />
+    <Content Include="Assets\Logos\Temp\SplashScreen.png" />
+    <Content Include="Assets\messing_with_background.png" />
     <Content Include="Assets\parking_lots.jpg" />
     <Content Include="Assets\SplashScreen.scale-140.png" />
     <Content Include="Assets\SplashScreen140.png" />
@@ -217,14 +249,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="LiveSDKXAML, Version=5.5">
-      <Name>Live SDK</Name>
+    <SDKReference Include="Bing.Maps.Xaml, Version=1.313.0825.0">
+      <Name>Bing Maps for C#, C++, or Visual Basic</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{c72002e9-fa71-4b6d-9fb4-2db41d0ed8c0}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="Map\Map.csproj">
+      <Project>{4ba1e10b-1a12-4ff4-b97e-ac828c996ded}</Project>
+      <Name>Map</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

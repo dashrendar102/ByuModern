@@ -1,14 +1,17 @@
 ﻿using BYU.Common;
-
+using Common.Authentication;
+using Common.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -26,6 +29,10 @@ namespace BYU
     /// </summary>
     sealed partial class App : Application
     {
+        private SettingsCommand loginSetting;
+        private SettingsCommand logoutSetting;
+        private string firstNavState;
+
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -92,6 +99,7 @@ namespace BYU
             }
             // Ensure the current window is active
             Window.Current.Activate();
+            firstNavState = ((Frame)Window.Current.Content).GetNavigationState();
         }
 
         /// <summary>
@@ -116,6 +124,41 @@ namespace BYU
             var deferral = e.SuspendingOperation.GetDeferral();
             await SuspensionManager.SaveAsync();
             deferral.Complete();
+        }
+
+        protected override void OnWindowCreated(WindowCreatedEventArgs args)
+        {
+            SettingsPane.GetForCurrentView().CommandsRequested += OnCommandsRequested;
+        }
+
+        private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
+        {
+            loginSetting = new SettingsCommand(
+                "Login Setting", "Login", (handler) => ShowLoginSettingFlyout());
+            logoutSetting = new SettingsCommand(
+                "Logout Setting", "Logout", (handler) => LogoutSettingHandler());
+
+            if (AuthenticationManager.LoggedIn())
+            {
+                args.Request.ApplicationCommands.Add(logoutSetting);
+            }
+            else
+            {
+                args.Request.ApplicationCommands.Add(loginSetting);
+            }
+        }
+
+        public void ShowLoginSettingFlyout()
+        {
+            LoginSettingFlyout flyout = new LoginSettingFlyout();
+            flyout.Show();
+        }
+
+        public async Task LogoutSettingHandler()
+        {
+            AuthenticationManager.Logout();
+            await WebCache.Instance.ClearCache();
+            ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
         }
     }
 }
