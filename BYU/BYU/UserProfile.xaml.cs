@@ -118,11 +118,12 @@ namespace BYU
             qualification.DataContext = userResponse.employee_information.date_hired;
 
             ContactInfoStack.DataContext = userResponse.contact_information;
-            string mailingAddressString = "";
+            TextBlock[] mailingAddressBoxes = new TextBlock[] { mailingAddress, mailingAddress2, mailingAddress3 };
+            int count = 0;
             foreach (string str in userResponse.contact_information.mailing_address){
-                mailingAddressString += str + " ";
+                mailingAddressBoxes[count].Text = str;
+                count++;
             }
-            mailingAddress.Text = mailingAddressString;
             if (userResponse.contact_information.mailing_phone_unlisted)
             {
                 mailPhoneUnlist.Text = " (Unlisted)";

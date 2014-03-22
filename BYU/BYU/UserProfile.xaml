@@ -154,6 +154,8 @@
                     <TextBlock x:Name="mailingAddress" FontSize="20"/>
                     <TextBlock x:Name="mailingAddressUnlist" FontSize="20" />
                 </StackPanel>
+                <TextBlock x:Name="mailingAddress2" FontSize="20"/>
+                <TextBlock x:Name="mailingAddress3" FontSize="20"/>
             </StackPanel>
         </Grid>
     </Grid>
