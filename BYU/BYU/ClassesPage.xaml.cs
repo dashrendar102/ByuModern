@@ -70,13 +70,7 @@ namespace BYU
             this.navigationHelper.LoadState += navigationHelper_LoadState;
 
         }
-
-        private void SetSelectedCourse(CourseInformation newCourse)
-        {
-            selectedCourse = newCourse;
-            SelectedClassContent.DataContext = selectedCourse;
-        }
-
+        
         /// <summary>
         /// Requires authentication. Obtains class list from web service and loads menu.
         /// </summary>
@@ -136,11 +130,31 @@ namespace BYU
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            SetSelectedCourse((CourseInformation)e.AddedItems[0]);
+            this.SetSelectedCourse((CourseInformation)e.AddedItems[0]);
         }
 
+        /// <summary>
+        /// Sets the currently selected course and loads course information into summary.
+        /// </summary>
+        /// <param name="newCourse"></param>
+        private void SetSelectedCourse(CourseInformation newCourse)
+        {
+            selectedCourse = newCourse;
+            SelectedClassContent.DataContext = selectedCourse;
+        }
+
+        /// <summary>
+        /// Adds class to Windows 8 Calendar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btnAddClass_Click(object sender, RoutedEventArgs e)
         {
             AppointmentGenerator generator = new AppointmentGenerator();
