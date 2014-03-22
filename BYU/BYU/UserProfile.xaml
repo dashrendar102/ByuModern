@@ -63,7 +63,7 @@
             </TextBlock>
         </StackPanel>
         <Canvas x:Name="idCardCanvas" Grid.Column="2" Margin="183,10,443,2">
-            <Image HorizontalAlignment="Left" VerticalAlignment="Top" Source="Assets/idCard.png" Height="308" Width="480"/>
+            <Image x:Name="idCardTemplate" HorizontalAlignment="Left" VerticalAlignment="Top" Source="Assets/idCard.png" Height="308" Width="480"/>
             <Image x:Name="userPicture" HorizontalAlignment="Left" Height="175" VerticalAlignment="Top" Width="175" Canvas.Left="32" Canvas.Top="33"/>
             <TextBlock x:Name="preferredName" Text="{Binding ID_card_name}" FontSize="20" Canvas.Left="26" Canvas.Top="216"/>
             <TextBlock x:Name="userStatus" Text="{Binding ID_card_role}" FontSize="20" Canvas.Left="26" Canvas.Top="245"/>
