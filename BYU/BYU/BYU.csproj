@@ -178,6 +178,7 @@
     <Content Include="Assets\campus_buildings.jpg" />
     <Content Include="Assets\class_demo.jpg" />
     <Content Include="Assets\defaultPhoto.png" />
+    <Content Include="Assets\idCard.png" />
     <Content Include="Assets\Logos\logo_200_95_blue.png" />
     <Content Include="Assets\Logos\logo_150_150.png" />
     <Content Include="Assets\Logos\logo_150_150_blue.png" />

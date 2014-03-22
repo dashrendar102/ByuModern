@@ -1,4 +1,5 @@
 ﻿using BYU.Common;
+using Common.WebServices.DO;
 using Common.WebServices.DO.PersonSummary;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
@@ -27,7 +29,10 @@ namespace BYU
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private PersonSummaryResponse userInfo;
+        private PersonSummaryResponse userResponse;
+        private PersonSummaryLine userSummary;
+        private PersonIdentifiers userIdentifiers;
+        private PersonNames userNames;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -93,11 +98,18 @@ namespace BYU
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            this.userInfo = e.Parameter as PersonSummaryResponse;
-            rootGrid.DataContext = this.userInfo;
+            this.userResponse = e.Parameter as PersonSummaryResponse;
+            this.userSummary = userResponse.person_summary_line;
+            this.userIdentifiers = userResponse.identifiers;
+            this.userNames = userResponse.names;
+            userPicture.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
+            idCardCanvas.DataContext = userSummary;
+            preferredName.DataContext = userNames;
+            byuId.DataContext = userIdentifiers;
+            byuIdIssue.DataContext = userIdentifiers;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

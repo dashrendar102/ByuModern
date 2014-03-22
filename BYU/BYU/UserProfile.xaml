@@ -62,6 +62,14 @@
                 </TextBlock.Foreground>
             </TextBlock>
         </StackPanel>
-        <TextBlock Text="{Binding names}" Grid.Row="1" Grid.Column="1"/>
+        <Canvas x:Name="idCardCanvas" Grid.Column="2" Margin="183,10,443,450" Height="308" Width="480" Grid.RowSpan="2">
+            <Image HorizontalAlignment="Left" VerticalAlignment="Top" Source="Assets/idCard.png" Height="308" Width="480"/>
+            <Image x:Name="userPicture" HorizontalAlignment="Left" Height="172" VerticalAlignment="Top" Width="172" Canvas.Left="34" Canvas.Top="34"/>
+            <TextBlock x:Name="preferredName" Text="{Binding preferred_name}" FontSize="20" Canvas.Left="26" Canvas.Top="216"/>
+            <TextBlock x:Name="userStatus" Text="Student" FontSize="20" Canvas.Left="26" Canvas.Top="245"/>
+            <TextBlock x:Name="byuId" Text="{Binding byu_id}" FontSize="20" Canvas.Left="26" Canvas.Top="274"/>
+            <TextBlock x:Name="byuIdIssue" Text="{Binding byu_id_issue_number}" FontSize="20" Canvas.Left="170" Canvas.Top="274"/>
+            <TextBlock x:Name="idExpiration" Text="" FontSize="20" Canvas.Left="280" Canvas.Top="274"/>
+        </Canvas>
     </Grid>
 </Page>
