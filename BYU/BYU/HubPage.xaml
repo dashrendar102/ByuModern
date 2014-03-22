@@ -34,51 +34,41 @@
     This grid acts as a root panel for the page.
   -->
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFE0EDF9" Offset="1"/>
+                <GradientStop Color="White" Offset="0.5"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1366"/>
+            <ColumnDefinition Width="0"/>
+            <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        
+
         <!-- Define Backgrounds -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3">
-            <Border.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF002255" Offset="0.517"/>
-                    <GradientStop Color="#FF040202"/>
-                </LinearGradientBrush>
-            </Border.Background>
-        </Border>
-        
-        <Border Grid.Row="1" Grid.ColumnSpan="3" Background="#FFB0B0B0"/>
 
         <!-- button and page title -->
-        <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
-                Margin="20,42,0,0" 
-                VerticalAlignment="Top"
-                Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                AutomationProperties.Name="Back"
-                AutomationProperties.AutomationId="BackButton"
-                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41"/>
-        <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
-                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="10,42,0,0" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Right" Width="80" />
-        <TextBlock x:Name="studentName" Text="Student Name" Style="{StaticResource HeaderTextBlockStyle}" 
-                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="0,42,61,0" Grid.Column="2" HorizontalAlignment="Right" Width="393" TextAlignment="Right" FontFamily="Global User Interface" FontSize="48" />
-        <Hub SectionHeaderClick="Hub_SectionHeaderClick" Grid.Row="2" Grid.ColumnSpan="3">
+        <Image HorizontalAlignment="Left" VerticalAlignment="Center" Source="Assets/BYUSmallLogo.png" Margin="32,0,0,0" Height="92" RenderTransformOrigin="0.543,0.153"/>
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Margin="0,0,36,0" RenderTransformOrigin="0.116,0.479">
+            <Image HorizontalAlignment="Right" Margin="0,0,20,0" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="50" Height="50"/>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Content="Mike Curtis" Margin="0" Background="#FFB6B6B6"/>
+        </StackPanel>
+
+        <Hub SectionHeaderClick="Hub_SectionHeaderClick" Grid.Row="1">
             <!--<Hub.Header>
                 
             </Hub.Header>-->
-            <HubSection Width="300" x:Uid="FeaturedHeader" Header="Featured">
-            </HubSection>
+            <HubSection Width="300" x:Uid="FeaturedHeader" Header="Featured"/>
             <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes">
                 <DataTemplate>
                     <Grid>
@@ -166,10 +156,7 @@
                 </DataTemplate>
             </HubSection>
         </Hub>
-
         <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="354,362,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
-
         <!--<Button Content="Run Brian's Demo Code" HorizontalAlignment="Left" Margin="1127,36,0,0" VerticalAlignment="Top" Click="RunBrianDemo"/>-->
-
     </Grid>
 </Page>
