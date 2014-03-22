@@ -29,10 +29,7 @@ namespace BYU
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private PersonSummaryResponse userResponse;
-        private PersonSummaryLine userSummary;
-        private PersonIdentifiers userIdentifiers;
-        private PersonNames userNames;
+        private IdCardResponse userResponse;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -101,15 +98,26 @@ namespace BYU
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            this.userResponse = e.Parameter as PersonSummaryResponse;
-            this.userSummary = userResponse.person_summary_line;
-            this.userIdentifiers = userResponse.identifiers;
-            this.userNames = userResponse.names;
+            
+            this.userResponse = e.Parameter as IdCardResponse;
+            
             userPicture.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
-            idCardCanvas.DataContext = userSummary;
-            preferredName.DataContext = userNames;
-            byuId.DataContext = userIdentifiers;
-            byuIdIssue.DataContext = userIdentifiers;
+            idCardCanvas.DataContext = userResponse.person_summary_line;
+            preferredName.DataContext = userResponse.names;
+            byuId.DataContext = userResponse.identifiers;
+            byuIdIssue.DataContext = userResponse.identifiers;
+
+            PersonalInfoStack.DataContext = userResponse.personal_information;
+
+            completeName.DataContext = userResponse.names;
+            netId.DataContext = userResponse.identifiers;
+
+            EmployeeInfo.DataContext = userResponse.employee_information;
+            empDate.DataContext = userResponse.employee_information.date_hired;
+            qualification.DataContext = userResponse.employee_information.date_hired;
+
+            ContactInfoStack.DataContext = userResponse.contact_information;
+
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
