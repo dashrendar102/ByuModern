@@ -1,5 +1,6 @@
 ﻿using BYU.Common;
 using Common.WebServices.DO;
+using Common.WebServices.DO.IdCard;
 using Common.WebServices.DO.PersonSummary;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,8 @@ namespace BYU
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private IdCardResponse userResponse;
+        private PersonSummaryResponse userResponse;
+        private IdCardResponse idResponse;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -99,13 +101,12 @@ namespace BYU
         {
             navigationHelper.OnNavigatedTo(e);
             
-            this.userResponse = e.Parameter as IdCardResponse;
-            
+            this.userResponse = e.Parameter as PersonSummaryResponse;
+            this.idResponse = await IdCardRoot.GetIdCard();
+
             userPicture.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
-            idCardCanvas.DataContext = userResponse.person_summary_line;
-            preferredName.DataContext = userResponse.names;
-            byuId.DataContext = userResponse.identifiers;
-            byuIdIssue.DataContext = userResponse.identifiers;
+
+            idCardCanvas.DataContext = idResponse;
 
             PersonalInfoStack.DataContext = userResponse.personal_information;
 
@@ -117,7 +118,24 @@ namespace BYU
             qualification.DataContext = userResponse.employee_information.date_hired;
 
             ContactInfoStack.DataContext = userResponse.contact_information;
-
+            TextBlock[] mailingAddressBoxes = new TextBlock[] { mailingAddress, mailingAddress2, mailingAddress3 };
+            int count = 0;
+            foreach (string str in userResponse.contact_information.mailing_address){
+                mailingAddressBoxes[count].Text = str;
+                count++;
+            }
+            if (userResponse.contact_information.mailing_phone_unlisted)
+            {
+                mailPhoneUnlist.Text = " (Unlisted)";
+            }
+            if (userResponse.contact_information.email_address_unlisted)
+            {
+                emailUnlist.Text = " (Unlisted)";
+            }
+            if (userResponse.contact_information.mailing_address_unlisted)
+            {
+                mailingAddressUnlist.Text = " (Unlisted)";
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
