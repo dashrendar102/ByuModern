@@ -22,7 +22,7 @@
             </bm:Map.Center>
 
         </bm:Map>
-        <Button Content="Reset View" HorizontalAlignment="Right" VerticalAlignment="Top" Click="Button_Click" Background="White" BorderBrush="#FFCCCCCC" Foreground="Black" BorderThickness="1" Margin="0,7,90,0" />
+        <Button Content="Reset View" HorizontalAlignment="Right" VerticalAlignment="Top" Click="ResetViewButton_Click" Background="White" BorderBrush="#FFCCCCCC" Foreground="Black" BorderThickness="1" Margin="0,7,90,0" />
     </Grid>
     
 </UserControl>

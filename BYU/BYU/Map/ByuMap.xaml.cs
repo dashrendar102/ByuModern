@@ -74,7 +74,10 @@ namespace Common
                 {
                     return GetBuildingsSync();
                 }
-                else throw new TimeoutException("Could not load maps data");
+                else
+                {
+                    throw new TimeoutException("Could not load maps data");
+                }
             });
         }
 
@@ -150,7 +153,9 @@ namespace Common
             BingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
             var buildings = await GetBuildings();
             foreach (var building in buildings)
+            {
                 DeselectEntity(building);
+            }
         }
 
         ByuMapEntity lastSelected = null;
@@ -176,7 +181,7 @@ namespace Common
             entity.BingEntity.HideOutline();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ResetViewButton_Click(object sender, RoutedEventArgs e)
         {
             ResetView();
         }
