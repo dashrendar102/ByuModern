@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
-  <Publisher>CN=6FC52E2A-8F1C-4978-AAE3-B2CB5D128F7E</Publisher>
-  <NamespacePrefix>51648Dr.KsMinionArmy</NamespacePrefix>
-  <PublisherDisplayName>Dr. K's Minion Army</PublisherDisplayName>
+  <Publisher>CN=48CB40B6-8D67-4F1E-BB42-013D2AF73764</Publisher>
+  <NamespacePrefix>44891WilliamsWare</NamespacePrefix>
+  <PublisherDisplayName>WilliamsWare</PublisherDisplayName>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
     <Language Code="af" InMinimumRequirementSet="false" />
@@ -349,11 +349,11 @@
     <Language Code="zu-za" InMinimumRequirementSet="false" />
   </SupportedLocales>
   <ProductReservedInfo>
-    <MainPackageIdentityName>51648Dr.KsMinionArmy.BrighamYoungUniversity</MainPackageIdentityName>
+    <MainPackageIdentityName>44891WilliamsWare.BYU8</MainPackageIdentityName>
     <ReservedNames>
-      <ReservedName>Brigham Young University</ReservedName>
+      <ReservedName>BYU8</ReservedName>
     </ReservedNames>
   </ProductReservedInfo>
   <AccountPackageIdentityNames />
-  <PackageInfoList LandingUrl="https://appdev.microsoft.com:443/StorePortals/Developer/Catalog/ReleaseAnchor/408e57be-2db0-4271-ac8a-4fd4a5bdd8c1" />
+  <PackageInfoList LandingUrl="https://appdev.microsoft.com:443/StorePortals/Developer/Catalog/ReleaseAnchor/bdbaa38d-5360-4e8f-9293-819fd73fadd5" />
 </StoreAssociation>

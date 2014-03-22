@@ -168,10 +168,10 @@
                         </Button>-->
                     </Grid>
                 </StackPanel>
-                <StackPanel Name="DevLinksPanel" Orientation="Vertical" Grid.Column="3" Margin="50,30,40,0">
+                <!-- <StackPanel Name="DevLinksPanel" Orientation="Vertical" Grid.Column="3" Margin="50,30,40,0">
                     <TextBlock Text="Dev Links" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <Button Content="Berger Demos" Name="BergerDemoButton" HorizontalAlignment="Left" Margin="79,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="BergerDemoButton_Click"/>
-                </StackPanel>
+                </StackPanel> -->
             </Grid>
         </ScrollViewer>
     </Grid>
