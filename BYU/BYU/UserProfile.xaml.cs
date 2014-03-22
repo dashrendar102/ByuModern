@@ -104,6 +104,19 @@ namespace BYU
             this.userResponse = e.Parameter as PersonSummaryResponse;
             this.idResponse = await IdCardRoot.GetIdCard();
 
+            if (idResponse.beard && idResponse.dtf)
+            {
+                SetIdCardTemplate("Assets/idCardBeardDTF.png");
+            }
+            else if (idResponse.beard && !idResponse.dtf)
+            {
+                SetIdCardTemplate("Assets/idCardBeard.png");
+            }
+            else if (!idResponse.beard && idResponse.dtf)
+            {
+                SetIdCardTemplate("Assets/idCardDTF.png");
+            }
+
             userPicture.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
 
             idCardCanvas.DataContext = idResponse;
@@ -136,6 +149,13 @@ namespace BYU
             {
                 mailingAddressUnlist.Text = " (Unlisted)";
             }
+        }
+
+        private void SetIdCardTemplate(string path)
+        {
+            BitmapImage template = new BitmapImage();
+            template.UriSource = new Uri(this.BaseUri, path);
+            idCardTemplate.Source = template;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
