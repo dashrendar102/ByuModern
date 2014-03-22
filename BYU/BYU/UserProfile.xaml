@@ -15,8 +15,8 @@
     -->
     <Grid x:Name="rootGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="120"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="320"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
@@ -50,19 +50,19 @@
                 AutomationProperties.AutomationId="BackButton"
                 AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"/>
         <!--<Image Source="Assets/Logos/logo_200_95_blue.png" Grid.Column="1"/>-->
-        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
-            <TextBlock Text="BYU" Style="{StaticResource HeaderTextBlockStyle}" FontWeight="Bold">
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="40" Margin="20,162,19,118" Width="141" >
+            <TextBlock Text="BYU" Style="{StaticResource HeaderTextBlockStyle}" FontWeight="Bold" VerticalAlignment="Top" Margin="0,-120,0,0">
                 <TextBlock.Foreground>
                     <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                 </TextBlock.Foreground>
             </TextBlock>
-            <TextBlock Text=" 8" Style="{StaticResource HeaderTextBlockStyle}" FontStyle="Italic" FontWeight="Normal" >
+            <TextBlock Text=" 8" Style="{StaticResource HeaderTextBlockStyle}" FontStyle="Italic" FontWeight="Normal" VerticalAlignment="Top" Margin="0,-120,0,0" >
                 <TextBlock.Foreground>
                     <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                 </TextBlock.Foreground>
             </TextBlock>
         </StackPanel>
-        <Canvas x:Name="idCardCanvas" Grid.Column="2" Margin="183,10,443,450" Height="308" Width="480" Grid.RowSpan="2">
+        <Canvas x:Name="idCardCanvas" Grid.Column="2" Margin="183,10,443,2">
             <Image HorizontalAlignment="Left" VerticalAlignment="Top" Source="Assets/idCard.png" Height="308" Width="480"/>
             <Image x:Name="userPicture" HorizontalAlignment="Left" Height="172" VerticalAlignment="Top" Width="172" Canvas.Left="34" Canvas.Top="34"/>
             <TextBlock x:Name="preferredName" Text="{Binding preferred_name}" FontSize="20" Canvas.Left="26" Canvas.Top="216"/>
@@ -71,5 +71,83 @@
             <TextBlock x:Name="byuIdIssue" Text="{Binding byu_id_issue_number}" FontSize="20" Canvas.Left="170" Canvas.Top="274"/>
             <TextBlock x:Name="idExpiration" Text="" FontSize="20" Canvas.Left="280" Canvas.Top="274"/>
         </Canvas>
+        <Grid Grid.Row="1" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Margin="0, 0, 10, 0">
+                <TextBlock FontSize="20" Text="Complete Name:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Net ID:" HorizontalAlignment="Right" />
+            </StackPanel>
+            <StackPanel x:Name="NamesAndIDs" Grid.Column="2" Grid.Row="1" Margin="10, 0, 0, 0">
+                <TextBlock x:Name="completeName" FontSize="20" Text="{Binding complete_name}" />
+                <TextBlock x:Name="netId" FontSize="20" Text="{Binding net_id}" />
+            </StackPanel>
+            <StackPanel Grid.Column="3" Grid.Row="1" Margin="0, 0, 10, 0">
+                <TextBlock FontSize="20" Text="Role:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Department:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Job Title:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Original Hire Date:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Qualification:" HorizontalAlignment="Right" />
+            </StackPanel>
+            <StackPanel x:Name="EmployeeInfo" Grid.Column="4" Grid.Row="1" Margin="10, 0, 0, 0">
+                <TextBlock x:Name="employeeRole" FontSize="20" Text="{Binding employee_role}" />
+                <TextBlock x:Name="empDepartment" FontSize="20" Text="{Binding department}" />
+                <TextBlock x:Name="jobTitle" FontSize="20" Text="{Binding job_title}" />
+                <TextBlock x:Name="empDate" FontSize="20" Text="{Binding date}" />
+                <TextBlock x:Name="qualification" FontSize="20" Text="{Binding qualification}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="3" HorizontalAlignment="Right" Margin="0, 0, 10, 0">
+                <TextBlock FontSize="20" Text="Born:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Age:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Ethnicity:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Gender:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Marital Status:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Citizenship:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Home Town:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Religion:" HorizontalAlignment="Right" />
+            </StackPanel>
+            <StackPanel x:Name="PersonalInfoStack" Grid.Column="2" Grid.Row="3" Margin="10, 0, 0, 0">
+                <TextBlock x:Name="dateBirth" FontSize="20" Text="{Binding date_of_birth}" />
+                <TextBlock x:Name="age" FontSize="20" Text="{Binding age}" />
+                <TextBlock x:Name="ethnicity" FontSize="20" Text="{Binding ethnicity}" />
+                <TextBlock x:Name="gender" FontSize="20" Text="{Binding gender}" />
+                <TextBlock x:Name="maritalStatus" FontSize="20" Text="{Binding marital_status}" />
+                <TextBlock x:Name="citizenship" FontSize="20" Text="{Binding citizenship}" />
+                <TextBlock x:Name="homeTown" FontSize="20" Text="{Binding home_town}" />
+                <TextBlock x:Name="religion" FontSize="20" Text="{Binding religion}" />
+            </StackPanel>
+            <StackPanel Grid.Column="3" Grid.Row="3" HorizontalAlignment="Right" Margin="0, 0, 10, 0">
+                <TextBlock FontSize="20" Text="Mailing Address:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Unlisted:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Phone Number:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Mailing Phone:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Unlisted:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Email:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Email Address:" HorizontalAlignment="Right" />
+                <TextBlock FontSize="20" Text="Unlisted:" HorizontalAlignment="Right" />
+            </StackPanel>
+            <StackPanel x:Name="ContactInfoStack" Grid.Column="4" Grid.Row="3" Margin="10, 0, 0, 0">
+                <TextBlock x:Name="mailingAddress" FontSize="20" Text="{Binding mailing_address}" />
+                <TextBlock x:Name="mailingAddressUnlist" FontSize="20" Text="{Binding mailing_address_unlisted}" />
+                <TextBlock x:Name="phone" FontSize="20" Text="{Binding phone_number}" />
+                <TextBlock x:Name="mailPhone" FontSize="20" Text="{Binding mailing_phone}" />
+                <TextBlock x:Name="mailPhoneUnlist" FontSize="20" Text="{Binding mailing_phone_unlisted}" />
+                <TextBlock x:Name="email" FontSize="20" Text="{Binding email}" />
+                <TextBlock x:Name="email_address" FontSize="20" Text="{Binding email_address}" />
+                <TextBlock x:Name="emailUnlist" FontSize="20" Text="{Binding email_address_unlisted}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>
