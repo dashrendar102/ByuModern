@@ -18,8 +18,14 @@ namespace Common
             BingEntity = bingEntity;
         }
 
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        internal VenueEntity BingEntity { get; private set; }
+        //this is only designed for use in serialization
+        public ByuMapEntity()
+        {
+
+        }
+
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public VenueEntity BingEntity { get; set; }
     }
 }

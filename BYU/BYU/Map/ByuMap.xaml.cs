@@ -1,11 +1,14 @@
 ﻿using Bing.Maps;
 using Bing.Maps.VenueMaps;
 using Common;
+using Common.Storage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -29,7 +32,7 @@ namespace Common
         private VenueMap ByuVenue;
         Task MapInit = null;
         //This event has a default empty method so that we don't have to null check the event before firing it
-        public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => {};
+        public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => { };
 
         public ByuMap()
         {
@@ -68,11 +71,24 @@ namespace Common
 
         public async Task<IEnumerable<ByuMapEntity>> GetBuildings()
         {
+            string cacheIdentifier = "buildingList";
             return await Task<IEnumerable<ByuMapEntity>>.Run(() =>
             {
                 if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
-                    return GetBuildingsSync();
+                    if (WebCache.Instance.IsCached(cacheIdentifier).Result)
+                    {
+                        ByuMapEntity[] buildingArray = WebCache.Instance.RetrieveObjectFromCache<ByuMapEntity[]>(cacheIdentifier).Result;
+                        return buildingArray;
+                    }
+                    else
+                    {
+                        IEnumerable<ByuMapEntity> buildingEnumerable = GetBuildingsSync();
+                        ByuMapEntity[] buildingArray = buildingEnumerable.ToArray<ByuMapEntity>();
+                        var cacheTask = WebCache.Instance.CacheObject(cacheIdentifier, buildingArray);
+                        cacheTask.Wait();
+                        return buildingArray;
+                    }
                 }
                 else
                 {
@@ -84,12 +100,12 @@ namespace Common
         //Only call this if you are certain the Venue has been loaded
         private IEnumerable<ByuMapEntity> GetBuildingsSync()
         {
-                    var buildings =
-                        from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
-                        where !String.IsNullOrWhiteSpace(ve.Name)
-                        select new ByuMapEntity(ve.Name, ve.Description, ve);
-                    return buildings;
-                }
+            var buildings =
+                from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
+                where !String.IsNullOrWhiteSpace(ve.Name)
+                select new ByuMapEntity(ve.Name, ve.Description, ve);
+            return buildings;
+        }
 
         private double Zoom
         {
@@ -110,7 +126,7 @@ namespace Common
             MapPolygon myPolygon = getPolygon();
             parkingLayer.Shapes.Add(myPolygon);
             BingMap.ShapeLayers.Add(parkingLayer);
-          
+
         }
 
 
@@ -142,8 +158,8 @@ namespace Common
                 //new Location(40.252267078,-111.649692927),
                 //new Location(40.252267078,-111.649692927)
             };
-          
-            myPolygon.FillColor = Windows.UI.Color.FromArgb(50, 0, 0,255);
+
+            myPolygon.FillColor = Windows.UI.Color.FromArgb(50, 0, 0, 255);
             return myPolygon;
         }
 
@@ -166,7 +182,7 @@ namespace Common
             {
                 DeselectEntity(lastSelected);
             }
-            
+
             entity.BingEntity.Highlight();
             entity.BingEntity.ShowOutline();
 
