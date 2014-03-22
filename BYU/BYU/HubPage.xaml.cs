@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -14,19 +15,30 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using BergerClassLibrary.WebServices;
-
-// The Hub Page item template is documented at http://go.microsoft.com/fwlink/?LinkID=321224
+using Windows.Security.Credentials;
+using Common.Authentication;
+using Common.WebServices.DO.PersonSummary;
+using Common.WebServices.DO.ClassSchedule;
+using Common.WebServices.DO;
+using Common.WebServices;
+using Common;
+using BYU.BergerDemos;
+using Windows.UI.Popups;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Collections.ObjectModel;
+using Windows.UI;
+using Windows.Storage;
 
 namespace BYU
 {
-    /// <summary>
-    /// A page that displays a grouped collection of items.
-    /// </summary>
     public sealed partial class HubPage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        private const string userPhotoName = "userPhoto.jpg";
+        private Uri userPhotoUri;
+        PersonSummaryResponse userInfo;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -66,8 +78,48 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
-            this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+            //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
+            //this.DefaultViewModel["Section3Items"] = sampleDataGroup;
+
+            // Restore values stored in session state.
+            if (e.PageState != null)
+            {
+                if (AuthenticationManager.LoggedIn())
+                {
+                    userInfo = await PersonSummaryResponse.GetPersonSummary();
+                    userPhotoUri = await PersonPhoto.getPhotoUri();
+                    LoadUserPhoto();
+                    await PopulateClasses();
+                }
+
+                SetElementEnableStatuses();
+            }
+
+
+
+            // Restore values stored in app data.
+            
+            //Just leaving an example below to mimic later on if needed
+            /*Windows.Storage.ApplicationDataContainer roamingSettings =
+                Windows.Storage.ApplicationData.Current.RoamingSettings;
+            if (roamingSettings.Values.ContainsKey("userName"))
+            {
+                nameInput.Text = roamingSettings.Values["userName"].ToString();
+            }*/
+        }
+
+        /// <summary>
+        /// Preserves state associated with this page in case the application is suspended or the
+        /// page is discarded from the navigation cache.  Values must conform to the serialization
+        /// requirements of <see cref="SuspensionManager.SessionState"/>.
+        /// </summary>
+        /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
+        /// <param name="e">Event data that provides an empty dictionary to be populated with
+        /// serializable state.</param>
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+            e.PageState["UserObject"] = userInfo;
+            e.PageState["UserPhoto"] = userPhotoUri;
         }
 
         /// <summary>
@@ -93,7 +145,7 @@ namespace BYU
             // Navigate to the appropriate destination page, configuring the new page
             // by passing required information as a navigation parameter
             var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ItemPage), itemId);
+            this.Frame.Navigate(typeof(ClassesPage), itemId);
         }
         #region NavigationHelper registration
 
@@ -119,26 +171,147 @@ namespace BYU
         #endregion
 
 
-        private void ClassButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(ItemPage));
-        }
-
         private void MapButton_Clicked(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(MapPage));
         }
 
-        //private async void RunBrianDemo(object sender, RoutedEventArgs e)
-        //{
-        //    string url = BYUWebServiceURLs.GetFullURL(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID, "D3pGY5aU0FWK");
-        //    BYUWebServiceHelper wsHelper = new BYUWebServiceHelper("fregley", "DrR25178/*/y/U");
-        //    var response = wsHelper.sendAuthenticatedGETRequest(url);
-        //    string prettyJson = JsonUtils.prettifyJson(response);
-        //    Windows.UI.Popups.MessageDialog messageDialog =
-        //        new Windows.UI.Popups.MessageDialog(prettyJson);
-        //    //wsHelper.
-        //    await messageDialog.ShowAsync();
-        //}
+        private void Login_Click(object sender, RoutedEventArgs e)
+        {
+            DoLogin();
+        }
+
+        private async void DoLogin()
+        {
+            var netID = this.LoginNameTextbox.Text;
+            var password = this.LoginPasswordTextbox.Password;
+
+            bool success = false;
+            try
+            {
+                ProgressBar.Visibility = Visibility.Visible;
+                SignInButton.IsEnabled = false;
+                LoginNameTextbox.IsEnabled = false;
+                LoginPasswordTextbox.IsEnabled = false;
+                //AuthenticationManager.Login(netID, password);
+                WebServiceSession session = await WebServiceSession.GetSession(netID, password);
+                success = session != null;
+            }
+            catch (InvalidCredentialsException){ }
+
+            if (!success)
+            {
+                var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
+                await messageDialog.ShowAsync();
+                ProgressBar.Visibility = Visibility.Collapsed;
+                SignInButton.IsEnabled = true;
+                LoginNameTextbox.IsEnabled = true;
+                LoginPasswordTextbox.IsEnabled = true;
+                return;
+            }
+
+            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
+            WebServiceSession webServiceSession = await Task.Run(() =>
+            {
+                return WebServiceSession.GetSession(netID, password);
+            });
+            if (webServiceSession != null)
+            {
+                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
+
+                userPhotoUri = await PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                vault.Add(new Windows.Security.Credentials.PasswordCredential(
+                    "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
+                await PopulateClasses();
+            }
+            else
+            {
+                var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
+                await messageDialog.ShowAsync();
+            }
+
+            SetElementEnableStatuses();
+            ProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        private void SetElementEnableStatuses()
+        {
+            bool loggedIn = AuthenticationManager.LoggedIn();
+            var credential = AuthenticationManager.credential;
+            if (loggedIn)
+            {
+                if (userInfo != null)
+                {
+                    this.UserButton.Content = userInfo.names.preferred_name;
+                }
+                else
+                {
+                    this.UserButton.Content = credential.UserName;
+                }
+            }
+            this.LoginNameTextbox.IsEnabled = !loggedIn;
+            this.LoginPasswordTextbox.IsEnabled = !loggedIn;
+            this.SignInButton.IsEnabled = !loggedIn;
+            this.UserButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
+            this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void LoadUserPhoto()
+        {
+            if (userPhotoUri != null)
+            {
+                UserImage.Source = new BitmapImage(userPhotoUri);
+            }
+            else
+            {
+                UserImage.Source = null;
+            }
+        }
+
+        private async Task PopulateClasses()
+        {
+            CourseScheduleInformation classes = await ClassScheduleRoot.GetClassSchedule();
+            ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
+        }
+
+        private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(BergerDemoLand));
+        }
+
+        private void PasswordTextbox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter && !this.LoginNameTextbox.Text.Equals(""))
+            {
+                DoLogin();
+            }
+        }
+
+        private void ClassButton_Click(object sender, ItemClickEventArgs e)
+        {
+            this.Frame.Navigate(typeof(ClassesPage), ((CourseInformation)e.ClickedItem));
+        }
+
+        private void UserButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Windows.UI.ApplicationSettings.SettingsPane.Show();
+            this.Frame.Navigate(typeof(UserProfile), userInfo);
+        }
+
+        private async void pageRoot_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (AuthenticationManager.LoggedIn())
+            {
+                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
+                userPhotoUri = await PersonPhoto.getPhotoUri();
+                LoadUserPhoto();
+                await PopulateClasses();
+            }
+            SetElementEnableStatuses();
+        }
     }
 }

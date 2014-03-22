@@ -7,12 +7,13 @@
     xmlns:local="using:BYU"
     xmlns:data="using:BYU.Data"
     xmlns:common="using:BYU.Common"
+    xmlns:Map="using:Common"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Loaded="pageRoot_Loaded">
 
-    <Page.Resources>
-        <!-- Grid-appropriate 310 by 260 pixel item template as seen in section 4 -->
+    <!--<Page.Resources>
         <DataTemplate x:Key="Standard310x260ItemTemplate">
             <Grid Height="250" Width="310" Margin="5,10,5,10">
                 <Grid.RowDefinitions>
@@ -28,7 +29,7 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
-    </Page.Resources>
+    </Page.Resources>-->
 
     <!--
     This grid acts as a root panel for the page.
@@ -40,136 +41,132 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
                 <EntranceThemeTransition/>
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        
+
         <!-- Define Backgrounds -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3">
+        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="White"/>
+
+        <Border Grid.Row="1" Grid.ColumnSpan="3">
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF002255" Offset="0.517"/>
-                    <GradientStop Color="#FF040202"/>
+                    <GradientStop Color="#FFE0EDF9" Offset="1"/>
+                    <GradientStop Color="White"/>
                 </LinearGradientBrush>
             </Border.Background>
         </Border>
-        
-        <Border Grid.Row="1" Grid.ColumnSpan="3" Background="#FFB0B0B0"/>
 
         <!-- button and page title -->
-        <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
+        <Button x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
                 Margin="20,42,0,0" 
                 VerticalAlignment="Top"
                 Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                 AutomationProperties.Name="Back"
                 AutomationProperties.AutomationId="BackButton"
-                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41"/>
-        <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" 
-                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="10,42,0,0" Grid.Column="1" HorizontalAlignment="Left" TextAlignment="Right" Width="80" />
-        <TextBlock x:Name="studentName" Text="Student Name" Style="{StaticResource HeaderTextBlockStyle}" 
-                 VerticalAlignment="Top" IsHitTestVisible="false" TextWrapping="NoWrap" RenderTransformOrigin="0.496,0.515" Margin="0,42,61,0" Grid.Column="2" HorizontalAlignment="Right" Width="393" TextAlignment="Right" FontFamily="Global User Interface" FontSize="48" />
-        <Hub SectionHeaderClick="Hub_SectionHeaderClick" Grid.Row="2" Grid.ColumnSpan="3">
-            <!--<Hub.Header>
+                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"/>
+        <!--<Image Source="Assets/Logos/logo_200_95_blue.png" Grid.Column="1"/>-->
+        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
+            <TextBlock Text="BYU" Style="{StaticResource HeaderTextBlockStyle}" FontWeight="Bold">
+                <TextBlock.Foreground>
+                    <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                </TextBlock.Foreground>
+            </TextBlock>
+            <TextBlock Text=" 8" Style="{StaticResource HeaderTextBlockStyle}" FontStyle="Italic" FontWeight="Normal" >
+                <TextBlock.Foreground>
+                    <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                </TextBlock.Foreground>
+            </TextBlock>
+        </StackPanel>
+        <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Background="#FFB6B6B6" Grid.Column="2" Margin="0,60,130,37" Visibility="Collapsed" Height="31" Click="UserButton_Click"/>
+        <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="2" Margin="0,10,15,10" Visibility="Collapsed"/>
+        <ScrollViewer ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="3">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="100,30,40,0" x:Name="LoginSection" Visibility="Collapsed">
+                    <TextBlock Text="Login" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <TextBlock Text="Sign in using your BYU NetID credentials" FontSize="14" Margin="0,20,0,0"/>
+                    <TextBlock Text="to view more personalized information." FontSize="14"/>
+                    <TextBlock Text="Username:" Margin="0,20,0,0"/>
+                    <TextBox x:Name="LoginNameTextbox" Margin="0,10,0,0" />
+                    <TextBlock Text="Password:" Margin="0,20,0,0"/>
+                    <PasswordBox x:Name="LoginPasswordTextbox" Margin="0,10,0,0" IsPasswordRevealButtonEnabled="True" KeyUp="PasswordTextbox_KeyUp" />
+                    <Button x:Name="SignInButton" Content="Login" Margin="0,20,0,0" HorizontalAlignment="Right" Click="Login_Click"/>
+                    <ProgressBar Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,-30,0,0" HorizontalAlignment="Left" Width="185"/>
+                </StackPanel>
+
+                <StackPanel x:Name="ClassesSection" Grid.Column="1" Visibility="Collapsed" Margin="100,30,40,0" >
+                    <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <ScrollViewer Height="524" Margin="0,20,0,0" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
+                        <ListView x:Name="ClassesListView" ItemsSource="{Binding}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="ClassButton_Click">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="300">
+                                        <StackPanel.Background>
+                                            <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                                        </StackPanel.Background>
+                                        <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                            <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                            <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="5,0,0,5">
+                                            <TextBlock Text="{Binding days}" Foreground="White"/>
+                                            <TextBlock Text="{Binding class_period}" Foreground="White" Margin="4,0,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
+                </StackPanel>
                 
-            </Hub.Header>-->
-            <HubSection Width="300" x:Uid="FeaturedHeader" Header="Featured">
-            </HubSection>
-            <HubSection Width="362" x:Uid="ClassesHeader" Header="My Classes">
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Button Grid.Row="0" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="1" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="2" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="3" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                        <Button Grid.Row="4" Margin="0,0,0,13" BorderThickness="0" Height="80" Width="294" Click="ClassButton_Click">
-                            <Image Source="Assets/class_demo.jpg"/>
-                        </Button>
-                    </Grid>
-                </DataTemplate>
-            </HubSection>
-            <HubSection x:Uid="MapHeader" Header="Where on campus" Padding="40,40,40,32" Width="428">
-                <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
+                <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,30,40,0">
+                    <TextBlock Text="Campus Map" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <Grid Margin="0,20,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
-                        <Button Grid.Row="0" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="450"/>
+                            <RowDefinition Height="100"/>
+                        </Grid.RowDefinitions>
+                        <Map:ByuMap Grid.ColumnSpan="7"/>
+                        <!--<Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />-->
+                        <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
                             <Image Source="Assets/campus_buildings.jpg"/>
                         </Button>
-                        <Button Grid.Row="0" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
+                        <!--<Button Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="MapButton_Clicked">
                             <Image Source="Assets/blank_map_tile.jpg"/>
                         </Button>
-                        <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/blank_map_tile.jpg"/>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="1" BorderThickness="0" Click="MapButton_Clicked">
+                        <Button Grid.Row="1" Grid.Column="4" BorderThickness="0" Click="MapButton_Clicked">
                             <Image Source="Assets/parking_lots.jpg"/>
-                        </Button>
+                        </Button>-->
                     </Grid>
-                </DataTemplate>
-            </HubSection>
-            <HubSection x:Uid="Map2Header" Header="Where on campus, version 2">
-                <DataTemplate>
-                    <!-- width of 400 -->
-                    <StackPanel Orientation="Vertical">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                                <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="130"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="270"/>
-                                <RowDefinition Height="95"/>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />
-                            <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
-                                <Image Source="Assets/campus_buildings.jpg"/>
-                            </Button>
-                            <Button Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="MapButton_Clicked">
-                                <Image Source="Assets/blank_map_tile.jpg"/>
-                            </Button>
-                            <Button Grid.Row="1" Grid.Column="4" BorderThickness="0" Click="MapButton_Clicked">
-                                <Image Source="Assets/parking_lots.jpg"/>
-                            </Button>
-                        </Grid>
-                    </StackPanel>
-                </DataTemplate>
-            </HubSection>
-        </Hub>
-
-        <Grid Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="354,362,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
-
-        <!--<Button Content="Run Brian's Demo Code" HorizontalAlignment="Left" Margin="1127,36,0,0" VerticalAlignment="Top" Click="RunBrianDemo"/>-->
-
+                </StackPanel>
+                <StackPanel Name="DevLinksPanel" Orientation="Vertical" Grid.Column="3" Margin="50,30,40,0">
+                    <TextBlock Text="Dev Links" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <Button Content="Berger Demos" Name="BergerDemoButton" HorizontalAlignment="Left" Margin="79,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="BergerDemoButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

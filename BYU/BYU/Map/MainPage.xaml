@@ -1,0 +1,72 @@
+﻿<Page
+    x:Class="Common.MainPage"
+    DataContext="{Binding DefaultViewModel, RelativeSource={RelativeSource Self}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Common"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <!-- Collection of items displayed by this page -->
+        <CollectionViewSource x:Name="itemsViewSource" Source="{Binding Items}"/>
+    </Page.Resources>
+
+    <Grid Background="#FF002255">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+
+        <!--<TextBlock x:Name="pageTitle" Text="Buildings" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="0" 
+                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Top" Margin="20,20,0,40"/>-->
+        <ListView
+            x:Name="itemListView"
+            AutomationProperties.AutomationId="ItemsListView"
+            AutomationProperties.Name="Items"
+            TabIndex="1"
+            Grid.Column="0"
+            Grid.Row="0"
+            Margin="-10,-10,0,0"
+            Padding="20,0,0,60"
+            ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
+            IsSwipeEnabled="False"
+            SelectionChanged="ItemListView_SelectionChanged">
+            <ListView.Header>
+                <StackPanel Margin ="0, 20, 0, 15">
+                    <TextBlock Text="Buildings" Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="70" Margin="6"/>
+                </StackPanel>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                            <TextBlock Text="{Binding Name}" Style="{StaticResource TitleTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="40"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="FrameworkElement">
+                    <Setter Property="Margin" Value="0,0,0,10"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+
+
+        <local:ByuMap x:Name = "map" Grid.Column="1" Grid.Row="0" />
+
+    </Grid>
+    <!--<local:ByuMap Grid.Column = />-->
+
+</Page>

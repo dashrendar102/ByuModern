@@ -84,7 +84,7 @@ namespace BYU
             // Navigate to the appropriate destination page, configuring the new page
             // by passing required information as a navigation parameter
             var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ItemPage), itemId);
+            this.Frame.Navigate(typeof(ClassesPage), itemId);
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)
