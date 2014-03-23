@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -16,6 +17,14 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public int? beginDate;
 
+        public ZonedDateTime BeginDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(beginDate);
+            }
+        }
+
         [DataMember]
         public string categoryID;
 
@@ -30,6 +39,14 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember]
         public int? endDate;
+
+        public ZonedDateTime EndDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(endDate);
+            }
+        }
 
         [DataMember]
         public bool? extraCredit;

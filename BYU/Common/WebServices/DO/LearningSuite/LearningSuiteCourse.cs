@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common.Calendar;
+using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +28,14 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember(Name = "creationDate")]
         public int creationDate { get; set; }
+
+        public ZonedDateTime CreationDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(creationDate);
+            }
+        }
 
         [DataMember(Name = "curriculumID")]
         public string curriculumID { get; set; }
@@ -65,6 +75,14 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember(Name = "updatedDate")]
         public int updatedDate { get; set; }
+
+        public ZonedDateTime UpdatedDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(updatedDate);
+            }
+        }
 
         [DataMember(Name = "useAssignmentCategoryWeights")]
         public bool useAssignmentCategoryWeights { get; set; }
