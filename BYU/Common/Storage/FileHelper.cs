@@ -84,7 +84,8 @@ namespace Common.Storage
         {
             var file = await folder.CreateFileAsync(filename, CreationCollisionOption.ReplaceExisting);
 
-            using (var dataStream = GenerateStreamFromString(contents)) {
+            using (var dataStream = GenerateStreamFromString(contents))
+            {
                 await Save(folder, filename, dataStream, encrypt);
             }
         }
@@ -94,12 +95,12 @@ namespace Common.Storage
             try
             {
 
-            StorageFile file = await GetFile(folder, filename);
-            using (Stream fileStream = await OpenReadOnlyFileStream(file, decrypt))
-            {
-                StreamReader streamReader = new StreamReader(fileStream);
-                return streamReader.ReadToEnd();
-            }
+                StorageFile file = await GetFile(folder, filename);
+                using (Stream fileStream = await OpenReadOnlyFileStream(file, decrypt))
+                {
+                    StreamReader streamReader = new StreamReader(fileStream);
+                    return streamReader.ReadToEnd();
+                }
             }
             catch (Exception e)
             {
@@ -142,11 +143,15 @@ namespace Common.Storage
                 var decrypter = new DataProtectionProvider();
 
                 // Create a random access stream to contain the decrypted data.
-                InMemoryRandomAccessStream unprotectedDataStream = new InMemoryRandomAccessStream();
-                IOutputStream dest = unprotectedDataStream.GetOutputStreamAt(0);
-                await decrypter.UnprotectStreamAsync(fileStream, dest);
-                await dest.FlushAsync();
-                return unprotectedDataStream.GetInputStreamAt(0).AsStreamForRead();
+                var unprotectedDataStream = new InMemoryRandomAccessStream();
+                using (IOutputStream dest = unprotectedDataStream.GetOutputStreamAt(0))
+                {
+                    await decrypter.UnprotectStreamAsync(fileStream, dest);
+                    await dest.FlushAsync();
+                    fileStream.Dispose();
+                    Stream ret = unprotectedDataStream.GetInputStreamAt(0).AsStreamForRead();
+                    return ret;
+                }
             }
             else
             {

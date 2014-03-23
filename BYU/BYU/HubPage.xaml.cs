@@ -278,11 +278,6 @@ namespace BYU
             ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
         }
 
-        private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(BergerDemoLand));
-        }
-
         private void PasswordTextbox_KeyUp(object sender, KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter && !this.LoginNameTextbox.Text.Equals(""))

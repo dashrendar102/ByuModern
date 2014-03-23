@@ -78,10 +78,7 @@ namespace Common.WebServices.DO.LearningSuite
         public async static Task<LearningSuiteCourse[]> GetCourses()
         {
             WebServiceSession session = await WebServiceSession.GetSession();
-            
-            Task<string> termTask = TermUtility.TermUtility.getCurrentTerm();
-            termTask.Wait();
-            string curTerm = termTask.Result;
+            string curTerm = await TermUtility.TermUtility.getCurrentTerm();
 
             return await BYUWebServiceHelper.GetObjectFromWebService<LearningSuiteCourse[]>(string.Format(BYUWebServiceURLs.GET_LEARNINGSUITE_COURSES, session.personId, curTerm));
         }
