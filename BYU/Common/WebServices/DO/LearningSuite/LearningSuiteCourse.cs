@@ -13,7 +13,7 @@ namespace Common.WebServices.DO.LearningSuite
     public class LearningSuiteCourse
     {
         [DataMember(Name = "id")]
-        public string id { get; set; }
+        public string CourseID { get; set; }
 
         [DataMember(Name = "allowAllCopy")]
         public string allowAllCopy { get; set; }

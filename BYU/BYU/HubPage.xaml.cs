@@ -22,7 +22,6 @@ using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO;
 using Common.WebServices;
 using Common;
-using BYU.BergerDemos;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
