@@ -182,14 +182,14 @@ namespace BYU
             DoLogin();
         }
 
-        private async void DoLogin()
+        public async void DoLogin()
         {
             var netID = this.LoginNameTextbox.Text;
             var password = this.LoginPasswordTextbox.Password;
 
             bool success = false;
-            try
-            {
+            //try
+            //{
                 ProgressBar.Visibility = Visibility.Visible;
                 SignInButton.IsEnabled = false;
                 LoginNameTextbox.IsEnabled = false;
@@ -197,8 +197,8 @@ namespace BYU
                 //AuthenticationManager.Login(netID, password);
                 WebServiceSession session = await WebServiceSession.GetSession(netID, password);
                 success = session != null;
-            }
-            catch (InvalidCredentialsException){ }
+            //}
+            //catch (InvalidCredentialsException){ }
 
             if (!success)
             {

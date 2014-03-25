@@ -29,6 +29,8 @@ namespace BYU
     /// </summary>
     sealed partial class App : Application
     {
+        public static Frame RootFrame { get; private set; }
+
         private SettingsCommand loginSetting;
         private SettingsCommand logoutSetting;
         private string firstNavState;
@@ -58,6 +60,7 @@ namespace BYU
 #endif
 
             Frame rootFrame = Window.Current.Content as Frame;
+            App.RootFrame = rootFrame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -66,6 +69,7 @@ namespace BYU
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+                App.RootFrame = rootFrame;
                 //Associate the frame with a SuspensionManager key                                
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
                 // Set the default language
