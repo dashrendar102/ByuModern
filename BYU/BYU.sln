@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BYU", "BYU\BYU.csproj", "{C70BB8A0-DD8C-4D9A-9014-A770E2E82192}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -60,8 +60,8 @@ Global
 		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Debug|x64.Build.0 = Debug|x64
 		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Debug|x86.ActiveCfg = Debug|x86
 		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Debug|x86.Build.0 = Debug|x86
-		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Release|Any CPU.ActiveCfg = Release|x86
+		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Release|Any CPU.Build.0 = Release|x86
 		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Release|ARM.ActiveCfg = Release|ARM
 		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Release|ARM.Build.0 = Release|ARM
 		{C72002E9-FA71-4B6D-9FB4-2DB41D0ED8C0}.Release|x64.ActiveCfg = Release|x64
@@ -122,8 +122,8 @@ Global
 		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Debug|x64.Build.0 = Debug|x64
 		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Debug|x86.ActiveCfg = Debug|x86
 		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Debug|x86.Build.0 = Debug|x86
-		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Release|Any CPU.ActiveCfg = Release|x86
+		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Release|Any CPU.Build.0 = Release|x86
 		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Release|ARM.ActiveCfg = Release|ARM
 		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Release|ARM.Build.0 = Release|ARM
 		{CD2467E8-1527-4F04-9787-08FC28C9BA72}.Release|x64.ActiveCfg = Release|x64

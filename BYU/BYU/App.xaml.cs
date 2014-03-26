@@ -31,6 +31,7 @@ namespace BYU
     {
         private SettingsCommand loginSetting;
         private SettingsCommand logoutSetting;
+        private SettingsCommand privacyPolicySetting;
         private string firstNavState;
 
         /// <summary>
@@ -137,6 +138,8 @@ namespace BYU
                 "Login Setting", "Login", (handler) => ShowLoginSettingFlyout());
             logoutSetting = new SettingsCommand(
                 "Logout Setting", "Logout", (handler) => LogoutSettingHandler());
+            privacyPolicySetting = new SettingsCommand(
+                "View Privacy Policy", "Privacy Policy", (handler) => ShowPrivacyPolicy());
 
             if (AuthenticationManager.LoggedIn())
             {
@@ -146,6 +149,8 @@ namespace BYU
             {
                 args.Request.ApplicationCommands.Add(loginSetting);
             }
+
+            args.Request.ApplicationCommands.Add(privacyPolicySetting);
         }
 
         public void ShowLoginSettingFlyout()
@@ -159,6 +164,11 @@ namespace BYU
             AuthenticationManager.Logout();
             await WebCache.Instance.ClearCache();
             ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
+        }
+
+        public async void ShowPrivacyPolicy()
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://williamsware.com/byu/index.html"));
         }
     }
 }
