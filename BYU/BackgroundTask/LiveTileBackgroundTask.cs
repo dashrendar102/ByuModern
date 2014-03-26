@@ -15,9 +15,33 @@ namespace BackgroundTask
     {
         // TODO add a new background task to the package manifest once something's implemented here
 
+        static string textElementName = "text";
+
         public void Run(IBackgroundTaskInstance taskInstance)
         {
-            throw new NotImplementedException();
+            // Get a deferral, to prevent the task from closing prematurely 
+            // while asynchronous code is still running.
+            BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
+
+            UpdateTile();
+
+            // Inform the system that the task is finished.
+            deferral.Complete();
+        }
+
+        private static void UpdateTile()
+        {
+            // Create a tile update manager
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            updater.EnableNotificationQueue(true);
+            updater.Clear();
+
+            // Notification 1
+            XmlDocument tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideText03);
+            tileXml.GetElementsByTagName(textElementName)[0].InnerText = "Go Cougars!";
+
+            // Create a new tile notification. 
+            updater.Update(new TileNotification(tileXml));
         }
     }
 }
