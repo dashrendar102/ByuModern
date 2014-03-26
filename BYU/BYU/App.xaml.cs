@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.ApplicationSettings;
@@ -33,6 +34,10 @@ namespace BYU
         private SettingsCommand logoutSetting;
         private string firstNavState;
 
+        // for registering the live tile
+        private const string taskName = "LiveTileBackgroundTask";
+        private const string taskEntryPoint = "BackgroundTasks.LiveTileBackgroundTask";
+
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -56,6 +61,8 @@ namespace BYU
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            this.RegisterBackgroundTask();
 
             Frame rootFrame = Window.Current.Content as Frame;
 
@@ -100,6 +107,28 @@ namespace BYU
             // Ensure the current window is active
             Window.Current.Activate();
             firstNavState = ((Frame)Window.Current.Content).GetNavigationState();
+        }
+
+        private async void RegisterBackgroundTask()
+        {
+            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+            if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity ||
+                backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
+            {
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == taskName)
+                    {
+                        task.Value.Unregister(true);
+                    }
+                }
+
+                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                taskBuilder.Name = taskName;
+                taskBuilder.TaskEntryPoint = taskEntryPoint;
+                taskBuilder.SetTrigger(new TimeTrigger(15, false));
+                var registration = taskBuilder.Register();
+            }
         }
 
         /// <summary>
