@@ -56,18 +56,10 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
 
-                <!--<Grid x:Name="contentRegion" Margin="0,10,0,-10" Background="#FFB0B0B0">
-                    <ListBox x:Name="classList" HorizontalAlignment="Left" Height="632" Margin="91,-2,0,-2" VerticalAlignment="Top" Width="488" Background="Transparent" ItemsSource="{Binding}">
-                    </ListBox>
-                    <GridView x:Name="selectedClassContent" HorizontalAlignment="Left" Height="628" Margin="582,0,0,0" VerticalAlignment="Top" Width="700" Background="Gray">
-                        <TextBlock x:Name="selectedClassTitle" Height="80" TextWrapping="Wrap" Width="300" FontSize="32" Margin="15,15,0,0"/>
-                    </GridView>
-                </Grid>-->
-                
-
-                <StackPanel x:Name="ClassesSection" Grid.Column="1" Margin="100,30,40,0" >
+                <StackPanel x:Name="ClassesSection" Grid.Column="0" Margin="100,30,40,0" >
                     <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <ScrollViewer Height="524" Margin="0,20,0,0" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
                         <ListView x:Name="ClassesListView" ItemsSource="{Binding}" SelectionChanged="ClassButton_Click">
@@ -92,45 +84,41 @@
                         </ListView>
                     </ScrollViewer>
                 </StackPanel>
-                <StackPanel x:Name="SelectedClassContent" Margin="366,30,-644,0" >
-                    <GridView x:Name="SelectedClassSummary" ItemsSource="{Binding}" Visibility="Visible" Height="400" Margin="149,0,0,0">
-                        <GridView.Background>
+                <StackPanel x:Name="SelectedClassContent" Grid.Column="1" Margin="40,30,0,0">
+                    <TextBlock Text="Summary" Style="{StaticResource SubheaderTextBlockStyle}"/>
+
+                    <StackPanel Margin="0,15,0,30" Height="220" Width="400">
+                        <StackPanel.Background>
                             <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
-                        </GridView.Background>
-                        <GridView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="20,20,250,20">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding course}" Foreground="White" FontSize="24"/>
-                                        <TextBlock Text=" - Section " Foreground="White" FontSize="24"/>
-                                        <TextBlock Text="{Binding section}" Margin="5,0,0,5" Foreground="White" FontSize="24"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding course_title}" Foreground="White" FontSize="20"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" Height="20">
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Instructor: " Foreground="White" FontSize="20"/>
-                                        <TextBlock Text="{Binding instructor}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Time: " Foreground="White" FontSize="20"/>
-                                        <TextBlock Text="{Binding class_period}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
-                                        <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="20"/>
-                                        <TextBlock Text="{Binding days}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Location: " Foreground="White" FontSize="20"/>
-                                        <TextBlock Text="{Binding room}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
-                                        <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="20"/>
-                                        <TextBlock Text="{Binding building}" Margin="0,0,0,5" Foreground="White" FontSize="20"/>
-                                    </StackPanel>
-                                    <Button x:Name="btnAddClass" Content="Add To Calendar" Click="btnAddClass_Click" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
+                        </StackPanel.Background>
+                        <StackPanel Orientation="Horizontal" Margin="15,15,5,0">
+                            <TextBlock Text="{Binding course}" Foreground="White" FontSize="20"/>
+                            <TextBlock Text=" - Section " Foreground="White" FontSize="20"/>
+                            <TextBlock Text="{Binding section}" Margin="5,0,0,5" Foreground="White" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0,5,20">
+                            <TextBlock Text="{Binding course_title}" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Instructor: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding instructor}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Time: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding class_period}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding days}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                            <TextBlock Text="Location: " Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding room}" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text=" " Margin ="5,0,0,5" Foreground="White" FontSize="16"/>
+                            <TextBlock Text="{Binding building}" Margin="0,0,0,5" Foreground="White" FontSize="16"/>
+                        </StackPanel>
+                        <Button x:Name="btnAddClass" Content="Add To Calendar" Click="btnAddClass_Click" Margin="15,15"/>
+                    </StackPanel>
+                    <TextBlock Text="Announcements" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                    <ScrollViewer Height="278" Margin="0,15,0,0"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

@@ -11,13 +11,13 @@ namespace Common.WebServices.DO.PersonSummary
     public class StudentInformation
     {
         [DataMember]
-        public string student_role;
+        public string student_role { get; set; }
 
         [DataMember]
-        public string year_term;
+        public string year_term { get; set; }
 
         [DataMember]
-        public string credit_hours;
+        public string credit_hours { get; set; }
 
         [DataMember]
         public PersonClass[] classes;

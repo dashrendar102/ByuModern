@@ -12,6 +12,7 @@ namespace Common.WebServices
         internal const string GET_ASSIGNMENTS_BY_COURSE_ID = "https://ws.byu.edu/rest/v1.0/learningsuite/assignments/assignment/courseID/";
         internal const string GET_STUDENT_SCHEDULE = "https://ws.byu.edu/rest/v1.0/academic/registration/studentschedule/{0}/{1}";
         internal const string GET_PERSONAL_INFO = "https://ws.byu.edu/rest/v2.0/identity/person/PRO/personSummary.cgi/";
+        internal const string GET_ID_CARD = "https://ws.byu.edu/rest/v2.0/identity/person/PRO/personIdCard.cgi/";
         internal const string GET_USER_PHOTO_BY_PERSON_ID = "https://ws.byu.edu/rest/v1.0/identity/person/idphoto/?p=";
         internal const string GET_WS_SESSION = "https://ws.byu.edu/authentication/services/rest/v1/ws/session";
         internal const string GET_NONCE_URL = "https://ws.byu.edu/authentication/services/rest/v1/hmac/nonce/";
@@ -23,8 +24,9 @@ namespace Common.WebServices
         internal const string GET_MATERIALS = "https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/material/courseID/{0}/includeBooklist/true";
         internal const string GET_SYLLABI = "https://ws.byu.edu/rest/v1.0/learningsuite/syllabus/syllabus/courseID/";
         internal const string GET_SYSTEM_ANNOUNCEMENT = "https://ws.byu.edu/rest/v1.0/learningsuite/announcements/sysannouncement/student-anno";
-        internal const string GET_CONTROL_DATES = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/asofdate/{0}/current_yyt";
+        internal const string GET_CONTROL_DATES_BY_DATE = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/asofdate/{0}/{1}";
         internal const string GET_PARKING_LOTS = "https://soaregistry.byu.edu/services/rest/v2/map/ParkingLots";
+        internal const string GET_CONTROL_DATES_BY_YEAR_TERM = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/yearterm/{0}/{1}";
         
         // This functionality is replaced by String.Format(string toFormat, string param1, string param2, ...)
         // where each parameter after the first replaces indexed sections in the string like this: "...{0}...{1}...{2}...".

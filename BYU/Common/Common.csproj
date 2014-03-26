@@ -107,6 +107,14 @@
     <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\Win8CalendarClient.cs" />
+    <Compile Include="WebServices\DateTypes.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardRequest.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardResponse.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardRole.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardRoles.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardRoot.cs" />
+    <Compile Include="WebServices\DO\IdCard\IdCardService.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\LearningSuiteUtils.cs" />
     <Compile Include="WebServices\DO\ParkingLots\ParkingLot.cs" />
     <Compile Include="WebServices\DO\ParkingLots\ParkingLotRoot.cs" />
     <Compile Include="WebServices\DO\ParkingLots\ParkingLotRequest.cs" />
@@ -116,7 +124,6 @@
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleResponse.cs" />
-    <Compile Include="Demo\Demo.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
     <Compile Include="WebServices\DO\LearningSuite\Announcement.cs" />
     <Compile Include="WebServices\DO\LearningSuite\Assignment.cs" />
@@ -151,7 +158,7 @@
     <Compile Include="WebServices\DO\TermUtility\TermUtility.cs" />
     <Compile Include="WebServices\DO\Nonce.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebServices\DO\ClassSchedule\ScheduleEntry.cs" />
+    <Compile Include="WebServices\DO\ClassSchedule\CourseInformation.cs" />
     <Compile Include="Demo\ServiceTest.cs" />
     <Compile Include="Storage\FileHelper.cs" />
     <Compile Include="WebServices\DO\WebServiceSession.cs" />

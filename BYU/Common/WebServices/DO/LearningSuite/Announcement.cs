@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,14 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public int? availableDate;
 
+        public ZonedDateTime AvailableDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(availableDate);
+            }
+        }
+
         [DataMember]
         public string[] courses;
 
@@ -30,8 +39,24 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public int? date;
 
+        public ZonedDateTime DateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(date);
+            }
+        }
+
         [DataMember]
         public int? expirationDate;
+
+        public ZonedDateTime ExpirationDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(expirationDate);
+            }
+        }
 
         [DataMember]
         public string instructorID;

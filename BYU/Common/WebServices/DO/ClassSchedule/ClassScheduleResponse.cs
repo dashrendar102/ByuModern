@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Common.WebServices.DO.ClassSchedule
 {
     [DataContract(Name = "response")]
-    public class ClassScheduleResponse
+    public class CourseScheduleInformation
     {
         [DataMember(Name = "sort_name")]
         public string sort_name { get; set; }

@@ -1,9 +1,14 @@
-﻿using Bing.Maps.VenueMaps;
+﻿using Bing.Maps;
+using Bing.Maps.VenueMaps;
+using Common;
+using Common.Storage;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -17,7 +22,7 @@ using Windows.UI.Xaml.Navigation;
 
 // The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
 
-namespace Map
+namespace Common
 {
     public delegate void MapEntitySelectedEventArgs(object sender, ByuMapEntity selected);
 
@@ -27,7 +32,7 @@ namespace Map
         private VenueMap ByuVenue;
         Task MapInit = null;
         //This event has a default empty method so that we don't have to null check the event before firing it
-        public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => {};
+        public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => { };
 
         public ByuMap()
         {
@@ -45,11 +50,11 @@ namespace Map
 
         async Task SetupMapAsync()
         {
-            ByuVenue = await this.BingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
-            BingMap.VenueManager.ActiveVenue = ByuVenue;
+            ByuVenue = await this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
+            this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
 
-            BingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
-            BingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
+            this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
+            this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
         }
 
         void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
@@ -66,25 +71,41 @@ namespace Map
 
         public async Task<IEnumerable<ByuMapEntity>> GetBuildings()
         {
+            string cacheIdentifier = "buildingList";
             return await Task<IEnumerable<ByuMapEntity>>.Run(() =>
             {
                 if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
-                    return GetBuildingsSync();
+                    if (WebCache.Instance.IsCached(cacheIdentifier).Result)
+                    {
+                        ByuMapEntity[] buildingArray = WebCache.Instance.RetrieveObjectFromCache<ByuMapEntity[]>(cacheIdentifier).Result;
+                        return buildingArray;
+                    }
+                    else
+                    {
+                        IEnumerable<ByuMapEntity> buildingEnumerable = GetBuildingsSync();
+                        ByuMapEntity[] buildingArray = buildingEnumerable.ToArray<ByuMapEntity>();
+                        //var cacheTask = WebCache.Instance.CacheObject(cacheIdentifier, buildingArray);
+                        //cacheTask.Wait();
+                        return buildingArray;
+                    }
                 }
-                else throw new TimeoutException("Could not load maps data");
+                else
+                {
+                    throw new TimeoutException("Could not load maps data");
+                }
             });
         }
 
         //Only call this if you are certain the Venue has been loaded
         private IEnumerable<ByuMapEntity> GetBuildingsSync()
         {
-                    var buildings =
-                        from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
-                        where !String.IsNullOrWhiteSpace(ve.Name)
-                        select new ByuMapEntity(ve.Name, ve.Description, ve);
-                    return buildings;
-                }
+            var buildings =
+                from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
+                where !String.IsNullOrWhiteSpace(ve.Name)
+                select new ByuMapEntity(ve.Name, ve.Description, ve);
+            return buildings;
+        }
 
         private double Zoom
         {
@@ -104,8 +125,8 @@ namespace Map
             MapShapeLayer parkingLayer = new MapShapeLayer();
             MapPolygon myPolygon = getPolygon();
             parkingLayer.Shapes.Add(myPolygon);
-            BingMap.ShapeLayers.Add(parkingLayer);
-          
+            this.MyBingMap.ShapeLayers.Add(parkingLayer);
+
         }
 
 
@@ -137,18 +158,20 @@ namespace Map
                 //new Location(40.252267078,-111.649692927),
                 //new Location(40.252267078,-111.649692927)
             };
-          
-            myPolygon.FillColor = Windows.UI.Color.FromArgb(50, 0, 0,255);
+
+            myPolygon.FillColor = Windows.UI.Color.FromArgb(50, 0, 0, 255);
             return myPolygon;
         }
 
         public async void ResetView()
         {
-            BingMap.VenueManager.ActiveVenue = ByuVenue;
-            BingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
+            this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
+            this.MyBingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
             var buildings = await GetBuildings();
             foreach (var building in buildings)
+            {
                 DeselectEntity(building);
+            }
         }
 
         ByuMapEntity lastSelected = null;
@@ -159,11 +182,11 @@ namespace Map
             {
                 DeselectEntity(lastSelected);
             }
-            
+
             entity.BingEntity.Highlight();
             entity.BingEntity.ShowOutline();
 
-            BingMap.SetView(entity.BingEntity.Location, 18.5);
+            this.MyBingMap.SetView(entity.BingEntity.Location, 18.5);
 
             lastSelected = entity;
         }
@@ -174,7 +197,7 @@ namespace Map
             entity.BingEntity.HideOutline();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void ResetViewButton_Click(object sender, RoutedEventArgs e)
         {
             ResetView();
         }
