@@ -37,7 +37,7 @@ namespace BYU
 
         // for registering the live tile
         private const string taskName = "LiveTileBackgroundTask";
-        private const string taskEntryPoint = "BackgroundTasks.LiveTileBackgroundTask";
+        private const string taskEntryPoint = "BackgroundTask.LiveTileBackgroundTask";
 
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
