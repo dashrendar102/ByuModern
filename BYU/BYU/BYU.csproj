@@ -252,6 +252,10 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackgroundTask\BackgroundTask.csproj">
+      <Project>{cd2467e8-1527-4f04-9787-08fc28c9ba72}</Project>
+      <Name>BackgroundTask</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{c72002e9-fa71-4b6d-9fb4-2db41d0ed8c0}</Project>
       <Name>Common</Name>
