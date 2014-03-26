@@ -111,12 +111,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BergerDemos\AuthDemoPage.xaml.cs">
-      <DependentUpon>AuthDemoPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BergerDemos\BergerDemoLand.xaml.cs">
-      <DependentUpon>BergerDemoLand.xaml</DependentUpon>
-    </Compile>
     <Compile Include="BYUSettingsFlyout.xaml.cs">
       <DependentUpon>BYUSettingsFlyout.xaml</DependentUpon>
     </Compile>
@@ -155,14 +149,6 @@
     </Page>
     <None Include="BYU_StoreKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
-    <Page Include="BergerDemos\AuthDemoPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BergerDemos\BergerDemoLand.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BYUSettingsFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

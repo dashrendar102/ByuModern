@@ -22,7 +22,6 @@ using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO;
 using Common.WebServices;
 using Common;
-using BYU.BergerDemos;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
@@ -276,11 +275,6 @@ namespace BYU
         {
             CourseScheduleInformation classes = await ClassScheduleRoot.GetClassSchedule();
             ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
-        }
-
-        private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(BergerDemoLand));
         }
 
         private void PasswordTextbox_KeyUp(object sender, KeyRoutedEventArgs e)

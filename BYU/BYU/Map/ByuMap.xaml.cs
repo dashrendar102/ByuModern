@@ -85,8 +85,8 @@ namespace Common
                     {
                         IEnumerable<ByuMapEntity> buildingEnumerable = GetBuildingsSync();
                         ByuMapEntity[] buildingArray = buildingEnumerable.ToArray<ByuMapEntity>();
-                        var cacheTask = WebCache.Instance.CacheObject(cacheIdentifier, buildingArray);
-                        cacheTask.Wait();
+                        //var cacheTask = WebCache.Instance.CacheObject(cacheIdentifier, buildingArray);
+                        //cacheTask.Wait();
                         return buildingArray;
                     }
                 }

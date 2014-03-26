@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Common.Calendar;
+using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,7 +15,7 @@ namespace Common.WebServices.DO.LearningSuite
     public class LearningSuiteCourse
     {
         [DataMember(Name = "id")]
-        public string id { get; set; }
+        public string CourseID { get; set; }
 
         [DataMember(Name = "allowAllCopy")]
         public string allowAllCopy { get; set; }
@@ -26,6 +28,14 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember(Name = "creationDate")]
         public int creationDate { get; set; }
+
+        public ZonedDateTime CreationDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(creationDate);
+            }
+        }
 
         [DataMember(Name = "curriculumID")]
         public string curriculumID { get; set; }
@@ -66,6 +76,14 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember(Name = "updatedDate")]
         public int updatedDate { get; set; }
 
+        public ZonedDateTime UpdatedDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(updatedDate);
+            }
+        }
+
         [DataMember(Name = "useAssignmentCategoryWeights")]
         public bool useAssignmentCategoryWeights { get; set; }
 
@@ -78,10 +96,7 @@ namespace Common.WebServices.DO.LearningSuite
         public async static Task<LearningSuiteCourse[]> GetCourses()
         {
             WebServiceSession session = await WebServiceSession.GetSession();
-            
-            Task<string> termTask = TermUtility.TermUtility.getCurrentTerm();
-            termTask.Wait();
-            string curTerm = termTask.Result;
+            string curTerm = await TermUtility.TermUtility.getCurrentTerm();
 
             return await BYUWebServiceHelper.GetObjectFromWebService<LearningSuiteCourse[]>(string.Format(BYUWebServiceURLs.GET_LEARNINGSUITE_COURSES, session.personId, curTerm));
         }

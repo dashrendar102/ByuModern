@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common.WebServices.DO.LearningSuite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -54,5 +55,7 @@ namespace Common.WebServices.DO.ClassSchedule
 
         [DataMember(Name = "instructor")]
         public string instructor { get; set; }
+
+        public LearningSuiteCourse LearningSuiteCourseInformation { get; set; }
     }
 }
