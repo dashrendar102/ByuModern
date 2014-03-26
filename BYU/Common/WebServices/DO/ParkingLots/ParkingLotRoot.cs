@@ -35,9 +35,6 @@ namespace Common.WebServices.DO.ParkingLots
 
         public static Polygon getPolygon()
         {
-            //ParkingLotResponse myRoot = ParkingLotRoot.getParkingLot();
-            //System.Diagnostics.Debug.WriteLine("Parking Lot Name: " + myRoot.Name);
-
             return null;
         }
 
