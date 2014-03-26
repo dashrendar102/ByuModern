@@ -37,19 +37,19 @@ namespace BackgroundTask
             updater.Clear();
 
             // Notification 1
-            XmlDocument tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideText03);
+            XmlDocument tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWide310x150Text03);
             tileXml.GetElementsByTagName(textElementName)[0].InnerText = "Go Cougars!";
 
             updater.Update(new TileNotification(tileXml));
 
             // Notification 2
-            XmlDocument tileXml2 = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideText03);
+            XmlDocument tileXml2 = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWide310x150Text03);
             tileXml2.GetElementsByTagName(textElementName)[0].InnerText = "Don't fail!";
 
             updater.Update(new TileNotification(tileXml2));
 
             // Notification 3
-            XmlDocument tileXml3 = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideText03);
+            XmlDocument tileXml3 = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWide310x150Text03);
             tileXml3.GetElementsByTagName(textElementName)[0].InnerText = "Keep up the good work!";
 
             updater.Update(new TileNotification(tileXml3));
