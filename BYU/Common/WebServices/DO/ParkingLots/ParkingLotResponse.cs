@@ -26,5 +26,6 @@ namespace Common.WebServices.DO.ParkingLots
 
         [DataMember(Name = "TypeID")]
         public int TypeID { get; set; }
+
     }
 }
