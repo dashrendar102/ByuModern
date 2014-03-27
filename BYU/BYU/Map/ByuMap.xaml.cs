@@ -2,7 +2,6 @@
 using Bing.Maps.VenueMaps;
 using Common;
 using Common.Storage;
-using Common.WebServices.DO.ParkingLots;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -49,7 +48,6 @@ namespace Common
             this.ResetView();
         }
 
-        
         async Task SetupMapAsync()
         {
             ByuVenue = await this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
@@ -57,9 +55,6 @@ namespace Common
 
             this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
             this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
-            parkingLayer = new MapShapeLayer();
-            this.MyBingMap.ShapeLayers.Add(parkingLayer);
-            DrawPolygons();
         }
 
         void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
@@ -124,23 +119,48 @@ namespace Common
             }
         }
 
-        private static MapShapeLayer parkingLayer;
-        
-        public async void DrawPolygons()
+        public void drawPolygon()
         {
-            ParkingLotResponse[] parkingLots = await ParkingLotRoot.getAllLots();
-            
-            foreach(ParkingLotResponse Lot in parkingLots)
-            {
-                ParkingLot newLot = new ParkingLot(Lot, Infobox);
-                parkingLayer.Shapes.Add(newLot.getParkingPolygon());
-                parkingLayer.Shapes.Add(newLot.getParkingOutline());
-            }
+            //ParkingLot.getAllLots();
+            MapShapeLayer parkingLayer = new MapShapeLayer();
+            MapPolygon myPolygon = getPolygon();
+            parkingLayer.Shapes.Add(myPolygon);
+            this.MyBingMap.ShapeLayers.Add(parkingLayer);
+
         }
 
-        private void CloseInfoboxTapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+
+        private static MapPolygon getPolygon()
         {
-            Infobox.Visibility = Visibility.Collapsed;
+            MapPolygon myPolygon = new MapPolygon();
+            myPolygon.Locations = new LocationCollection() {
+                new Location(40.244156769,-111.654940121),
+                new Location(40.244102515,-111.654940121),
+                new Location(40.244111728,-111.653578900),
+                new Location(40.244186455,-111.653580241),
+                new Location(40.244183384,-111.653790794),
+                new Location(40.244181337,-111.654010735),
+                new Location(40.244184408,-111.654210560),
+                new Location(40.244181337,-111.654379539),
+                new Location(40.244170076,-111.654595457),
+                new Location(40.244156769,-111.654911958),
+                new Location(40.244156769,-111.654911958),
+                new Location(40.244156769,-111.654911958),
+                new Location(40.244156769,-111.654911958)
+
+                //new Location(40.252299832,-111.650151585),
+                //new Location(40.251298802,-111.650130127),
+                //new Location(40.251288567,-111.649658058),
+                //new Location(40.252267078,-111.649692927),
+                //new Location(40.252267078,-111.649692927),
+                //new Location(40.252267078,-111.649692927),
+                //new Location(40.252267078,-111.649692927),
+                //new Location(40.252267078,-111.649692927),
+                //new Location(40.252267078,-111.649692927)
+            };
+
+            myPolygon.FillColor = Windows.UI.Color.FromArgb(50, 0, 0, 255);
+            return myPolygon;
         }
 
         public async void ResetView()
