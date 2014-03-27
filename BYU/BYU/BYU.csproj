@@ -166,15 +166,12 @@
     <PRIResource Include="Strings\en-US\Resources.resw">
       <SubType>Designer</SubType>
     </PRIResource>
-    <Content Include="Assets\800px-BYUclarillon.jpg" />
     <Content Include="Assets\badgelogo.scale-100.png" />
     <Content Include="Assets\badgelogo.scale-140.png" />
     <Content Include="Assets\badgelogo.scale-180.png" />
     <Content Include="Assets\bg.png" />
-    <Content Include="Assets\blank_map_tile.jpg" />
     <Content Include="Assets\BYUSmallLogo.png" />
     <Content Include="Assets\campus_buildings.jpg" />
-    <Content Include="Assets\class_demo.jpg" />
     <Content Include="Assets\defaultPhoto.png" />
     <Content Include="Assets\idCard.png" />
     <Content Include="Assets\idCardBeard.png" />
@@ -211,9 +208,6 @@
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\Logos\SplashScreenBlue.png" />
-    <Content Include="Assets\LightGray.png" />
-    <Content Include="Assets\MediumGray.png" />
-    <Content Include="Assets\DarkGray.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
