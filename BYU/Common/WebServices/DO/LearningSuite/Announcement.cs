@@ -13,11 +13,11 @@ namespace Common.WebServices.DO.LearningSuite
     [DataContract]
     public class Announcement
     {
-        [DataMember]
-        public string id;
+        [DataMember (Name = "id")]
+        public string id { get; set; }
 
-        [DataMember]
-        public string attachment;
+        [DataMember (Name = "attachment")]
+        public string attachment { get; set; } 
 
         [DataMember]
         public int? availableDate;
@@ -36,14 +36,22 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public string createdBy;
 
-        [DataMember]
-        public int? date;
+        [DataMember (Name="date")]
+        public int? date { get; set; }
 
         public ZonedDateTime DateTime
         {
             get
             {
                 return LearningSuiteUtils.ConvertTimeStampToDateTime(date);
+            }
+        }
+
+        public String DateTimeFormalString
+        {
+            get
+            {
+                return String.Format("{0:dddd, MMMM dd, yyyy}", LearningSuiteUtils.ConvertTimeStampToDateTime(date));
             }
         }
 
@@ -58,17 +66,17 @@ namespace Common.WebServices.DO.LearningSuite
             }
         }
 
-        [DataMember]
-        public string instructorID;
+        [DataMember (Name = "instructorID")]
+        public string instructorID { get; set; }
 
         [DataMember]
         public bool? published;
 
-        [DataMember]
-        public string text;
+        [DataMember (Name = "text")]
+        public string text { get; set; }
 
-        [DataMember]
-        public string title;
+        [DataMember (Name = "title")]
+        public string title { get; set; }
 
         [DataMember]
         public string updatedBy;
