@@ -39,7 +39,7 @@ namespace TestSuite
         [TestMethod]
         public void TestGetParkingLots()
         {
-            Task<ParkingLotResponse[]> getLotsTask = ParkingLot.getAllLots();
+            Task<ParkingLotResponse[]> getLotsTask = ParkingLotRoot.getAllLots();
             getLotsTask.Wait();
             ParkingLotResponse[] lots = getLotsTask.Result;
             var lotsFound = from l in lots where l.Name.Contains("Lot") select l;
