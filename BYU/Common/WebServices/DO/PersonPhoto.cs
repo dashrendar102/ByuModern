@@ -19,9 +19,11 @@ namespace Common.WebServices.DO
 
         public async static Task<Uri> getPhotoUri()
         {
-            if (!(await photoFileExists()))
+            WebServiceSession session = await WebServiceSession.GetSession();
+
+            if (!(await photoFileExists()) && session != null)
             {
-                string photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId;
+                string photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + session.personId;
                 using (WebResponse response = await BYUWebServiceHelper.sendGETRequest(photoRequestUrl))
                 {
                     Stream photoStream = response.GetResponseStream();

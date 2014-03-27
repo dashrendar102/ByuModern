@@ -192,7 +192,12 @@ namespace BYU
         {
             AuthenticationManager.Logout();
             await WebCache.Instance.ClearCache();
-            ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
+            GoHome();
+        }
+
+        public void GoHome()
+        {
+            ((Frame)Window.Current.Content).SetNavigationState(firstNavState); 
         }
 
         public async void ShowPrivacyPolicy()

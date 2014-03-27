@@ -39,10 +39,17 @@ namespace Common.WebServices.DO.PersonSummary
         public async static Task<PersonSummaryResponse> GetPersonSummary()
         {
             WebServiceSession session = await WebServiceSession.GetSession();
-            string personId = session.personId;
+            if (session != null)
+            {
+                string personId = session.personId;
 
-            RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(BYUWebServiceURLs.GET_PERSONAL_INFO + (await WebServiceSession.GetSession()).personId);
-            return root.PersonSummaryService.response;
+                RootObject root = await BYUWebServiceHelper.GetObjectFromWebService<RootObject>(BYUWebServiceURLs.GET_PERSONAL_INFO + (await WebServiceSession.GetSession()).personId);
+                return root.PersonSummaryService.response;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }
