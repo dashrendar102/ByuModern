@@ -104,25 +104,12 @@ namespace Common.WebServices.DO.ParkingLots
 
         private void ParkingLotEntered(object sender, PointerRoutedEventArgs e)
         {
-            //if (sender is MapShape)
-            //{
-            //    var poly = sender as MapShape;
-            //    var tag = GetDescription();
-
-            //    if (tag != null && tag is string)
-            //    {
-            //        Infobox.DataContext = tag as string;
-            //        Infobox.Visibility = Visibility.Visible;
-            //        MapLayer.SetPosition(Infobox, MapLayer.GetPosition(parkingPolygon.Locations[0]));
-                        
-            //    }
-            //}
             this.parkingOutline.Width = 3;
         }
 
         private void ParkingLotExited(object sender, PointerRoutedEventArgs e)
         {
-            Infobox.Visibility = Visibility.Collapsed;
+            //Infobox.Visibility = Visibility.Collapsed;
             this.parkingOutline.Width = 2;
         }
 
