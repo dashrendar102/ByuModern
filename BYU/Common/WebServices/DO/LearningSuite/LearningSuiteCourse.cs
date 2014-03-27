@@ -1,12 +1,5 @@
-﻿using Common.Calendar;
-using NodaTime;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using NodaTime;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Common.WebServices.DO.LearningSuite
