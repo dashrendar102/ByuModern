@@ -85,7 +85,7 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             var buildings = await map.GetBuildings();
-            ParkingLotResponse[] parkingLots = await ParkingLot.getAllLots();
+            //ParkingLotResponse[] parkingLots = await ParkingLot.getAllLots();
             buildings = buildings.OrderBy(building => building.Name);
             this.DefaultViewModel["Items"] = buildings;
             
