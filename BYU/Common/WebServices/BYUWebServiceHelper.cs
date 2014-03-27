@@ -3,6 +3,7 @@ using Common.WebServices.DO;
 using System;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Json;
 using System.Text;

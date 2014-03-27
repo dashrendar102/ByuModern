@@ -1,8 +1,13 @@
-﻿﻿using Common.WebServices;
+﻿﻿using Common.Calendar;
+using Common.WebServices;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.TermUtility;
 using NodaTime;
+using NodaTime.Text;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Appointments;

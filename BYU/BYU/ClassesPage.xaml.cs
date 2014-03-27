@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text.RegularExpressions;
-using System.Net;
 using System.Windows.Input;
 using System.Windows;
 using Windows.Foundation;
@@ -22,7 +20,6 @@ using System.Collections.ObjectModel;
 using Windows.UI;
 using Common.WebServices.DO;
 using Common.WebServices.DO.ClassSchedule;
-using Common.WebServices.DO.LearningSuite;
 using Common.WebServices.DO.TermUtility;
 using Common.WebServices;
 using System.Threading.Tasks;
@@ -41,9 +38,8 @@ namespace BYU
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private CourseInformation selectedCourse = null;
-
-        private LearningSuiteCourse[] LSCourses;
-        private List<Announcement[]> courseAnnouncements;
+        private ObservableCollection<CourseInformation> selected_class_list =
+                    new ObservableCollection<CourseInformation>();
 
         public CourseScheduleInformation ScheduleInformation { get; private set; }
 
@@ -72,8 +68,9 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-        }
 
+        }
+        
         /// <summary>
         /// Requires authentication. Obtains class list from web service and loads menu.
         /// </summary>
@@ -88,22 +85,6 @@ namespace BYU
                 {
                     ClassesListView.SelectedItem = course;
                 }
-            }
-        }
-
-        private async void RetrieveAnnouncements()
-        {
-            this.LSCourses = await LearningSuiteCourse.GetCourses();
-            this.courseAnnouncements = new List<Announcement[]>();
-            foreach (LearningSuiteCourse course in LSCourses)
-            {
-                Announcement[] announcement_list = await Announcement.GetAnnouncements(course.CourseID);
-                foreach (Announcement announcement in announcement_list)
-                {
-                    announcement.text = Regex.Replace(announcement.text, "<.*?>", string.Empty);
-                    announcement.text = WebUtility.HtmlDecode(announcement.text);
-                }
-                courseAnnouncements.Add(announcement_list);
             }
         }
 
@@ -138,7 +119,6 @@ namespace BYU
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            RetrieveAnnouncements();
             SetSelectedCourse(e.Parameter as CourseInformation);
             LoadClasses();
         }
@@ -157,7 +137,7 @@ namespace BYU
         /// <param name="e"></param>
         private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            SetSelectedCourse((CourseInformation)e.AddedItems[0]);
+            this.SetSelectedCourse((CourseInformation)e.AddedItems[0]);
         }
 
         /// <summary>
@@ -168,20 +148,6 @@ namespace BYU
         {
             selectedCourse = newCourse;
             SelectedClassContent.DataContext = selectedCourse;
-            SetSelectedAnnouncements();            
-        }
-
-        private void SetSelectedAnnouncements()
-        {
-            foreach (LearningSuiteCourse course in LSCourses)
-            {
-                if (selectedCourse.curriculum_id == course.curriculumID)
-                {
-                    ObservableCollection<Announcement> announcement_observable =
-                        new ObservableCollection<Announcement>(courseAnnouncements[Array.IndexOf(LSCourses, course)]);
-                    AnnouncementsList.ItemsSource = announcement_observable;
-                }
-            }
         }
 
         /// <summary>

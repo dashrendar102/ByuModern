@@ -1,9 +1,14 @@
 ﻿using Common.Storage;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace Common.WebServices.DO
 {
