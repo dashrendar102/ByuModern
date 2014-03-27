@@ -22,12 +22,10 @@ using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO;
 using Common.WebServices;
 using Common;
-using BYU.BergerDemos;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
-using Common;
 using Windows.Storage;
 
 namespace BYU
@@ -177,7 +175,7 @@ namespace BYU
             this.Frame.Navigate(typeof(MapPage));
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+        private async void Login_Click(object sender, RoutedEventArgs e)
         {
             DoLogin();
         }
@@ -275,13 +273,8 @@ namespace BYU
 
         private async Task PopulateClasses()
         {
-            ClassScheduleResponse classes = await ClassScheduleRoot.GetClassSchedule();
+            CourseScheduleInformation classes = await ClassScheduleRoot.GetClassSchedule();
             ClassesListView.ItemsSource = new ObservableCollection<CourseInformation>(classes.courseList);        
-        }
-
-        private void BergerDemoButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(BergerDemoLand));
         }
 
         private void PasswordTextbox_KeyUp(object sender, KeyRoutedEventArgs e)
@@ -299,7 +292,8 @@ namespace BYU
 
         private void UserButton_Click(object sender, RoutedEventArgs e)
         {
-            Windows.UI.ApplicationSettings.SettingsPane.Show();
+            //Windows.UI.ApplicationSettings.SettingsPane.Show();
+            this.Frame.Navigate(typeof(UserProfile), userInfo);
         }
 
         private async void pageRoot_Loaded(object sender, RoutedEventArgs e)
@@ -311,6 +305,7 @@ namespace BYU
                 LoadUserPhoto();
                 await PopulateClasses();
             }
+
             SetElementEnableStatuses();
         }
     }

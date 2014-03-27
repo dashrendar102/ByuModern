@@ -38,9 +38,11 @@ namespace BYU
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private CourseInformation selectedCourse = null;
-        private ObservableCollection<CourseInformation> selected_class_list = 
+        private ObservableCollection<CourseInformation> selected_class_list =
                     new ObservableCollection<CourseInformation>();
-        
+
+        public CourseScheduleInformation ScheduleInformation { get; private set; }
+
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
         /// process lifetime management
@@ -66,24 +68,26 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-        }
 
+        }
+        
         /// <summary>
         /// Requires authentication. Obtains class list from web service and loads menu.
         /// </summary>
         private async void LoadClasses()
         {
-            ClassScheduleResponse response = await ClassScheduleRoot.GetClassSchedule();
-            ObservableCollection<CourseInformation> courses = new ObservableCollection<CourseInformation>(response.courseList);
+            this.ScheduleInformation = await ClassScheduleRoot.GetClassSchedule();
+            ObservableCollection<CourseInformation> courses = new ObservableCollection<CourseInformation>(this.ScheduleInformation.courseList);
             ClassesListView.ItemsSource = courses;
-            foreach (CourseInformation course in courses){
+            foreach (CourseInformation course in courses)
+            {
                 if (course.curriculum_id == selectedCourse.curriculum_id)
                 {
                     ClassesListView.SelectedItem = course;
                 }
             }
         }
-       
+
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -115,7 +119,7 @@ namespace BYU
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            this.selectedCourse = e.Parameter as CourseInformation;
+            SetSelectedCourse(e.Parameter as CourseInformation);
             LoadClasses();
         }
 
@@ -126,24 +130,39 @@ namespace BYU
 
         #endregion
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            selectedCourse = (CourseInformation)e.AddedItems[0];
-            selected_class_list.Clear();
-            selected_class_list.Add(selectedCourse);
-            SelectedClassSummary.ItemsSource = selected_class_list;
+            this.SetSelectedCourse((CourseInformation)e.AddedItems[0]);
         }
 
+        /// <summary>
+        /// Sets the currently selected course and loads course information into summary.
+        /// </summary>
+        /// <param name="newCourse"></param>
+        private void SetSelectedCourse(CourseInformation newCourse)
+        {
+            selectedCourse = newCourse;
+            SelectedClassContent.DataContext = selectedCourse;
+        }
+
+        /// <summary>
+        /// Adds class to Windows 8 Calendar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void btnAddClass_Click(object sender, RoutedEventArgs e)
         {
-            string yearTerm = await TermUtility.getCurrentTerm();
-            
             AppointmentGenerator generator = new AppointmentGenerator();
-            var appointment = await generator.GenerateAppointment(selectedCourse);
+            var appointment = await generator.GenerateAppointment(ScheduleInformation, selectedCourse);
 
             var rect = GetElementRect(sender as FrameworkElement);
+            //TODO - store this id in some way so we know which classes have already been exported
             String appointmentId = await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Windows.UI.Popups.Placement.Default);
-            appointmentId.ToString();
         }
 
         //taken from http://code.msdn.microsoft.com/windowsapps/Appointments-API-sample-2b55c76e

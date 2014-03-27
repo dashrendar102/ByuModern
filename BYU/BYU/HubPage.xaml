@@ -35,6 +35,12 @@
     This grid acts as a root panel for the page.
   -->
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFE0EDF9" Offset="1"/>
+                <GradientStop Color="White" Offset="0.5"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
             <RowDefinition Height="*"/>
@@ -161,10 +167,6 @@
                             <Image Source="Assets/parking_lots.jpg"/>
                         </Button>-->
                     </Grid>
-                </StackPanel>
-                <StackPanel Name="DevLinksPanel" Orientation="Vertical" Grid.Column="3" Margin="50,30,40,0">
-                    <TextBlock Text="Dev Links" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <Button Content="Berger Demos" Name="BergerDemoButton" HorizontalAlignment="Left" Margin="79,-3,0,0" Grid.Row="1" VerticalAlignment="Top" Click="BergerDemoButton_Click"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

@@ -14,7 +14,12 @@
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>BYU_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateThumbprint>D44846F3EA9398E230F908341E5553290341D5F8</PackageCertificateThumbprint>
+    <PackageCertificateKeyFile>BYU_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -27,13 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -55,7 +61,7 @@
     <PlatformTarget>ARM</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
@@ -77,7 +83,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -99,17 +105,11 @@
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
-    <Prefer32Bit>true</Prefer32Bit>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BergerDemos\AuthDemoPage.xaml.cs">
-      <DependentUpon>AuthDemoPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BergerDemos\BergerDemoLand.xaml.cs">
-      <DependentUpon>BergerDemoLand.xaml</DependentUpon>
     </Compile>
     <Compile Include="BYUSettingsFlyout.xaml.cs">
       <DependentUpon>BYUSettingsFlyout.xaml</DependentUpon>
@@ -135,20 +135,20 @@
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
+    <Compile Include="UserProfile.xaml.cs">
+      <DependentUpon>UserProfile.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Page Include="UserProfile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <None Include="BYU_StoreKey.pfx" />
     <None Include="Package.StoreAssociation.xml" />
-    <Page Include="BergerDemos\AuthDemoPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="BergerDemos\BergerDemoLand.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="BYUSettingsFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -166,11 +166,17 @@
     <PRIResource Include="Strings\en-US\Resources.resw">
       <SubType>Designer</SubType>
     </PRIResource>
-    <Content Include="Assets\800px-BYUclarillon.jpg" />
-    <Content Include="Assets\blank_map_tile.jpg" />
+    <Content Include="Assets\badgelogo.scale-100.png" />
+    <Content Include="Assets\badgelogo.scale-140.png" />
+    <Content Include="Assets\badgelogo.scale-180.png" />
+    <Content Include="Assets\bg.png" />
+    <Content Include="Assets\BYUSmallLogo.png" />
     <Content Include="Assets\campus_buildings.jpg" />
-    <Content Include="Assets\class_demo.jpg" />
     <Content Include="Assets\defaultPhoto.png" />
+    <Content Include="Assets\idCard.png" />
+    <Content Include="Assets\idCardBeard.png" />
+    <Content Include="Assets\idCardBeardDTF.png" />
+    <Content Include="Assets\idCardDTF.png" />
     <Content Include="Assets\Logos\logo_200_95_blue.png" />
     <Content Include="Assets\Logos\logo_150_150.png" />
     <Content Include="Assets\Logos\logo_150_150_blue.png" />
@@ -192,16 +198,16 @@
     <Content Include="Assets\Logos\Temp\SplashScreen.png" />
     <Content Include="Assets\messing_with_background.png" />
     <Content Include="Assets\parking_lots.jpg" />
+    <Content Include="Assets\SplashScreen.scale-140.png" />
+    <Content Include="Assets\SplashScreen140.png" />
+    <Content Include="Assets\SplashScreen180.png" />
+    <Content Include="Assets\storelogo.png" />
     <Content Include="DataModel\SampleData.json" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\Logos\SplashScreenBlue.png" />
-    <Content Include="Assets\StoreLogo.scale-100.png" />
-    <Content Include="Assets\LightGray.png" />
-    <Content Include="Assets\MediumGray.png" />
-    <Content Include="Assets\DarkGray.png" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -235,14 +241,15 @@
     <SDKReference Include="Bing.Maps.Xaml, Version=1.313.0825.0">
       <Name>Bing Maps for C#, C++, or Visual Basic</Name>
     </SDKReference>
-    <SDKReference Include="LiveSDKXAML, Version=5.5">
-      <Name>Live SDK</Name>
-    </SDKReference>
     <SDKReference Include="Microsoft.VCLibs, version=12.0">
       <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BackgroundTask\BackgroundTask.csproj">
+      <Project>{cd2467e8-1527-4f04-9787-08fc28c9ba72}</Project>
+      <Name>BackgroundTask</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{c72002e9-fa71-4b6d-9fb4-2db41d0ed8c0}</Project>
       <Name>Common</Name>

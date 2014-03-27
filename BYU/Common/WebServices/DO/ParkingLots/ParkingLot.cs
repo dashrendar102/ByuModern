@@ -28,7 +28,7 @@ namespace Common.WebServices.DO.ParkingLots
             return null;
         }
 
-        public async static Task<ParkingLotResponse> getAllLots()
+        public async static Task<ParkingLotResponse[]> getAllLots()
         {
             //string term = await TermUtility.TermUtility.getCurrentTerm();
             //WebServiceSession session = await WebServiceSession.GetSession();
@@ -38,8 +38,8 @@ namespace Common.WebServices.DO.ParkingLots
 
             WebServiceSession session = await WebServiceSession.GetSession();
 
-            ParkingLot parkingLots = await BYUWebServiceHelper.GetObjectFromWebService<ParkingLot>(string.Format(BYUWebServiceURLs.GET_PARKING_LOTS));
-            return parkingLots.ParkingService.response;
+            ParkingLotResponse[] parkingLots = await BYUWebServiceHelper.GetObjectFromWebService<ParkingLotResponse[]>(BYUWebServiceURLs.GET_PARKING_LOTS, authenticate: false);
+            return parkingLots;
             
         }
 

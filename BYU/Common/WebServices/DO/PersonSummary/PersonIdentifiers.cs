@@ -11,19 +11,19 @@ namespace Common.WebServices.DO.PersonSummary
     public class PersonIdentifiers
     {
         [DataMember]
-        public string person_id;
+        public string person_id { get; set; }
 
         [DataMember]
-        public string byu_id;
+        public string byu_id { get; set; }
 
         [DataMember]
-        public string byu_id_issue_number;
+        public string byu_id_issue_number { get; set; }
 
         [DataMember]
-        public string net_id;
+        public string net_id { get; set; }
 
         // We're ignoring this data field for privacy reasons.
         /*[DataMember]
-        public string ssn;*/
+        public string ssn { get; set; }*/
     }
 }

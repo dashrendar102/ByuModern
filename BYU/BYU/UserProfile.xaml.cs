@@ -1,5 +1,7 @@
-﻿using Common;
-using BYU.Common;
+﻿using BYU.Common;
+using Common.WebServices.DO;
+using Common.WebServices.DO.IdCard;
+using Common.WebServices.DO.PersonSummary;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,60 +9,29 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
-using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using Common.Calendar;
-using Common.WebServices.DO.ClassSchedule;
-using System.Threading.Tasks;
-using Common.WebServices.DO.TermUtility;
-using Common.Storage;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
-namespace BYU.BergerDemos
+namespace BYU
 {
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
-    public sealed partial class BergerDemoLand : Page
+    public sealed partial class UserProfile : Page
     {
-
-        public void BYUAuthDemo_Click(Object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(AuthDemoPage));
-        }
-
-        private async void CalendarExportDemoButton_Click(object sender, RoutedEventArgs e)
-        {
-            string yearTerm = await TermUtility.getCurrentTerm();
-            AppointmentGenerator generator = new AppointmentGenerator();
-            ClassScheduleResponse schedule = await ClassScheduleRoot.GetClassSchedule();
-            CourseInformation sampleCourse = schedule.courseList[0];
-            var appointment = await generator.GenerateAppointment(sampleCourse);
-
-            var rect = GetElementRect(sender as FrameworkElement);
-            String appointmentId = await Windows.ApplicationModel.Appointments.AppointmentManager.ShowAddAppointmentAsync(appointment, rect, Windows.UI.Popups.Placement.Default);
-            appointmentId.ToString();
-        }
-
-        //taken from http://code.msdn.microsoft.com/windowsapps/Appointments-API-sample-2b55c76e
-        private Windows.Foundation.Rect GetElementRect(FrameworkElement element)
-        {
-            Windows.UI.Xaml.Media.GeneralTransform buttonTransform = element.TransformToVisual(null);
-            Windows.Foundation.Point point = buttonTransform.TransformPoint(new Windows.Foundation.Point());
-            return new Windows.Foundation.Rect(point, new Windows.Foundation.Size(element.ActualWidth, element.ActualHeight));
-        }
-
-        //auto-generated code
 
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private PersonSummaryResponse userResponse;
+        private IdCardResponse idResponse;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -80,7 +51,7 @@ namespace BYU.BergerDemos
         }
 
 
-        public BergerDemoLand()
+        public UserProfile()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
@@ -126,9 +97,65 @@ namespace BYU.BergerDemos
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            
+            this.userResponse = e.Parameter as PersonSummaryResponse;
+            this.idResponse = await IdCardRoot.GetIdCard();
+
+            if (idResponse.beard && idResponse.dtf)
+            {
+                SetIdCardTemplate("Assets/idCardBeardDTF.png");
+            }
+            else if (idResponse.beard && !idResponse.dtf)
+            {
+                SetIdCardTemplate("Assets/idCardBeard.png");
+            }
+            else if (!idResponse.beard && idResponse.dtf)
+            {
+                SetIdCardTemplate("Assets/idCardDTF.png");
+            }
+
+            userPicture.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
+
+            idCardCanvas.DataContext = idResponse;
+
+            PersonalInfoStack.DataContext = userResponse.personal_information;
+
+            completeName.DataContext = userResponse.names;
+            netId.DataContext = userResponse.identifiers;
+
+            EmployeeInfo.DataContext = userResponse.employee_information;
+            empDate.DataContext = userResponse.employee_information.date_hired;
+            qualification.DataContext = userResponse.employee_information.date_hired;
+
+            ContactInfoStack.DataContext = userResponse.contact_information;
+            TextBlock[] mailingAddressBoxes = new TextBlock[] { mailingAddress, mailingAddress2, mailingAddress3 };
+            int count = 0;
+            foreach (string str in userResponse.contact_information.mailing_address){
+                mailingAddressBoxes[count].Text = str;
+                count++;
+            }
+            if (userResponse.contact_information.mailing_phone_unlisted)
+            {
+                mailPhoneUnlist.Text = " (Unlisted)";
+            }
+            if (userResponse.contact_information.email_address_unlisted)
+            {
+                emailUnlist.Text = " (Unlisted)";
+            }
+            if (userResponse.contact_information.mailing_address_unlisted)
+            {
+                mailingAddressUnlist.Text = " (Unlisted)";
+            }
+        }
+
+        private void SetIdCardTemplate(string path)
+        {
+            BitmapImage template = new BitmapImage();
+            template.UriSource = new Uri(this.BaseUri, path);
+            idCardTemplate.Source = template;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -137,11 +164,5 @@ namespace BYU.BergerDemos
         }
 
         #endregion
-
-        private async void ClearCacheButton_Click(object sender, RoutedEventArgs e)
-        {
-            await WebCache.Instance.ClearCache();
-        }
-
     }
 }

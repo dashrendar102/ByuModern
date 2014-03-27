@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,14 @@ namespace Common.WebServices.DO.LearningSuite
         [DataMember]
         public int? beginDate;
 
+        public ZonedDateTime BeginDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(beginDate);
+            }
+        }
+
         [DataMember]
         public string categoryID;
 
@@ -44,6 +53,14 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember]
         public int dueDate;
+
+        public ZonedDateTime DueDateTime
+        {
+            get
+            {
+                return LearningSuiteUtils.ConvertTimeStampToDateTime(dueDate);
+            }
+        }
 
         [DataMember]
         public bool extraCredit;

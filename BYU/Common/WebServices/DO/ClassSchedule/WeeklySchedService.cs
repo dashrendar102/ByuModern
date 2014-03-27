@@ -15,6 +15,6 @@ namespace Common.WebServices.DO.ClassSchedule
         public ClassScheduleRequest request { get; set; }
 
         [DataMember(Name = "response")]
-        public ClassScheduleResponse response { get; set; }
+        public CourseScheduleInformation response { get; set; }
     }
 }

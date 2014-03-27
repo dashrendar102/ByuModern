@@ -1,0 +1,3 @@
+MainPackage=C:\Users\Lawrence\ByuModern\BYU\BYU\bin\ARM\Release\BYU_1.1.0.9_Bundle\BYU_1.1.0.9_ARM.appx
+ResourcePack=C:\Users\Lawrence\ByuModern\BYU\BYU\bin\ARM\Release\BYU_1.1.0.9_Bundle\BYU_1.1.0.9_scale-140.appx
+ResourcePack=C:\Users\Lawrence\ByuModern\BYU\BYU\bin\ARM\Release\BYU_1.1.0.9_Bundle\BYU_1.1.0.9_scale-180.appx

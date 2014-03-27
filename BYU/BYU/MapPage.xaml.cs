@@ -18,8 +18,6 @@ using Windows.UI.Xaml.Navigation;
 using Common;
 using Windows.UI.Xaml.Shapes;
 using Bing.Maps;
-using Common.WebServices.DO.ParkingLots;
-
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
@@ -85,7 +83,6 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             var buildings = await map.GetBuildings();
-            var parkingLots = await ParkingLot.getAllLots();
             buildings = buildings.OrderBy(building => building.Name);
             this.DefaultViewModel["Items"] = buildings;
             
