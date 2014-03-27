@@ -115,11 +115,6 @@
     <Compile Include="WebServices\DO\IdCard\IdCardRoot.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardService.cs" />
     <Compile Include="WebServices\DO\LearningSuite\LearningSuiteUtils.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingLot.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingLotRoot.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingLotRequest.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingLotResponse.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingService.cs" />
     <Compile Include="Storage\WebCache.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />

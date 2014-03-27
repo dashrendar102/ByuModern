@@ -61,7 +61,7 @@ namespace Common.WebServices
             }
         }
 
-        internal async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true)
+        public async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true)
         {
             if (WebServiceSession.GetSession() == null)
             {

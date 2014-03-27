@@ -126,6 +126,11 @@
     <Compile Include="ByuMap.xaml.cs">
       <DependentUpon>ByuMap.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ParkingLots\ParkingLot.cs" />
+    <Compile Include="ParkingLots\ParkingLotRequest.cs" />
+    <Compile Include="ParkingLots\ParkingLotResponse.cs" />
+    <Compile Include="ParkingLots\ParkingLotRoot.cs" />
+    <Compile Include="ParkingLots\ParkingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
