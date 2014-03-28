@@ -27,12 +27,13 @@ namespace Common.WebServices.DO.ParkingLots
         public static readonly DependencyProperty TagProp = DependencyProperty.Register
             ("Tag", typeof(object), typeof(MapShape), new PropertyMetadata(null));
         private Windows.UI.Xaml.Controls.Grid Infobox;
+        private ByuMap map;
 
-        
-        public ParkingLot(ParkingLotResponse Lot, Windows.UI.Xaml.Controls.Grid Infobox)
+
+        public ParkingLot(ParkingLotResponse Lot, ByuMap map)
         {
             this.Lot = Lot;
-            this.Infobox = Infobox;
+            this.map = map;
             parkingPolygon = new MapPolygon();
             parkingPolygon.PointerEntered += ParkingLotEntered;
             parkingPolygon.PointerExited += ParkingLotExited;
@@ -41,7 +42,7 @@ namespace Common.WebServices.DO.ParkingLots
             parkingOutline = new MapPolyline();
             parkingOutline.Width = 2;
             parkingOutline.Visible = true;
-
+            parkingPolygon.SetValue(TagProp, GetDescription());
             setColors();
             setPoints();
         }
@@ -91,11 +92,10 @@ namespace Common.WebServices.DO.ParkingLots
             if(sender is MapShape)
             {
                 var poly = sender as MapShape;
-                var tag = GetDescription();
+                var tag = poly.GetValue(TagProp);
 
                 if(tag != null && tag is string)
                 {
-
                     var msg = new MessageDialog(tag as string);
                     await msg.ShowAsync();
                 }
@@ -104,6 +104,8 @@ namespace Common.WebServices.DO.ParkingLots
 
         private void ParkingLotEntered(object sender, PointerRoutedEventArgs e)
         {
+            //send string to map
+            map.OpenInfobox(this.parkingPolygon);
             this.parkingOutline.Width = 3;
         }
 
@@ -113,6 +115,11 @@ namespace Common.WebServices.DO.ParkingLots
             this.parkingOutline.Width = 2;
         }
 
+
+        internal DependencyObject GetPosition()
+        {
+            return this.parkingPolygon.Locations[1];
+        }
     }
     public class ParkingData
     {

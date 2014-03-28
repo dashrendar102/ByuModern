@@ -131,10 +131,17 @@ namespace Common
              
              foreach(ParkingLotResponse Lot in parkingLots)
              {
-                 ParkingLot newLot = new ParkingLot(Lot, Infobox);
+                 ParkingLot newLot = new ParkingLot(Lot, this);
                  parkingLayer.Shapes.Add(newLot.getParkingPolygon());
                  parkingLayer.Shapes.Add(newLot.getParkingOutline());
              }
+        }
+
+        internal void OpenInfobox(MapPolygon myLot)
+        {
+            Infobox.DataContext = myLot.GetValue(TagProperty);
+            Infobox.Visibility = Visibility.Visible;
+            MapLayer.SetPosition(Infobox, MapLayer.GetPosition(myLot.Locations[1]));
         }
         
         private void CloseInfoboxTapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
