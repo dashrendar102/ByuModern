@@ -29,7 +29,7 @@ namespace Common.WebServices.DO.ParkingLots
         private Windows.UI.Xaml.Controls.Grid Infobox;
         private ByuMap map;
 
-
+        
         public ParkingLot(ParkingLotResponse Lot, ByuMap map)
         {
             this.Lot = Lot;
@@ -82,9 +82,32 @@ namespace Common.WebServices.DO.ParkingLots
         {
             if(String.IsNullOrEmpty(Lot.Description))
             {
-                return "No description avaliabe";
+                return "No information is available for this lot.";
             }
             return Lot.Description;
+        }
+
+        //http://stackoverflow.com/questions/4878452/remove-html-tags-in-string
+        private string StripTagsCharArray(string source) {
+            char[] array = new char[source.Length]; 
+            int arrayIndex = 0; 
+            bool inside = false; 
+            for (int i = 0; i < source.Length; i++) {
+                char let = source[i]; 
+                if (let == '<') { 
+                    inside = true; 
+                    continue; 
+                } 
+                if (let == '>') { 
+                    inside = false; 
+                    continue; 
+                } 
+                if (!inside) { 
+                    array[arrayIndex] = let; 
+                    arrayIndex++; 
+                } 
+            } 
+            return new string(array, 0, arrayIndex); 
         }
 
         private async void ParkingLotTapped(object sender, TappedRoutedEventArgs e)
@@ -96,7 +119,8 @@ namespace Common.WebServices.DO.ParkingLots
 
                 if(tag != null && tag is string)
                 {
-                    var msg = new MessageDialog(tag as string);
+
+                    var msg = new MessageDialog(StripTagsCharArray(tag as string));
                     await msg.ShowAsync();
                 }
             }
