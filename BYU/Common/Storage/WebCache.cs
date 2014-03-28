@@ -23,7 +23,8 @@ namespace Common.Storage
             if (cacheFolder == null)
             {
                 cacheFolder = await FileHelper.LocalFolder.CreateFolderAsync(cacheFolderName, CreationCollisionOption.OpenIfExists);
-                return null;
+                // Why was this NULL statement here?
+                //return null;
             }
             return cacheFolder;
         }
@@ -49,7 +50,7 @@ namespace Common.Storage
         internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true)
         {
             string fileName = TransformURLToFilename(url);
-            return await FileHelper.OpenReadOnlyFileStream(await GetCacheFolder(), fileName, decrypt);
+            return await FileHelper.OpenReadOnlyFileStream((await GetCacheFolder()), fileName, decrypt);
         }
 
         internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)

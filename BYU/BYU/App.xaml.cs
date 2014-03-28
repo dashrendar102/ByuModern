@@ -164,11 +164,11 @@ namespace BYU
         private void OnCommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
         {
             loginSetting = new SettingsCommand(
-                "Login Setting", "Login", (handler) => ShowLoginSettingFlyout());
+                "CD66F38D-04E4-45A1-B6AC-A101B2B46FDE", "Login", (handler) => ShowLoginSettingFlyout());
             logoutSetting = new SettingsCommand(
-                "Logout Setting", "Logout", (handler) => LogoutSettingHandler());
+                "E227EA56-6C88-4D32-94E2-8A65503BC10C", "Logout", (handler) => LogoutSettingHandler());
             privacyPolicySetting = new SettingsCommand(
-                "View Privacy Policy", "Privacy Policy", (handler) => ShowPrivacyPolicy());
+                "34A8EB2A-C446-41E9-A6E8-AD3626BC3AB1", "Privacy Policy", (handler) => ShowPrivacyPolicy());
 
             if (AuthenticationManager.LoggedIn())
             {

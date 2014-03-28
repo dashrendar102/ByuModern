@@ -19,6 +19,11 @@ namespace Common.WebServices.DO.ClassSchedule
             string term = await TermUtility.TermUtility.getCurrentTerm();
             WebServiceSession session = await WebServiceSession.GetSession();
 
+            if (session == null)
+            {
+                return null;
+            }
+
             ClassScheduleRoot schedule = await BYUWebServiceHelper.GetObjectFromWebService<ClassScheduleRoot>(string.Format(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, term));
             await incorporateLearningSuiteCourseInformation(schedule);
             return schedule.WeeklySchedService.response;

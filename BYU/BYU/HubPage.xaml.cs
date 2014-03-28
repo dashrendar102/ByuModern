@@ -184,8 +184,8 @@ namespace BYU
         {
             var netID = this.LoginNameTextbox.Text;
             var password = this.LoginPasswordTextbox.Password;
+            WebServiceSession session = null;
 
-            bool success = false;
             try
             {
                 ProgressBar.Visibility = Visibility.Visible;
@@ -193,28 +193,13 @@ namespace BYU
                 LoginNameTextbox.IsEnabled = false;
                 LoginPasswordTextbox.IsEnabled = false;
                 //AuthenticationManager.Login(netID, password);
-                WebServiceSession session = await WebServiceSession.GetSession(netID, password);
-                success = session != null;
+                session = await WebServiceSession.GetSession(netID, password);
             }
             catch (InvalidCredentialsException){ }
 
-            if (!success)
-            {
-                var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
-                await messageDialog.ShowAsync();
-                ProgressBar.Visibility = Visibility.Collapsed;
-                SignInButton.IsEnabled = true;
-                LoginNameTextbox.IsEnabled = true;
-                LoginPasswordTextbox.IsEnabled = true;
-                return;
-            }
-
             //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
-            WebServiceSession webServiceSession = await Task.Run(() =>
-            {
-                return WebServiceSession.GetSession(netID, password);
-            });
-            if (webServiceSession != null)
+
+            if (session != null)
             {
                 this.userInfo = await PersonSummaryResponse.GetPersonSummary();
 
@@ -229,6 +214,11 @@ namespace BYU
             {
                 var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
                 await messageDialog.ShowAsync();
+                ProgressBar.Visibility = Visibility.Collapsed;
+                SignInButton.IsEnabled = true;
+                LoginNameTextbox.IsEnabled = true;
+                LoginPasswordTextbox.IsEnabled = true;
+                return;
             }
 
             SetElementEnableStatuses();

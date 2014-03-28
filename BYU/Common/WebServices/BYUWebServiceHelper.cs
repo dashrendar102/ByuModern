@@ -104,7 +104,7 @@ namespace Common.WebServices
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
 
             request.Method = "POST";
-            request.Accept = "application/json";
+            //request.Accept = "application/json";
 
             if (parameters != null)
             {
@@ -112,11 +112,10 @@ namespace Common.WebServices
                 {
                     using (StreamWriter requestWriter = new StreamWriter(requestStream))
                     {
-                        requestWriter.Write(parameters);
+                        await requestWriter.WriteAsync(parameters);
                     }
                 }
             }
-
             return await request.GetResponseAsync();
         }
 
