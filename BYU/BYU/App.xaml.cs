@@ -33,11 +33,11 @@ namespace BYU
         private SettingsCommand loginSetting;
         private SettingsCommand logoutSetting;
         private SettingsCommand privacyPolicySetting;
-        private string firstNavState;
+        private static string firstNavState;
 
         // for registering the live tile
         private const string taskName = "LiveTileBackgroundTask";
-        private const string taskEntryPoint = "BackgroundTasks.LiveTileBackgroundTask";
+        private const string taskEntryPoint = "BackgroundTask.LiveTileBackgroundTask";
 
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
@@ -192,12 +192,17 @@ namespace BYU
         {
             AuthenticationManager.Logout();
             await WebCache.Instance.ClearCache();
-            ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
+            GoHome();
         }
 
         public async void ShowPrivacyPolicy()
         {
             await Windows.System.Launcher.LaunchUriAsync(new Uri("http://williamsware.com/byu/index.html"));
+        }
+
+        public static void GoHome()
+        {
+            ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
         }
     }
 }
