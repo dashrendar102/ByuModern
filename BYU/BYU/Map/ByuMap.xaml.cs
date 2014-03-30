@@ -75,24 +75,13 @@ namespace Common
 
         public async Task<IEnumerable<ByuMapEntity>> GetBuildings()
         {
-            string cacheIdentifier = "buildingList";
             return await Task<IEnumerable<ByuMapEntity>>.Run(() =>
             {
                 if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
-                    if (WebCache.Instance.IsCached(cacheIdentifier).Result)
-                    {
-                        ByuMapEntity[] buildingArray = WebCache.Instance.RetrieveObjectFromCache<ByuMapEntity[]>(cacheIdentifier).Result;
-                        return buildingArray;
-                    }
-                    else
-                    {
                         IEnumerable<ByuMapEntity> buildingEnumerable = GetBuildingsSync();
                         ByuMapEntity[] buildingArray = buildingEnumerable.ToArray<ByuMapEntity>();
-                        //var cacheTask = WebCache.Instance.CacheObject(cacheIdentifier, buildingArray);
-                        //cacheTask.Wait();
                         return buildingArray;
-                    }
                 }
                 else
                 {

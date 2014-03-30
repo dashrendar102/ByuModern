@@ -18,6 +18,7 @@ namespace Common.Storage
     public class WebCache
     {
         private StorageFolder cacheFolder;
+        private const string cacheFolderName = "webcache";
         private async Task<StorageFolder> GetCacheFolder()
         {
             if (cacheFolder == null)
@@ -27,7 +28,6 @@ namespace Common.Storage
             }
             return cacheFolder;
         }
-        private const string cacheFolderName = "webcache";
 
         //this prevents illegal filename characters like '/' at the expense of filename intelligibility.
         private string TransformURLToFilename(string url)
@@ -56,61 +56,6 @@ namespace Common.Storage
         {
             string fileName = TransformURLToFilename(url);
             return await Download(fileName, dataStream, encrypt);
-        }
-
-        public async Task CacheObject<T>(string identifier, T objectToSerialize, bool encrypt = true)
-        {
-            try
-            {
-                string fileName = TransformURLToFilename(identifier);
-                Tuple<object> foo = new Tuple<object>(objectToSerialize);
-                //string json = JsonConvert.SerializeObject(objectToSerialize);
-                //string json2 = JsonConvert.SerializeObject(foo);
-
-
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Encoding = new System.Text.UnicodeEncoding(); // no BOM in a .NET string
-                settings.Indent = false;
-                settings.OmitXmlDeclaration = false;
-
-                using (StringWriter textWriter = new StringWriter())
-                {
-                    using (XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings))
-                    {
-                        serializer.Serialize(xmlWriter, objectToSerialize);
-                    }
-                    var str = textWriter.ToString();
-                    str.ToString();
-                }
-
-                //await FileHelper.SaveStringToFile(cacheFolder, fileName, json2, encrypt);
-            }
-            catch(Exception)
-            {
-                return;
-            }
-        }
-
-
-        public async Task<T> RetrieveObjectFromCache<T>(string identifier, bool decrypt = true)
-        {
-            try
-            {
-                string json = await FileHelper.ReadStringFromFile(cacheFolder, TransformURLToFilename(identifier), decrypt);
-                var bob = JsonConvert.DeserializeObject<Tuple<T>>(json);
-                //DataContractJsonSerializer foo = new DataContractJsonSerializer(typeof(Tuple<T>));
-                //var bob2 = JsonConvert.DeserializeObject<Tuple<T>>(json, new JsonSerializerSettings().);
-                //bob
-                //var klj = 
-                return default(T);
-
-            }
-            catch (Exception)
-            {
-                return default(T);
-            }
         }
 
         internal async Task<StorageFile> Download(string filename, Stream dataStream, bool encrypt = true)
