@@ -54,7 +54,7 @@ namespace Common.Storage
         internal async Task<StorageFile> GetDownloadedFile(string filename)
         {
             var folder = await GetCacheFolder();
-            return await folder.GetFileAsync(filename);
+            return await FileHelper.GetFile(folder, filename);
         }
 
         internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)
