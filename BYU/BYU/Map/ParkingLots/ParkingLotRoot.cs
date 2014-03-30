@@ -43,7 +43,7 @@ namespace Common.WebServices.DO.ParkingLots
             
             WebServiceSession session = await WebServiceSession.GetSession();
 
-            ParkingLotResponse[] parkingLots = await BYUWebServiceHelper.GetObjectFromWebService<ParkingLotResponse[]>(string.Format(BYUWebServiceURLs.GET_PARKING_LOTS), authenticate: false, allowCache: false);
+            ParkingLotResponse[] parkingLots = await BYUWebServiceHelper.GetObjectFromWebService<ParkingLotResponse[]>(string.Format(BYUWebServiceURLs.GET_PARKING_LOTS), authenticate: false, allowCache: true);
             return parkingLots;
             
         }

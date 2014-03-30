@@ -24,7 +24,6 @@ namespace Common.Storage
             if (cacheFolder == null)
             {
                 cacheFolder = await FileHelper.LocalFolder.CreateFolderAsync(cacheFolderName, CreationCollisionOption.OpenIfExists);
-                return null;
             }
             return cacheFolder;
         }
@@ -52,6 +51,12 @@ namespace Common.Storage
             return await FileHelper.OpenReadOnlyFileStream(await GetCacheFolder(), fileName, decrypt);
         }
 
+        internal async Task<StorageFile> GetDownloadedFile(string filename)
+        {
+            var folder = await GetCacheFolder();
+            return await folder.GetFileAsync(filename);
+        }
+
         internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)
         {
             string fileName = TransformURLToFilename(url);
@@ -69,13 +74,14 @@ namespace Common.Storage
             return await IsDownloaded(filename);
         }
 
-        internal Task<bool> IsDownloaded(string filename)
+        internal async Task<bool> IsDownloaded(string filename)
         {
-            return FileHelper.FileExists(cacheFolder, filename);
+            return await FileHelper.FileExists(await GetCacheFolder(), filename);
         }
 
         public async Task ClearCache()
         {
+            await GetCacheFolder();
             if (cacheFolder != null)
             {
                 await cacheFolder.DeleteAsync();
@@ -89,7 +95,7 @@ namespace Common.Storage
 
         internal async Task DeleteDownloadedItem(string filename)
         {
-            await FileHelper.DeleteFile(cacheFolder, filename);
+            await FileHelper.DeleteFile(await GetCacheFolder(), filename);
         }
 
         private static WebCache instance;
