@@ -59,6 +59,9 @@
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
                 <StackPanel x:Name="ClassesSection" Grid.Column="0" Margin="100,30,40,0" >
                     <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
@@ -126,8 +129,9 @@
                 <StackPanel x:Name="UpcomingAssignments" Grid.Column="2" Margin="40,30,0,0" VerticalAlignment="Top" >
 
                     <TextBlock Text="Upcoming Assignments" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ScrollViewer VerticalAlignment="Top" Height="800" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">
-                        <ListView x:Name="UpcomingAssignmentsList" ItemsSource="{Binding}" Margin="0,15,0,30" Width="400" SelectionChanged="UpcomingAssignmentsList_SelectionChanged">
+                    <ScrollViewer ZoomMode="Disabled" Width="400" Height="524" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">
+                        
+                        <ListView x:Name="UpcomingAssignmentsList" ItemsSource="{Binding}" SelectionChanged="UpcomingAssignmentsList_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel>
