@@ -166,5 +166,11 @@ namespace BYU
             Windows.Foundation.Point point = buttonTransform.TransformPoint(new Windows.Foundation.Point());
             return new Windows.Foundation.Rect(point, new Windows.Foundation.Size(element.ActualWidth, element.ActualHeight));
         }
+
+        private void UpcomingAssignmentsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var parameters = Tuple.Create(selectedCourse, UpcomingAssignmentsList.SelectedValue as Assignment);
+            this.Frame.Navigate(typeof(AssignmentDetail), parameters);
+        }
     }
 }

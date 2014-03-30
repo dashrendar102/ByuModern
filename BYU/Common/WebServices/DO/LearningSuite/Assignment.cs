@@ -51,7 +51,32 @@ namespace Common.WebServices.DO.LearningSuite
         {
             get
             {
-                return StringUtils.RetrieveTextFromHTML(description);
+                if (description == null)
+                {
+                    return "";
+                }
+                return StringUtils.RemoveTabs(StringUtils.RetrieveTextFromHTML(description)).Trim();
+            }
+        }
+
+        public string ShortDescription
+        {
+            get
+            {
+                string originalText = DescriptionText;
+                int maxLength = 300;
+                if (originalText.Length < maxLength)
+                {
+                    return originalText;
+                }
+                int truncationIndex = Math.Min(maxLength, originalText.Length) - 1;
+                while (truncationIndex < originalText.Length && !Char.IsWhiteSpace(originalText[truncationIndex]))
+                {
+                    truncationIndex++;
+                }
+                string result = originalText.Substring(0, truncationIndex + 1);
+                result += "...";
+                return result;
             }
         }
 
@@ -84,6 +109,14 @@ namespace Common.WebServices.DO.LearningSuite
 
         [DataMember]
         public bool extraCredit { get; set; }
+
+        public string ExtraCreditYesNo
+        {
+            get
+            {
+                return extraCredit ? "Yes" : "No";
+            }
+        }
 
         [DataMember]
         public int flagScoresBelowPassing { get; set; }
@@ -171,6 +204,20 @@ namespace Common.WebServices.DO.LearningSuite
             return await BYUWebServiceHelper.GetObjectFromWebService<Assignment[]>(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID + courseId);
         }
 
+        public AssignmentCategory Category { get; set; }
+
+        public string CategoryName
+        {
+            get
+            {
+                if (Category == null)
+                {
+                    return "";
+                }
+                return Category.title;
+            }
+        }
+
         public async static Task<Assignment[]> GetUpcomingAssignments(string courseId)
         {
             Assignment[] allAssignments = await GetAssignments(courseId);
@@ -180,7 +227,15 @@ namespace Common.WebServices.DO.LearningSuite
                 where a.DueDateTime >= currentTime
                 orderby a.DueDateTime
                 select a;
-            return allAssignments.ToArray();
+            return ordereredUpcomingAssignments.ToArray();
+        }
+
+        public async Task RetrieveCategoryInformation()
+        {
+            if (Category == null)
+            {
+                Category = await AssignmentCategory.GetCategoryByID(this.categoryID);
+            }
         }
     }
 }

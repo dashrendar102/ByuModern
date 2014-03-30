@@ -10,6 +10,11 @@ namespace Common.WebServices
 {
     public static class StringUtils
     {
+        public static string RemoveTabs(string str)
+        {
+            return str.Replace("\t", "");
+        }
+
         public static string RemoveHTMLTags(string sourceHTML)
         {
             char[] array = new char[sourceHTML.Length];

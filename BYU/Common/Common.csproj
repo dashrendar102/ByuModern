@@ -114,6 +114,7 @@
     <Compile Include="WebServices\DO\IdCard\IdCardRoles.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardRoot.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardService.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\AssignmentCategory.cs" />
     <Compile Include="WebServices\DO\LearningSuite\LearningSuiteUtils.cs" />
     <Compile Include="Storage\WebCache.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />

@@ -123,30 +123,30 @@
                     <ScrollViewer Height="278" Margin="0,15,0,0"/>
                 </StackPanel>
 
-                <StackPanel x:Name="UpcomingAssignments" Grid.Column="2" Margin="40,30,0,0">
+                <StackPanel x:Name="UpcomingAssignments" Grid.Column="2" Margin="40,30,0,0" VerticalAlignment="Top" >
 
                     <TextBlock Text="Upcoming Assignments" Style="{StaticResource SubheaderTextBlockStyle}"/>
-
-                    <ListView x:Name="UpcomingAssignmentsList" ItemsSource="{Binding}" Margin="0,15,0,30" Width="400">
-                        
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel>
-                                    <StackPanel.Background>
-                                        <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
-                                    </StackPanel.Background>
-                                    <TextBlock Text="{Binding name}" Foreground="White" FontSize="20"/>
-                                    <StackPanel Orientation="Horizontal" Margin="15,0">
-                                        <TextBlock Foreground="White" FontSize="16">
+                    <ScrollViewer VerticalAlignment="Top" Height="800" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">
+                        <ListView x:Name="UpcomingAssignmentsList" ItemsSource="{Binding}" Margin="0,15,0,30" Width="400" SelectionChanged="UpcomingAssignmentsList_SelectionChanged">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <StackPanel.Background>
+                                            <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                                        </StackPanel.Background>
+                                        <TextBlock Text="{Binding name}" Foreground="White" FontSize="20"/>
+                                        <StackPanel Orientation="Horizontal" Margin="15,0">
+                                            <TextBlock Foreground="White" FontSize="16">
                                             <Run Text="Due " />
                                             <Run Text="{Binding FormattedDueDate}" />
-                                        </TextBlock>
+                                            </TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding ShortDescription}" TextWrapping="WrapWholeWords" Margin="15,0" Foreground="White" FontSize="16"/>
                                     </StackPanel>
-                                    <TextBlock Text="{Binding DescriptionText}" TextWrapping="WrapWholeWords" Margin="5,0,0,5" Foreground="White" FontSize="16"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

@@ -22,7 +22,7 @@ namespace Common.WebServices.DO
             if (!(await photoFileExists()))
             {
                 string photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId;
-                using (WebResponse response = await BYUWebServiceHelper.sendGETRequest(photoRequestUrl))
+                using (WebResponse response = await BYUWebServiceHelper.SendGETRequest(photoRequestUrl))
                 {
                     Stream photoStream = response.GetResponseStream();
                     StorageFile file = await WebCache.Instance.Download(userPhotoName, photoStream, encrypt: false);

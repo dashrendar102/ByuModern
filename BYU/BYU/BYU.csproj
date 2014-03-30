@@ -111,6 +111,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AssignmentDetail.xaml.cs">
+      <DependentUpon>AssignmentDetail.xaml</DependentUpon>
+    </Compile>
     <Compile Include="BYUSettingsFlyout.xaml.cs">
       <DependentUpon>BYUSettingsFlyout.xaml</DependentUpon>
     </Compile>
@@ -140,6 +143,10 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Page Include="AssignmentDetail.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserProfile.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
