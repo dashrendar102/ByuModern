@@ -111,17 +111,6 @@ namespace BYU
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e){ }
 
-        /// <summary>
-        /// Invoked when a HubSection header is clicked.
-        /// </summary>
-        /// <param name="sender">The Hub that contains the HubSection whose header was clicked.</param>
-        /// <param name="e">Event data that describes how the click was initiated.</param>
-        void Hub_SectionHeaderClick(object sender, HubSectionHeaderClickEventArgs e)
-        {
-            HubSection section = e.Section;
-            var group = section.DataContext;
-            this.Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
-        }
         #region NavigationHelper registration
 
         /// The methods provided in this section are simply used to allow
