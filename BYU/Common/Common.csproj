@@ -165,6 +165,7 @@
     <Compile Include="WebServices\DO\PersonSummary\UserInformation.cs" />
     <Compile Include="WebServices\JsonUtils.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\WeeklySchedService.cs" />
+    <Compile Include="WebServices\StringUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">

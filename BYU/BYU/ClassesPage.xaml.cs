@@ -1,29 +1,13 @@
 ﻿using BYU.Common;
-using BYU.Data;
+using Common.Calendar;
+using Common.WebServices.DO.ClassSchedule;
+using Common.WebServices.DO.LearningSuite;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
-using System.Windows;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using Windows.UI;
-using Common.WebServices.DO;
-using Common.WebServices.DO.ClassSchedule;
-using Common.WebServices.DO.TermUtility;
-using Common.WebServices;
-using System.Threading.Tasks;
-using Common.Calendar;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -135,19 +119,29 @@ namespace BYU
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
+        private async void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            this.SetSelectedCourse((CourseInformation)e.AddedItems[0]);
+            await this.SetSelectedCourse((CourseInformation)e.AddedItems[0]);
         }
 
         /// <summary>
         /// Sets the currently selected course and loads course information into summary.
         /// </summary>
         /// <param name="newCourse"></param>
-        private void SetSelectedCourse(CourseInformation newCourse)
+        private async Task SetSelectedCourse(CourseInformation newCourse)
         {
             selectedCourse = newCourse;
             SelectedClassContent.DataContext = selectedCourse;
+           
+            await loadAssignmentInfo();
+        }
+
+        private async Task loadAssignmentInfo()
+        {
+            string courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
+            Assignment[] assignments = await Assignment.GetUpcomingAssignments(courseID);
+            ObservableCollection<Assignment> assignmentCollection = new ObservableCollection<Assignment>(assignments);
+            UpcomingAssignmentsList.ItemsSource = assignmentCollection;
         }
 
         /// <summary>
