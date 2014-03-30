@@ -76,10 +76,6 @@ namespace BYU
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            //var sampleDataGroup = await SampleDataSource.GetGroupAsync("Group-6");
-            //this.DefaultViewModel["Section3Items"] = sampleDataGroup;
-
             // Restore values stored in session state.
             if (e.PageState != null)
             {
@@ -93,8 +89,6 @@ namespace BYU
 
                 SetElementEnableStatuses();
             }
-
-
 
             // Restore values stored in app data.
             
@@ -115,11 +109,7 @@ namespace BYU
         /// <param name="sender">The source of the event; typically <see cref="NavigationHelper"/></param>
         /// <param name="e">Event data that provides an empty dictionary to be populated with
         /// serializable state.</param>
-        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
-        {
-            e.PageState["UserObject"] = userInfo;
-            e.PageState["UserPhoto"] = userPhotoUri;
-        }
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e){ }
 
         /// <summary>
         /// Invoked when a HubSection header is clicked.
@@ -131,20 +121,6 @@ namespace BYU
             HubSection section = e.Section;
             var group = section.DataContext;
             this.Frame.Navigate(typeof(SectionPage), ((SampleDataGroup)group).UniqueId);
-        }
-
-        /// <summary>
-        /// Invoked when an item within a section is clicked.
-        /// </summary>
-        /// <param name="sender">The GridView or ListView
-        /// displaying the item clicked.</param>
-        /// <param name="e">Event data that describes the item clicked.</param>
-        void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            // Navigate to the appropriate destination page, configuring the new page
-            // by passing required information as a navigation parameter
-            var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ClassesPage), itemId);
         }
         #region NavigationHelper registration
 
@@ -175,7 +151,7 @@ namespace BYU
             this.Frame.Navigate(typeof(MapPage));
         }
 
-        private async void Login_Click(object sender, RoutedEventArgs e)
+        private void Login_Click(object sender, RoutedEventArgs e)
         {
             DoLogin();
         }
