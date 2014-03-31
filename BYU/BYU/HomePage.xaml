@@ -120,7 +120,7 @@
                         </ListView>
                     </ScrollViewer>
                 </StackPanel>
-                <Grid VerticalAlignment="Stretch" Grid.Column="2" Margin="50,30,40,0">
+                <Grid VerticalAlignment="Stretch" Grid.Column="2" Margin="50,30,40,40">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="600"/>
                     </Grid.ColumnDefinitions>
