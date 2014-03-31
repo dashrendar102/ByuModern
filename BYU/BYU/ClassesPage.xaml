@@ -123,7 +123,25 @@
                         <Button x:Name="btnAddClass" Content="Add To Calendar" Click="btnAddClass_Click" Margin="15,15"/>
                     </StackPanel>
                     <TextBlock Text="Announcements" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ScrollViewer Height="278" Margin="0,15,0,0"/>
+                    <ScrollViewer Height="278" Margin="0,15,0,0">
+                        <ListView x:Name="AnnouncementsList" ItemsSource="{Binding}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="400">
+                                        <StackPanel Orientation="Vertical" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding title}" Foreground="Black" FontFamily="Global User Interface" FontSize="20"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding DateTimeFormalString}" Foreground="Black" FontFamily="Global User Interface" FontSize="14"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Vertical" Margin="5,5,0,0">
+                                            <TextBlock Text="{Binding text}" TextWrapping="Wrap" Foreground="Black" FontFamily="Global User Interface" FontSize="16"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </ScrollViewer>
                 </StackPanel>
 
                 <StackPanel x:Name="UpcomingAssignments" Grid.Column="2" Margin="40,30,0,0" VerticalAlignment="Top" >
