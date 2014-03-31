@@ -120,27 +120,20 @@
                         </ListView>
                     </ScrollViewer>
                 </StackPanel>
-                
-                <StackPanel Orientation="Vertical" Grid.Column="2" Margin="50,30,40,0">
-                    <TextBlock Text="Campus Map" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <Grid Margin="0,20,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="10"/>
-                            <ColumnDefinition Width="150"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="450"/>
-                            <RowDefinition Height="10"/>
-                            <RowDefinition Height="150"/>
-                        </Grid.RowDefinitions>
-                        <Map:ByuMap Grid.ColumnSpan="7"/>
-                        <!--<Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />-->
-                        <Button Grid.Row="2" Grid.Column="0" BorderThickness="1" Click="MapButton_Clicked" Width="150" Height="150">
+                <Grid VerticalAlignment="Stretch" Grid.Column="2" Margin="50,30,40,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="600"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50" />
+                        <RowDefinition />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Campus Map" Style="{StaticResource SubheaderTextBlockStyle}" />
+                    <Map:ByuMap Grid.Row="1" VerticalAlignment="Stretch" />
+                    <!--<Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />-->
+                    <StackPanel Grid.Row="2"  Orientation="Horizontal" Margin="0,10,0,10">
+                        <Button BorderThickness="1" Click="MapButton_Clicked" Width="150" Height="150">
                             <Button.Content>
                                 <StackPanel Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Image Source="Assets/campus-buildings.png" Width="119" Margin="0,25,0,2"/>
@@ -151,14 +144,8 @@
                                 <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                             </Button.Background>
                         </Button>
-                        <!--<Button Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/blank_map_tile.jpg"/>
-                        </Button>
-                        <Button Grid.Row="1" Grid.Column="4" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/parking_lots.jpg"/>
-                        </Button>-->
-                    </Grid>
-                </StackPanel>
+                    </StackPanel>
+                </Grid>
             </Grid>
         </ScrollViewer>
     </Grid>

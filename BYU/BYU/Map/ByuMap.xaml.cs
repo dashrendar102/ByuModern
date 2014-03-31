@@ -140,13 +140,22 @@ namespace Common
 
         public async void ResetView()
         {
-            //this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
-            //this.MyBingMap.SetView(new Bing.Maps.Location((double)this.Resources["Latitude"], (double)this.Resources["Longitude"]), Zoom);
-            //var buildings = await GetBuildings();
-            //foreach (var building in buildings)
-            //{
-            //    DeselectEntity(building);
-            //}
+            if (ByuVenue != null)
+            {
+                this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
+                this.MyBingMap.SetView
+                (
+                    center: new Location(
+                        (double)(this.Resources["Latitude"] ?? ByuVenue.Location.Latitude),
+                        (double)(this.Resources["Longitude"] ?? ByuVenue.Location.Longitude)),
+                    zoomLevel: Zoom
+                );
+                var buildings = await GetBuildings();
+                foreach (var building in buildings)
+                {
+                    DeselectEntity(building);
+                }
+            }
         }
 
         ByuMapEntity lastSelected = null;

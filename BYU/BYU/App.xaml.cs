@@ -112,24 +112,30 @@ namespace BYU
 
         private async void RegisterBackgroundTask()
         {
-            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
-            if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity ||
-                backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
+            try
             {
-                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+                if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity ||
+                    backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
                 {
-                    if (task.Value.Name == taskName)
+                    foreach (var task in BackgroundTaskRegistration.AllTasks)
                     {
-                        task.Value.Unregister(true);
+                        if (task.Value.Name == taskName)
+                        {
+                            task.Value.Unregister(true);
+                        }
                     }
-                }
 
-                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
-                taskBuilder.Name = taskName;
-                taskBuilder.TaskEntryPoint = taskEntryPoint;
-                taskBuilder.SetTrigger(new TimeTrigger(15, false));
-                var registration = taskBuilder.Register();
+                    BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                    taskBuilder.Name = taskName;
+                    taskBuilder.TaskEntryPoint = taskEntryPoint;
+                    taskBuilder.SetTrigger(new TimeTrigger(15, false));
+                    var registration = taskBuilder.Register();
+                }
             }
+            //Ignore the request if an exception is thrown. This allows the simulator to work.
+            catch
+            { }
         }
 
         /// <summary>
