@@ -33,7 +33,7 @@ namespace Common.WebServices
             }
         }
 
-        public async static Task<WebResponse> sendGETRequest(string url, bool authenticate = true, string acceptString = null)
+        public async static Task<WebResponse> SendGETRequest(string url, bool authenticate = true, string acceptString = null)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Common.WebServices
                     }
                 }
                 //use the application/json accept header because we only support JSON parsing in this method
-                using (var response = await sendGETRequest(url, authenticate, "application/json"))
+                using (var response = await SendGETRequest(url, authenticate, "application/json"))
                 {
                     var file = await WebCache.Instance.Cache(url, response.GetResponseStream());
                     using (Stream dataStream = await FileHelper.OpenReadOnlyFileStream(file))
@@ -91,7 +91,7 @@ namespace Common.WebServices
             else
             {
                 //use the application/json accept header because we only support JSON parsing in this method
-                using (var response = await sendGETRequest(url, authenticate, "application/json"))
+                using (var response = await SendGETRequest(url, authenticate, "application/json"))
                 {
                     return (T)serializer.ReadObject(response.GetResponseStream());
                 }

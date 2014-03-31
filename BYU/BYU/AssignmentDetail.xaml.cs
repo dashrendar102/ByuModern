@@ -1,11 +1,9 @@
-﻿using BYU.Common;
-using BYU.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
+using BYU.Common;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -15,20 +13,33 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Common.WebServices.DO.ClassSchedule;
+using Common.WebServices.DO.LearningSuite;
+using Common.WebServices;
+using System.Net;
 
-
-// The Section Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234229
+// The Item Detail Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
 namespace BYU
 {
     /// <summary>
-    /// A page that displays an overview of a single group, including a preview of the items
-    /// within the group.
+    /// A page that displays details for a single item within a group while allowing gestures to
+    /// flip through other items belonging to the same group.
     /// </summary>
-    public sealed partial class SectionPage : Page
+    public sealed partial class AssignmentDetail : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        public String Title { get; set; }
+
+        /// <summary>
+        /// This can be changed to a strongly typed view model.
+        /// </summary>
+        public ObservableDictionary DefaultViewModel
+        {
+            get { return this.defaultViewModel; }
+        }
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -39,20 +50,16 @@ namespace BYU
             get { return this.navigationHelper; }
         }
 
-        /// <summary>
-        /// This can be changed to a strongly typed view model.
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
-        }
-
-
-        public SectionPage()
+        public AssignmentDetail()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
+        }
+
+        private string generateTitle(CourseInformation course, Assignment assignment)
+        {
+            return course.course + " - " + assignment.name;
         }
 
         /// <summary>
@@ -68,30 +75,21 @@ namespace BYU
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var group = await SampleDataSource.GetGroupAsync((String)e.NavigationParameter);
-            this.DefaultViewModel["Group"] = group;
-            this.DefaultViewModel["Items"] = group.Items;
-        }
+            object navigationParameter;
+            if (e.PageState != null && e.PageState.ContainsKey("SelectedItem"))
+            {
+                navigationParameter = e.PageState["SelectedItem"];
+            }
 
-        /// <summary>
-        /// Invoked when an item is clicked.
-        /// </summary>
-        /// <param name="sender">The GridView displaying the item clicked.</param>
-        /// <param name="e">Event data that describes the item clicked.</param>
-        void ItemView_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            // Navigate to the appropriate destination page, configuring the new page
-            // by passing required information as a navigation parameter
-            var itemId = ((SampleDataItem)e.ClickedItem).UniqueId;
-            this.Frame.Navigate(typeof(ClassesPage), itemId);
-        }
+            var assignmentInformation = e.NavigationParameter as Tuple<CourseInformation, Assignment>;
+            var course = assignmentInformation.Item1;
+            var assignment = assignmentInformation.Item2;
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Windows.UI.Popups.MessageDialog messageDialog =
-                new Windows.UI.Popups.MessageDialog("Thank you for choosing banana.");
-            await messageDialog.ShowAsync();
+            this.Title = generateTitle(course, assignment);
+            await assignment.RetrieveCategoryInformation();
+
+            pageTitle.DataContext = this;
+            AssignmentInfoBlock.DataContext = assignment;
         }
 
         #region NavigationHelper registration
