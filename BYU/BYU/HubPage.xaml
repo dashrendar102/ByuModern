@@ -125,22 +125,31 @@
                     <TextBlock Text="Campus Map" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <Grid Margin="0,20,0,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="135"/>
-                            <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="135"/>
-                            <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="135"/>
-                            <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="135"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="150"/>
+                            <ColumnDefinition Width="10"/>
+                            <ColumnDefinition Width="150"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="450"/>
-                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="10"/>
+                            <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
                         <Map:ByuMap Grid.ColumnSpan="7"/>
                         <!--<Image Source="Assets/MediumGray.png" Grid.ColumnSpan="5" Margin="0,0,0,10" Stretch="Fill" />-->
-                        <Button Grid.Row="1" Grid.Column="0" BorderThickness="0" Click="MapButton_Clicked">
-                            <Image Source="Assets/campus_buildings.jpg"/>
+                        <Button Grid.Row="2" Grid.Column="0" BorderThickness="1" Click="MapButton_Clicked" Width="150" Height="150">
+                            <Button.Content>
+                                <StackPanel Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Image Source="Assets/campus-buildings.png" Width="119" Margin="0,25,0,2"/>
+                                    <TextBlock Foreground="White" TextAlignment="Center" Width="150">Campus Buildings</TextBlock>
+                                </StackPanel>
+                            </Button.Content>
+                            <Button.Background>
+                                <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                            </Button.Background>
                         </Button>
                         <!--<Button Grid.Row="1" Grid.Column="2" BorderThickness="0" Click="MapButton_Clicked">
                             <Image Source="Assets/blank_map_tile.jpg"/>

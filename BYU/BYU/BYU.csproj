@@ -171,7 +171,7 @@
     <Content Include="Assets\badgelogo.scale-180.png" />
     <Content Include="Assets\bg.png" />
     <Content Include="Assets\BYUSmallLogo.png" />
-    <Content Include="Assets\campus_buildings.jpg" />
+    <Content Include="Assets\campus-buildings.png" />
     <Content Include="Assets\defaultPhoto.png" />
     <Content Include="Assets\idCard.png" />
     <Content Include="Assets\idCardBeard.png" />
