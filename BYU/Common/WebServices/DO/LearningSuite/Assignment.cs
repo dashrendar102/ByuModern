@@ -237,5 +237,11 @@ namespace Common.WebServices.DO.LearningSuite
                 Category = await AssignmentCategory.GetCategoryByID(this.categoryID);
             }
         }
+
+        public async Task<Assignment[]> GetUpcomingAssignments(int numberOfResults)
+        {
+            var courses = await LearningSuiteCourse.GetCourses();
+            return await GetAssignments(courses[0].CourseID);
+        }
     }
 }
