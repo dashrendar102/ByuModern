@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -80,17 +81,28 @@ namespace Common
             {
                 var nameTerms = GetWordsToLower(building.Name);
 
-                int bestMatchTerms = 0;
+                float bestScore = 0f;
                 ByuBuilding bestMatch = null;
 
                 foreach(var kvp in webBuildingsDict)
                 {
                     //Intersect the words of the Bing Map Entity name with the BYU Building name to see if any match
                     var intersect = nameTerms.Intersect(kvp.Key);
-                    //If the words in the name have more matches than our last best, use this building
-                    if (intersect.Count() > bestMatchTerms)
+                    //Score a building using (matched terms) - 0.5(unmatched terms).
+                    //If there were any matches, the score should be at least 1.
+                    //This algorithm helps with cases such as:
+                    // - Joseph Smith Building vs. the Joseph F. Smith Building.
+                    // - Auxiliary Services Maintenance Building vs. Laundry Building,Auxiliary Services
+                    float score = 0f;
+                    if(intersect.Count() > 0)
                     {
-                        bestMatchTerms = intersect.Count();
+                        score = intersect.Count() - 0.5f * (kvp.Key.Length - intersect.Count());
+                        score = Math.Max(score, 1);
+                    }
+                    //If the words in the name have more matches than our last best, use this building
+                    if (intersect.Count() > bestScore)
+                    {
+                        bestScore = score;
                         bestMatch = kvp.Value;
                     }
                 }
@@ -99,13 +111,12 @@ namespace Common
                 {
                     usedMatches.Add(bestMatch);
                     //And now finally do what we're here for - set the acronym
-                    building.Acronym = bestMatch.Acronym;
+                    if(!String.IsNullOrWhiteSpace(bestMatch.Acronym))
+                        building.Acronym = bestMatch.Acronym;
                 }
             }
 
             #endregion
-
-            var test = buildings.Where(b => b.Name.ToLower().Contains("joseph"));
 
             this.Buildings = buildings;
 
@@ -119,7 +130,13 @@ namespace Common
         private string[] GetWordsToLower(string str)
         {
             if (!String.IsNullOrWhiteSpace(str))
-                return str.Split(' ').Select(s => s.ToLower()).ToArray();
+            {
+                //Remove anything in parenthesis
+                str = Regex.Replace(str, @"\(.*\)", String.Empty);
+                str = str.Trim();
+                return str.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.ToLower()).ToArray();
+            }
             else return new string[0];
         }
 
