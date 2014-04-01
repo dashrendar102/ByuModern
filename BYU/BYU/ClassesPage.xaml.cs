@@ -3,7 +3,10 @@ using Common.Calendar;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.LearningSuite;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -22,9 +25,7 @@ namespace BYU
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private CourseInformation selectedCourse = null;
-        private ObservableCollection<CourseInformation> selected_class_list =
-                    new ObservableCollection<CourseInformation>();
-
+        
         public CourseScheduleInformation ScheduleInformation { get; private set; }
 
         /// <summary>
@@ -52,9 +53,8 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-
         }
-        
+
         /// <summary>
         /// Requires authentication. Obtains class list from web service and loads menu.
         /// </summary>
@@ -100,10 +100,10 @@ namespace BYU
         /// in addition to page state preserved during an earlier session.
 
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            SetSelectedCourse(e.Parameter as CourseInformation);
+            await SetSelectedCourse(e.Parameter as CourseInformation);
             LoadClasses();
         }
 
@@ -132,8 +132,20 @@ namespace BYU
         {
             selectedCourse = newCourse;
             SelectedClassContent.DataContext = selectedCourse;
-           
+            await setSelectedAnnouncements();
             await loadAssignmentInfo();
+        }
+
+        private async Task setSelectedAnnouncements()
+        {
+            String courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
+            Announcement[] announcements = await Announcement.GetAnnouncements(courseID);
+            foreach (Announcement announcement in announcements)
+            {
+                announcement.text = Regex.Replace(announcement.text, "<.*?>", string.Empty);
+                announcement.text = WebUtility.HtmlDecode(announcement.text);
+            }
+            AnnouncementsList.ItemsSource = new ObservableCollection<Announcement>(announcements);
         }
 
         private async Task loadAssignmentInfo()
