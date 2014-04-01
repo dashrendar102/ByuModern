@@ -66,11 +66,11 @@ namespace Common
 
             #region Somewhat tricky code for mapping Bing Venue Entity objects to BYU Building abbreviations
 
-            //Catalog all of the BYU Buildings by the components of their names
+            //Catalog all of the BYU Buildings by the words of their names
             var webBuildingsDict = new Dictionary<string[], ByuBuilding>();
             foreach (var wb in webServiceBuildings)
             {
-                var nameTerms = GetSignificantTerms(wb.Name);
+                var nameTerms = GetWordsToLower(wb.Name);
                 webBuildingsDict.Add(nameTerms, wb);
             }
 
@@ -78,16 +78,16 @@ namespace Common
             //Iterate through each Bing Venue entity to find the best BYU Building match
             foreach(var building in buildings)
             {
-                var nameTerms = GetSignificantTerms(building.Name);
+                var nameTerms = GetWordsToLower(building.Name);
 
                 int bestMatchTerms = 0;
                 ByuBuilding bestMatch = null;
 
                 foreach(var kvp in webBuildingsDict)
                 {
-                    //Intersect the terms of the Bing Map Entity name with the BYU Building name to see if any match
+                    //Intersect the words of the Bing Map Entity name with the BYU Building name to see if any match
                     var intersect = nameTerms.Intersect(kvp.Key);
-                    //If the terms in the name have more matches than our last best, use this term
+                    //If the words in the name have more matches than our last best, use this building
                     if (intersect.Count() > bestMatchTerms)
                     {
                         bestMatchTerms = intersect.Count();
@@ -105,6 +105,8 @@ namespace Common
 
             #endregion
 
+            var test = buildings.Where(b => b.Name.ToLower().Contains("joseph"));
+
             this.Buildings = buildings;
 
             this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
@@ -114,10 +116,10 @@ namespace Common
             DrawPolygons();
         }
 
-        private string[] GetSignificantTerms(string str)
+        private string[] GetWordsToLower(string str)
         {
             if (!String.IsNullOrWhiteSpace(str))
-                return str.Split(' ').Select(s => s.ToLower()).Where(s => s.Length > 2).ToArray();
+                return str.Split(' ').Select(s => s.ToLower()).ToArray();
             else return new string[0];
         }
 
