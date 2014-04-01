@@ -74,7 +74,7 @@ namespace Common
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            var buildings = await map.GetBuildings();
+            var buildings = await map.GetBuildingsAsync();
             buildings = buildings.OrderBy(building => building.Name);
             this.DefaultViewModel["Items"] = buildings;
 

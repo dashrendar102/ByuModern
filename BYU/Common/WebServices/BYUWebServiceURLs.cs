@@ -26,6 +26,7 @@ namespace Common.WebServices
         internal const string GET_SYSTEM_ANNOUNCEMENT = "https://ws.byu.edu/rest/v1.0/learningsuite/announcements/sysannouncement/student-anno";
         internal const string GET_CONTROL_DATES_BY_DATE = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/asofdate/{0}/{1}";
         public const string GET_PARKING_LOTS = "https://soaregistry.byu.edu/services/rest/v2/map/ParkingLots";
+        public const string GET_BUILDINGS = "https://soaregistry.byu.edu:443/services/rest/v2/map/Buildings";
         internal const string GET_CONTROL_DATES_BY_YEAR_TERM = "https://ws.byu.edu/rest/v1/academic/controls/controldatesws/yearterm/{0}/{1}";
         internal const string GET_LEARNING_SUITE_CATEGORY_BY_ID = "https://ws.byu.edu/rest/v1.0/learningsuite/assignments/category/{0}";
         

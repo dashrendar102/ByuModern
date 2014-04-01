@@ -18,7 +18,7 @@ namespace TestSuite
             //This throws some kind of threading exception I can't figure out. This test will fail.
             ByuMap map = new ByuMap();
 
-            var buildingsTask = map.GetBuildings();
+            var buildingsTask = map.GetBuildingsAsync();
 
             //Give the control 10 seconds to get maps
             Assert.IsTrue(buildingsTask.Wait(TimeSpan.FromSeconds(10)));

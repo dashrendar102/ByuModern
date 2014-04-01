@@ -1,6 +1,7 @@
 ﻿using Bing.Maps;
 using Bing.Maps.VenueMaps;
 using Common;
+using Common.Buildings;
 using Common.Storage;
 using Common.WebServices.DO.ParkingLots;
 using Newtonsoft.Json;
@@ -29,7 +30,7 @@ namespace Common
 
     public sealed partial class ByuMap : UserControl
     {
-
+        private IEnumerable<ByuMapEntity> Buildings;
         private VenueMap ByuVenue;
         Task MapInit = null;
         //This event has a default empty method so that we don't have to null check the event before firing it
@@ -51,8 +52,60 @@ namespace Common
 
         async Task SetupMapAsync()
         {
+            var webServiceBuildingTask = BuildingRoot.GetAllBuildings();
             ByuVenue = await this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
             this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
+
+            await webServiceBuildingTask;
+            var webServiceBuildings = webServiceBuildingTask.Result;
+
+            var buildings = 
+                (from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
+                where !String.IsNullOrWhiteSpace(ve.Name)
+                select new ByuMapEntity(ve.Name, ve.Description, ve)).ToArray();
+
+            #region Somewhat tricky code for mapping Bing Venue Entity objects to BYU Building abbreviations
+
+            //Catalog all of the BYU Buildings by the components of their names
+            var webBuildingsDict = new Dictionary<string[], ByuBuilding>();
+            foreach (var wb in webServiceBuildings)
+            {
+                var nameTerms = GetSignificantTerms(wb.Name);
+                webBuildingsDict.Add(nameTerms, wb);
+            }
+
+            var usedMatches = new HashSet<ByuBuilding>();
+            //Iterate through each Bing Venue entity to find the best BYU Building match
+            foreach(var building in buildings)
+            {
+                var nameTerms = GetSignificantTerms(building.Name);
+
+                int bestMatchTerms = 0;
+                ByuBuilding bestMatch = null;
+
+                foreach(var kvp in webBuildingsDict)
+                {
+                    //Intersect the terms of the Bing Map Entity name with the BYU Building name to see if any match
+                    var intersect = nameTerms.Intersect(kvp.Key);
+                    //If the terms in the name have more matches than our last best, use this term
+                    if (intersect.Count() > bestMatchTerms)
+                    {
+                        bestMatchTerms = intersect.Count();
+                        bestMatch = kvp.Value;
+                    }
+                }
+
+                if (bestMatch != null && !usedMatches.Contains(bestMatch))
+                {
+                    usedMatches.Add(bestMatch);
+                    //And now finally do what we're here for - set the acronym
+                    building.Acronym = bestMatch.Acronym;
+                }
+            }
+
+            #endregion
+
+            this.Buildings = buildings;
 
             this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
             this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
@@ -61,9 +114,16 @@ namespace Common
             DrawPolygons();
         }
 
+        private string[] GetSignificantTerms(string str)
+        {
+            if (!String.IsNullOrWhiteSpace(str))
+                return str.Split(' ').Select(s => s.ToLower()).Where(s => s.Length > 2).ToArray();
+            else return new string[0];
+        }
+
         void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
         {
-            var buildings = GetBuildingsSync();
+            var buildings = this.Buildings;
             var building = buildings.SingleOrDefault(b => b.BingEntity == e.VenueEntity);
             MapEntitySelected(this, building);
         }
@@ -73,15 +133,15 @@ namespace Common
             ResetView();
         }
 
-        public async Task<IEnumerable<ByuMapEntity>> GetBuildings()
+        public async Task<IEnumerable<ByuMapEntity>> GetBuildingsAsync()
         {
             return await Task<IEnumerable<ByuMapEntity>>.Run(() =>
             {
                 if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
-                        IEnumerable<ByuMapEntity> buildingEnumerable = GetBuildingsSync();
-                        ByuMapEntity[] buildingArray = buildingEnumerable.ToArray<ByuMapEntity>();
-                        return buildingArray;
+                    IEnumerable<ByuMapEntity> buildingEnumerable = this.Buildings;
+                    ByuMapEntity[] buildingArray = buildingEnumerable.ToArray<ByuMapEntity>();
+                    return buildingArray;
                 }
                 else
                 {
@@ -90,24 +150,15 @@ namespace Common
             });
         }
 
-        //Only call this if you are certain the Venue has been loaded
-        private IEnumerable<ByuMapEntity> GetBuildingsSync()
-        {
-            var buildings =
-                from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
-                where !String.IsNullOrWhiteSpace(ve.Name)
-                select new ByuMapEntity(ve.Name, ve.Description, ve);
-            return buildings;
-        }
-
         private double Zoom
         {
             get
             {
-                //Linear formula for figuring out a good starting zoom, based on the height of the control
+                //Linear slope-intercept formula for figuring out a good starting zoom, based on the height of the control
+                //Orignal values 1/475 and 14.25 found using linear regression
                 //Reduce the denominator on the left to increase the zoom per pixel of height increase
                 //Increase the number on the right to increase the baseline zoom
-                //Zoom should be at least 16 to make buildings clickable
+                //Max is used because zoom should be at least 16 to make buildings clickable
                 return Math.Max(this.Height / 475 + 14.25, 16);
             }
         }
@@ -150,7 +201,7 @@ namespace Common
                         (double)(this.Resources["Longitude"] ?? ByuVenue.Location.Longitude)),
                     zoomLevel: Zoom
                 );
-                var buildings = await GetBuildings();
+                var buildings = await GetBuildingsAsync();
                 foreach (var building in buildings)
                 {
                     DeselectEntity(building);
