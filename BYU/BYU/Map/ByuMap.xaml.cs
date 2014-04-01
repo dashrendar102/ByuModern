@@ -100,7 +100,7 @@ namespace Common
                         score = Math.Max(score, 1);
                     }
                     //If the words in the name have more matches than our last best, use this building
-                    if (intersect.Count() > bestScore)
+                    if (score > bestScore)
                     {
                         bestScore = score;
                         bestMatch = kvp.Value;
