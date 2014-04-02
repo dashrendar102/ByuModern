@@ -78,13 +78,18 @@ namespace Common.WebServices.DO.ParkingLots
             return parkingOutline;
         }
 
-        public string GetDescription()
+        public ParkingData GetDescription()
         {
+            ParkingData myData = new ParkingData();
+            myData.Title = ParkingLotRoot.GetTitle(Lot.TypeID);
             if(String.IsNullOrEmpty(Lot.Description))
             {
-                return "No information is available for this lot.";
+                myData.Description = "No information is available for this lot.";
+                return myData;
             }
-            return Lot.Description;
+            
+            myData.Description = Lot.Description;
+            return myData;
         }
 
 
@@ -94,13 +99,14 @@ namespace Common.WebServices.DO.ParkingLots
             if(sender is MapShape)
             {
                 var poly = sender as MapPolygon;
-                var tag = poly.GetValue(TagProp);
+                ParkingData tag = (ParkingData)poly.GetValue(TagProp);
 
-                if(tag != null && tag is string)
+                if(!String.IsNullOrEmpty(tag.Title) || !String.IsNullOrEmpty(tag.Description))
                 {
-                    ByuMap.OpenInfobox(poly as MapPolygon);
+                    //ByuMap.OpenInfobox(poly as MapPolygon);
+                    //map.infobox
+                    var msg = new MessageDialog(StringUtils.RetrieveTextFromHTML(tag.Title + '\n' +tag.Description));
 
-                    var msg = new MessageDialog(StringUtils.RetrieveTextFromHTML(tag as string));
                     await msg.ShowAsync();
                 }
             }
@@ -109,7 +115,7 @@ namespace Common.WebServices.DO.ParkingLots
         private void ParkingLotEntered(object sender, PointerRoutedEventArgs e)
         {
             //send string to map
-            ByuMap.OpenInfobox(this.parkingPolygon);
+            map.OpenInfobox(this.parkingPolygon);
             this.parkingOutline.Width = 3;
         }
 

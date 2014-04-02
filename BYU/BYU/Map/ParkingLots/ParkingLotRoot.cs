@@ -100,5 +100,47 @@ namespace Common.WebServices.DO.ParkingLots
             return myColor;
         }
 
+
+        internal static string GetTitle(int parkingLotType)
+        {
+            string Title = "Lot type: ";
+            switch (parkingLotType)
+            {
+                case (int)lotType.Y:
+                    Title += "Student (Y) Lot";
+                    break;
+                case (int)lotType.G:
+                    Title += "Graduate (G) Lot";
+                    break;
+                case (int)lotType.A:
+                    Title += "Faculty/Staff (A) Lot";
+                    break;
+                case (int)lotType.C:
+                    Title += "Helaman Halls (C) Lot";
+                    break;
+                case (int)lotType.R:
+                    Title += "Restricted Visitor (R) Lot";
+                    break;
+                case (int)lotType.V:
+                    Title += "Visitor (V) Lot";
+                    break;
+                case (int)lotType.T:
+                    Title += "Timed (T) Lot";
+                    break;
+                case (int)lotType.MOTOR:
+                    Title += "Motorcycle (Motorcycle) Lot";
+                    break;
+                case (int)lotType.BIKE:
+                    Title += "Bike (Bike Rack)";
+                    break;
+                case (int)lotType.CON:
+                    Title += "Construction Area";
+                    break;
+                case (int)lotType.B:
+                    Title += "Heritage Halls (B) Lot";
+                    break;
+            }
+            return Title;
+        }
     }
 }

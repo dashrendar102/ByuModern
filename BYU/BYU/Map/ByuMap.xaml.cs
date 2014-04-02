@@ -196,7 +196,7 @@ namespace Common
              }
         }
 
-        internal static void OpenInfobox(MapPolygon myLot)
+        internal void OpenInfobox(MapPolygon myLot)
         {
             //Infobox.DataContext = myLot.GetValue(TagProp);
             Infobox.DataContext = "hello";
