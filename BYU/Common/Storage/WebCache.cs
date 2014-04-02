@@ -45,10 +45,24 @@ namespace Common.Storage
             return CryptographicBuffer.EncodeToHexString(hashed);
         }
 
-        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true)
+        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true, TimeSpan timeout = default(TimeSpan))
         {
             string fileName = TransformURLToFilename(url);
-            return await FileHelper.OpenReadOnlyFileStream(await GetCacheFolder(), fileName, decrypt);
+            StorageFile file = await FileHelper.GetFile(await GetCacheFolder(), fileName);
+            if (file != null)
+            {
+                TimeSpan age = DateTimeOffset.Now - file.DateCreated;
+                if (timeout == default(TimeSpan) || age < timeout)
+                {
+                    return await FileHelper.OpenReadOnlyFileStream(file, decrypt);
+                }
+                else
+                {
+                    //is this desirable? Should we delete or just ignore it?
+                    await file.DeleteAsync();
+                }
+            }
+            return null;
         }
 
         internal async Task<StorageFile> GetDownloadedFile(string filename)
@@ -66,12 +80,6 @@ namespace Common.Storage
         internal async Task<StorageFile> Download(string filename, Stream dataStream, bool encrypt = true)
         {
             return await FileHelper.Save(await GetCacheFolder(), filename, dataStream, encrypt);
-        }
-
-        public async Task<bool> IsCached(string url)
-        {
-            string filename = TransformURLToFilename(url);
-            return await IsDownloaded(filename);
         }
 
         internal async Task<bool> IsDownloaded(string filename)

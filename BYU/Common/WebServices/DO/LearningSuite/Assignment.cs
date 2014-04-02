@@ -201,7 +201,9 @@ namespace Common.WebServices.DO.LearningSuite
 
         public async static Task<Assignment[]> GetAssignments(string courseId)
         {
-            return await BYUWebServiceHelper.GetObjectFromWebService<Assignment[]>(BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID + courseId);
+            TimeSpan timeout = TimeSpan.FromDays(2);
+            return await BYUWebServiceHelper.GetObjectFromWebService<Assignment[]>(
+                BYUWebServiceURLs.GET_ASSIGNMENTS_BY_COURSE_ID + courseId, timeout: timeout);
         }
 
         public AssignmentCategory Category { get; set; }

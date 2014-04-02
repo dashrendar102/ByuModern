@@ -61,7 +61,7 @@ namespace Common.WebServices
             }
         }
 
-        public async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true)
+        public async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true, TimeSpan timeout = default(TimeSpan))
         {
             if (WebServiceSession.GetSession() == null)
             {
@@ -71,7 +71,7 @@ namespace Common.WebServices
 
             if (allowCache)
             {
-                using (Stream dataStream = await WebCache.Instance.GetCachedFileStream(url))
+                using (Stream dataStream = await WebCache.Instance.GetCachedFileStream(url, timeout: timeout))
                 {
                     if (dataStream != null)
                     {
