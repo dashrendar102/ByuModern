@@ -221,10 +221,10 @@ namespace Common.WebServices.DO.LearningSuite
         public async static Task<Assignment[]> GetUpcomingAssignments(string courseId)
         {
             Assignment[] allAssignments = await GetAssignments(courseId);
-            ZonedDateTime currentTime = new ZonedDateTime(SystemClock.Instance.Now, Constants.BYUTimeZone);
+            
             var ordereredUpcomingAssignments =
                 from a in allAssignments
-                where a.DueDateTime >= currentTime
+                where a.DueDateTime.ToInstant() >= SystemClock.Instance.Now
                 orderby a.DueDateTime
                 select a;
             return ordereredUpcomingAssignments.ToArray();
@@ -238,10 +238,35 @@ namespace Common.WebServices.DO.LearningSuite
             }
         }
 
-        public async Task<Assignment[]> GetUpcomingAssignments(int numberOfResults)
+        public static async Task<List<Assignment>> GetAllSemesterAssignments()
         {
+            //note: I don't know of any way to grab all assignments in one web service call
+            //if one is found, this should be rewritten
             var courses = await LearningSuiteCourse.GetCourses();
-            return await GetAssignments(courses[0].CourseID);
+            IEnumerable<string> courseIDs =
+                from course in courses
+                select course.CourseID;
+            List<Assignment> allAssignments = new List<Assignment>();
+            foreach (string courseID in courseIDs)
+            {
+                Assignment[] courseAssignments = await GetAssignments(courseID);
+                allAssignments.AddRange(courseAssignments);
+            }
+
+            return allAssignments;
+        }
+
+        public static async Task<Assignment[]> GetUpcomingAssignments(int numberOfResults)
+        {
+            List<Assignment> allAssignments = await GetAllSemesterAssignments();
+            var upcoming = (
+                from assignment in allAssignments
+                where assignment.DueDateTime.ToInstant() >= SystemClock.Instance.Now
+                orderby assignment.DueDateTime
+                select assignment
+                ).Take(numberOfResults);
+
+            return upcoming.ToArray();
         }
     }
 }
