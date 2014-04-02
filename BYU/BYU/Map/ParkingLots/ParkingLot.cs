@@ -93,11 +93,12 @@ namespace Common.WebServices.DO.ParkingLots
         {
             if(sender is MapShape)
             {
-                var poly = sender as MapShape;
+                var poly = sender as MapPolygon;
                 var tag = poly.GetValue(TagProp);
 
                 if(tag != null && tag is string)
                 {
+                    ByuMap.OpenInfobox(poly as MapPolygon);
 
                     var msg = new MessageDialog(StringUtils.RetrieveTextFromHTML(tag as string));
                     await msg.ShowAsync();
@@ -108,7 +109,7 @@ namespace Common.WebServices.DO.ParkingLots
         private void ParkingLotEntered(object sender, PointerRoutedEventArgs e)
         {
             //send string to map
-            map.OpenInfobox(this.parkingPolygon);
+            ByuMap.OpenInfobox(this.parkingPolygon);
             this.parkingOutline.Width = 3;
         }
 

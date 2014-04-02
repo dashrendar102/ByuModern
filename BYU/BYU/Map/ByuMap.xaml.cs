@@ -196,9 +196,10 @@ namespace Common
              }
         }
 
-        internal void OpenInfobox(MapPolygon myLot)
+        internal static void OpenInfobox(MapPolygon myLot)
         {
-            Infobox.DataContext = myLot.GetValue(TagProperty);
+            //Infobox.DataContext = myLot.GetValue(TagProp);
+            Infobox.DataContext = "hello";
             Infobox.Visibility = Visibility.Visible;
             MapLayer.SetPosition(Infobox, MapLayer.GetPosition(myLot.Locations[1]));
         }
@@ -256,5 +257,7 @@ namespace Common
             ResetView();
         }
 
+
+        public DependencyProperty TagProp { get; set; }
     }
 }
