@@ -132,6 +132,7 @@ namespace BYU
         {
             selectedCourse = newCourse;
             SelectedClassContent.DataContext = selectedCourse;
+            SelectedClassSummary.DataContext = selectedCourse;
             await setSelectedAnnouncements();
             await loadAssignmentInfo();
         }
