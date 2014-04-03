@@ -19,17 +19,22 @@ namespace Common.WebServices.DO
 
         public async static Task<Uri> getPhotoUri()
         {
-            if (!(await photoFileExists()))
+            if (photoUri != null)
+            {
+                return photoUri;
+            }
+            StorageFile file = await WebCache.Instance.GetDownloadedFile(userPhotoName);
+            if (file == null)
             {
                 string photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId;
-                using (WebResponse response = await BYUWebServiceHelper.sendGETRequest(photoRequestUrl))
+                using (WebResponse response = await BYUWebServiceHelper.SendGETRequest(photoRequestUrl))
                 {
                     Stream photoStream = response.GetResponseStream();
-                    StorageFile file = await WebCache.Instance.Download(userPhotoName, photoStream, encrypt: false);
-                    photoUri = new Uri(file.Path, UriKind.Absolute);
+                    file = await WebCache.Instance.Download(userPhotoName, photoStream, encrypt: false);
                 }
             }
 
+            photoUri = new Uri(file.Path, UriKind.Absolute);
             return photoUri;
         }
 
@@ -39,7 +44,6 @@ namespace Common.WebServices.DO
             {
                 return false;
             }
-            //return await WebCache.Instance.IsCached(userPhotoName);
             return await WebCache.Instance.IsDownloaded(userPhotoName);
         }
     }

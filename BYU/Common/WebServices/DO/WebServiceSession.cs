@@ -92,7 +92,7 @@ namespace Common.WebServices.DO
                 try
                 {
                     string url = BYUWebServiceURLs.GET_WS_SESSION;
-                    string parameters = "timeout=" + timeout + "&netId=" + netId + "&password=" + password;
+                    string parameters = "timeout=" + timeout + "&netId=" + Uri.EscapeDataString(netId) + "&password=" + Uri.EscapeDataString(password);
                     using (WebResponse response = await BYUWebServiceHelper.SendPost(url, parameters))
                     {
                         curSession = (WebServiceSession)serializer.ReadObject(response.GetResponseStream());

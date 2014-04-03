@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Map
+namespace Common
 {
     public class ByuMapEntity
     {
@@ -18,8 +18,9 @@ namespace Map
             BingEntity = bingEntity;
         }
 
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        internal VenueEntity BingEntity { get; private set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Acronym { get; set; }
+        public VenueEntity BingEntity { get; set; }
     }
 }

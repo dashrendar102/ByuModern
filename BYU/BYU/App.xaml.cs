@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Background;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.ApplicationSettings;
@@ -33,7 +34,12 @@ namespace BYU
 
         private SettingsCommand loginSetting;
         private SettingsCommand logoutSetting;
+        private SettingsCommand privacyPolicySetting;
         private string firstNavState;
+
+        // for registering the live tile
+        private const string taskName = "LiveTileBackgroundTask";
+        private const string taskEntryPoint = "BackgroundTask.LiveTileBackgroundTask";
 
         /// <summary>
         /// Initializes the singleton Application object.  This is the first line of authored code
@@ -58,6 +64,8 @@ namespace BYU
                 this.DebugSettings.EnableFrameRateCounter = true;
             }
 #endif
+
+            this.RegisterBackgroundTask();
 
             Frame rootFrame = Window.Current.Content as Frame;
             App.RootFrame = rootFrame;
@@ -106,6 +114,34 @@ namespace BYU
             firstNavState = ((Frame)Window.Current.Content).GetNavigationState();
         }
 
+        private async void RegisterBackgroundTask()
+        {
+            try
+            {
+                var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+                if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity ||
+                    backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
+                {
+                    foreach (var task in BackgroundTaskRegistration.AllTasks)
+                    {
+                        if (task.Value.Name == taskName)
+                        {
+                            task.Value.Unregister(true);
+                        }
+                    }
+
+                    BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                    taskBuilder.Name = taskName;
+                    taskBuilder.TaskEntryPoint = taskEntryPoint;
+                    taskBuilder.SetTrigger(new TimeTrigger(15, false));
+                    var registration = taskBuilder.Register();
+                }
+            }
+            //Ignore the request if an exception is thrown. This allows the simulator to work.
+            catch
+            { }
+        }
+
         /// <summary>
         /// Invoked when Navigation to a certain page fails
         /// </summary>
@@ -141,6 +177,8 @@ namespace BYU
                 "Login Setting", "Login", (handler) => ShowLoginSettingFlyout());
             logoutSetting = new SettingsCommand(
                 "Logout Setting", "Logout", (handler) => LogoutSettingHandler());
+            privacyPolicySetting = new SettingsCommand(
+                "View Privacy Policy", "Privacy Policy", (handler) => ShowPrivacyPolicy());
 
             if (AuthenticationManager.LoggedIn())
             {
@@ -150,6 +188,8 @@ namespace BYU
             {
                 args.Request.ApplicationCommands.Add(loginSetting);
             }
+
+            args.Request.ApplicationCommands.Add(privacyPolicySetting);
         }
 
         public void ShowLoginSettingFlyout()
@@ -163,6 +203,11 @@ namespace BYU
             AuthenticationManager.Logout();
             await WebCache.Instance.ClearCache();
             ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
+        }
+
+        public async void ShowPrivacyPolicy()
+        {
+            await Windows.System.Launcher.LaunchUriAsync(new Uri("http://williamsware.com/byu/index.html"));
         }
     }
 }

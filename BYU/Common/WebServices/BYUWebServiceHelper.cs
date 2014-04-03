@@ -32,8 +32,8 @@ namespace Common.WebServices
                 return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
             }
         }
-        
-        public async static Task<WebResponse> sendGETRequest(string url, bool authenticate = true, string acceptString = null)
+
+        public async static Task<WebResponse> SendGETRequest(string url, bool authenticate = true, string acceptString = null)
         {
             try
             {
@@ -61,38 +61,37 @@ namespace Common.WebServices
             }
         }
 
-        internal async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true)
+        public async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true, TimeSpan timeout = default(TimeSpan))
         {
             if (WebServiceSession.GetSession() == null)
             {
                 return default(T);
             }
             DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
-            
+
             if (allowCache)
             {
-                Stream dataStream = await WebCache.Instance.GetCachedFileStream(url);
-                if (dataStream != null)
+                using (Stream dataStream = await WebCache.Instance.GetCachedFileStream(url, timeout: timeout))
                 {
-                    return (T)serializer.ReadObject(dataStream);
-                }
-                else
-                {
-                    //use the application/json accept header because we only support JSON parsing in this method
-                    using (var response = await sendGETRequest(url, authenticate, "application/json"))
+                    if (dataStream != null)
                     {
-                        var file = await WebCache.Instance.Cache(url, response.GetResponseStream());
-                        using (dataStream = await FileHelper.OpenReadOnlyFileStream(file))
-                        {
-                            return (T)serializer.ReadObject(dataStream);
-                        }
+                        return (T)serializer.ReadObject(dataStream);
+                    }
+                }
+                //use the application/json accept header because we only support JSON parsing in this method
+                using (var response = await SendGETRequest(url, authenticate, "application/json"))
+                {
+                    var file = await WebCache.Instance.Cache(url, response.GetResponseStream());
+                    using (Stream dataStream = await FileHelper.OpenReadOnlyFileStream(file))
+                    {
+                        return (T)serializer.ReadObject(dataStream);
                     }
                 }
             }
             else
             {
                 //use the application/json accept header because we only support JSON parsing in this method
-                using (var response = await sendGETRequest(url, authenticate, "application/json"))
+                using (var response = await SendGETRequest(url, authenticate, "application/json"))
                 {
                     return (T)serializer.ReadObject(response.GetResponseStream());
                 }

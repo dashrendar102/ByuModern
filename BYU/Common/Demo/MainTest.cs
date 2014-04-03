@@ -32,13 +32,13 @@ namespace Common
 
             foreach (LearningSuiteCourse course in courses)
             {
-                Assignment[] assignments = await Assignment.GetAssignments(course.id);
-                CalendarItem[] calendarItems = await CalendarItem.GetCalendarItems(course.id);
-                ContentPage[] contentItems = await ContentPage.GetContentPages(course.id);
-                Announcement[] announcements = await Announcement.GetAnnouncements(course.id);
-                Instructor[] instructors = await Instructor.GetInstructors(course.id);
-                Material[] materials = await Material.GetMaterials(course.id);
-                Syllabus[] syllabi = await Syllabus.GetSyllabi(course.id);
+                Assignment[] assignments = await Assignment.GetAssignments(course.CourseID);
+                CalendarItem[] calendarItems = await CalendarItem.GetCalendarItems(course.CourseID);
+                ContentPage[] contentItems = await ContentPage.GetContentPages(course.CourseID);
+                Announcement[] announcements = await Announcement.GetAnnouncements(course.CourseID);
+                Instructor[] instructors = await Instructor.GetInstructors(course.CourseID);
+                Material[] materials = await Material.GetMaterials(course.CourseID);
+                Syllabus[] syllabi = await Syllabus.GetSyllabi(course.CourseID);
                 SystemAnnouncement sysAnnouncement = await SystemAnnouncement.GetSystemAnnouncement();
 
                 /*foreach (Assignment assignment in assignments)

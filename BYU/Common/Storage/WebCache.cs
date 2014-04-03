@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Serialization;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage;
@@ -14,6 +18,7 @@ namespace Common.Storage
     public class WebCache
     {
         private StorageFolder cacheFolder;
+        private const string cacheFolderName = "webcache";
         private async Task<StorageFolder> GetCacheFolder()
         {
             if (cacheFolder == null)
@@ -22,7 +27,6 @@ namespace Common.Storage
             }
             return cacheFolder;
         }
-        private const string cacheFolderName = "webcache";
 
         //this prevents illegal filename characters like '/' at the expense of filename intelligibility.
         private string TransformURLToFilename(string url)
@@ -41,10 +45,30 @@ namespace Common.Storage
             return CryptographicBuffer.EncodeToHexString(hashed);
         }
 
-        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true)
+        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true, TimeSpan timeout = default(TimeSpan))
         {
             string fileName = TransformURLToFilename(url);
-            return await FileHelper.OpenReadOnlyFileStream(await GetCacheFolder(), fileName, decrypt);
+            StorageFile file = await FileHelper.GetFile(await GetCacheFolder(), fileName);
+            if (file != null)
+            {
+                TimeSpan age = DateTimeOffset.Now - file.DateCreated;
+                if (timeout == default(TimeSpan) || age < timeout)
+                {
+                    return await FileHelper.OpenReadOnlyFileStream(file, decrypt);
+                }
+                else
+                {
+                    //is this desirable? Should we delete or just ignore it?
+                    await file.DeleteAsync();
+                }
+            }
+            return null;
+        }
+
+        internal async Task<StorageFile> GetDownloadedFile(string filename)
+        {
+            var folder = await GetCacheFolder();
+            return await FileHelper.GetFile(folder, filename);
         }
 
         internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)
@@ -58,19 +82,14 @@ namespace Common.Storage
             return await FileHelper.Save(await GetCacheFolder(), filename, dataStream, encrypt);
         }
 
-        internal async Task<bool> IsCached(string url)
+        internal async Task<bool> IsDownloaded(string filename)
         {
-            string filename = TransformURLToFilename(url);
-            return await IsDownloaded(filename);
-        }
-
-        internal Task<bool> IsDownloaded(string filename)
-        {
-            return FileHelper.FileExists(cacheFolder, filename);
+            return await FileHelper.FileExists(await GetCacheFolder(), filename);
         }
 
         public async Task ClearCache()
         {
+            await GetCacheFolder();
             if (cacheFolder != null)
             {
                 await cacheFolder.DeleteAsync();
@@ -84,7 +103,7 @@ namespace Common.Storage
 
         internal async Task DeleteDownloadedItem(string filename)
         {
-            await FileHelper.DeleteFile(cacheFolder, filename);
+            await FileHelper.DeleteFile(await GetCacheFolder(), filename);
         }
 
         private static WebCache instance;
