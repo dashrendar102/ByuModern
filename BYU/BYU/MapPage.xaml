@@ -36,7 +36,7 @@
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"
                         
-                        Foreground="White" />
+                        Foreground="White" RequestedTheme="Dark" />
         <ListView
             x:Name="itemListView"
             AutomationProperties.AutomationId="ItemsListView"
