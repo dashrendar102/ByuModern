@@ -108,7 +108,7 @@
                 <StackPanel x:Name="SelectedClassContent" Grid.Column="2" Margin="40,30,0,0">
                     <TextBlock Text="Announcements" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <ScrollViewer Height="524" Margin="0,15,0,0">
-                        <ListView x:Name="AnnouncementsList" ItemsSource="{Binding}">
+                        <ListView x:Name="AnnouncementsList" ItemsSource="{Binding}" SelectionMode="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Width="400">

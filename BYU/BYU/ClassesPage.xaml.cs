@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using System.Linq;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -63,13 +64,7 @@ namespace BYU
             this.ScheduleInformation = await ClassScheduleRoot.GetClassSchedule();
             ObservableCollection<CourseInformation> courses = new ObservableCollection<CourseInformation>(this.ScheduleInformation.courseList);
             ClassesListView.ItemsSource = courses;
-            foreach (CourseInformation course in courses)
-            {
-                if (course.curriculum_id == selectedCourse.curriculum_id)
-                {
-                    ClassesListView.SelectedItem = course;
-                }
-            }
+            ClassesListView.SelectedItem = courses.Single(c => c.curriculum_id == selectedCourse.curriculum_id);
         }
 
         /// <summary>
