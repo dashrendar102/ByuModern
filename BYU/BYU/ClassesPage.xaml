@@ -56,7 +56,12 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="15,0">
                     <TextBlock Text="Instructor: " FontSize="16"/>
-                    <TextBlock Text="{Binding instructor}" Margin="5,0,0,5" FontSize="16"/>
+                    <TextBlock Text="{Binding instructor}" Margin="5,0,0,0" FontSize="16"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="15,0">
+                    <TextBlock Text="Date &amp; Time: " FontSize="16"/>
+                    <TextBlock Text="{Binding days}" FontSize="16" Margin="4,0,0,0"/>
+                    <TextBlock Text="{Binding class_period}" FontSize="16" Margin="4,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="15,0">
                     <TextBlock Text="Location: " FontSize="16"/>
@@ -82,22 +87,18 @@
 
                 <StackPanel x:Name="ClassesSection" Grid.Column="0" Margin="100,30,40,0" >
                     <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ScrollViewer Height="524" Margin="0,20,0,0" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
+                    <ScrollViewer Height="485" Margin="0,20,0,0" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
                         <ListView x:Name="ClassesListView" ItemsSource="{Binding}" SelectionChanged="ClassButton_Click">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Width="300">
+                                    <StackPanel Width="200">
                                         <StackPanel.Background>
                                             <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                                         </StackPanel.Background>
-                                        <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                        <StackPanel Orientation="Horizontal" Margin="5,5,0,0" Height="50">
                                             <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
                                             <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
                                             <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Margin="5,0,0,5">
-                                            <TextBlock Text="{Binding days}" Foreground="White"/>
-                                            <TextBlock Text="{Binding class_period}" Foreground="White" Margin="4,0,0,0"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
@@ -107,11 +108,11 @@
                 </StackPanel>
                 <StackPanel x:Name="SelectedClassContent" Grid.Column="2" Margin="40,30,0,0">
                     <TextBlock Text="Announcements" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ScrollViewer Height="524" Margin="0,15,0,0">
+                    <ScrollViewer Height="485" Margin="0,15,0,0">
                         <ListView x:Name="AnnouncementsList" ItemsSource="{Binding}" SelectionMode="None">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Width="400">
+                                    <StackPanel Width="450">
                                         <StackPanel Orientation="Vertical" Margin="5,5,0,0">
                                             <TextBlock Text="{Binding title}" Foreground="Black" FontFamily="Global User Interface" FontSize="20"/>
                                         </StackPanel>
@@ -131,7 +132,7 @@
                 <StackPanel x:Name="UpcomingAssignments" Grid.Column="1" Margin="40,30,0,0" VerticalAlignment="Top" >
 
                     <TextBlock Text="Upcoming Assignments" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ScrollViewer ZoomMode="Disabled" Width="400" Height="524" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">
+                    <ScrollViewer ZoomMode="Disabled" Width="400" Height="485" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">
                         
                         <ListView x:Name="UpcomingAssignmentsList" ItemsSource="{Binding}" SelectionChanged="UpcomingAssignmentsList_SelectionChanged">
                             <ListView.ItemTemplate>
