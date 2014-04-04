@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Popups;
@@ -51,6 +52,7 @@ namespace Common.WebServices.DO.ParkingLots
         {
             Location myLocation;
             string[] myPointStrings = Lot.PolygonPoints.Split(',');
+
             for (int i = 0; i < myPointStrings.Length - 1; i++)
             {
                 myLocation = new Location(Convert.ToDouble(myPointStrings[i]), Convert.ToDouble(myPointStrings[i+1]));
@@ -82,13 +84,21 @@ namespace Common.WebServices.DO.ParkingLots
         {
             ParkingData myData = new ParkingData();
             myData.Title = ParkingLotRoot.GetTitle(Lot.TypeID);
+
+            //Check for a bike lot as they throw exceptions
+            if(Lot.TypeID == 9)
+            {
+                myData.Description = "Park your Bike here!";
+                return myData;
+            }
+
             if(String.IsNullOrEmpty(Lot.Description))
             {
                 myData.Description = "No information is available for this lot.";
                 return myData;
             }
-            
-            myData.Description = Lot.Description;
+
+            myData.Description = Regex.Replace(Lot.Description, "<.*?>", string.Empty);
             return myData;
         }
 
@@ -105,9 +115,15 @@ namespace Common.WebServices.DO.ParkingLots
                 {
                     //ByuMap.OpenInfobox(poly as MapPolygon);
                     //map.infobox
-                    var msg = new MessageDialog(StringUtils.RetrieveTextFromHTML(tag.Title + '\n' +tag.Description));
-
-                    await msg.ShowAsync();
+                    var msg = new MessageDialog(tag.Title + '\n' +tag.Description);
+                    try
+                    {
+                        await msg.ShowAsync();
+                    }
+                    catch (UnauthorizedAccessException)
+                    {
+                        return;
+                    }
                 }
             }
         }

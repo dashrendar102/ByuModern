@@ -36,6 +36,7 @@ namespace Common
         Task MapInit = null;
         //This event has a default empty method so that we don't have to null check the event before firing it
         public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => { };
+        private static MapShapeLayer parkingLayer;
 
         public ByuMap()
         {
@@ -124,7 +125,7 @@ namespace Common
             this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
             parkingLayer = new MapShapeLayer();
             this.MyBingMap.ShapeLayers.Add(parkingLayer);
-            DrawPolygons();
+            DrawParkingLots();
         }
 
         private string[] GetWordsToLower(string str)
@@ -182,9 +183,7 @@ namespace Common
             }
         }
 
-        private static MapShapeLayer parkingLayer;
-
-        public async void DrawPolygons()
+        public async void DrawParkingLots()
         {
             ParkingLotResponse[] parkingLots = await ParkingLotRoot.getAllLots();
              
