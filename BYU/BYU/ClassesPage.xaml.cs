@@ -1,5 +1,6 @@
 ﻿using BYU.Common;
 using Common.Calendar;
+using Common.WebServices;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.LearningSuite;
 using System;
