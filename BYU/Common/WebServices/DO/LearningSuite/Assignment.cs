@@ -55,7 +55,7 @@ namespace Common.WebServices.DO.LearningSuite
                 {
                     return "";
                 }
-                return StringUtils.RemoveTabs(StringUtils.RetrieveTextFromHTML(description)).Trim();
+                return StringUtils.ExtractAndPrettifyHTMLText(description);
             }
         }
 
@@ -63,20 +63,8 @@ namespace Common.WebServices.DO.LearningSuite
         {
             get
             {
-                string originalText = DescriptionText;
                 int maxLength = 300;
-                if (originalText.Length < maxLength)
-                {
-                    return originalText;
-                }
-                int truncationIndex = Math.Min(maxLength, originalText.Length) - 1;
-                while (truncationIndex < originalText.Length && !Char.IsWhiteSpace(originalText[truncationIndex]))
-                {
-                    truncationIndex++;
-                }
-                string result = originalText.Substring(0, truncationIndex + 1);
-                result += "...";
-                return result;
+                return StringUtils.LimitToLengthOnWordBoundaries(DescriptionText, maxLength);
             }
         }
 

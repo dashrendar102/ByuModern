@@ -48,5 +48,26 @@ namespace Common.WebServices
             string taglessHTML = RemoveHTMLTags(sourceHTML);
             return WebUtility.HtmlDecode(taglessHTML);
         }
+
+        public static string ExtractAndPrettifyHTMLText(string sourceHTML)
+        {
+            return RemoveTabs(RetrieveTextFromHTML(sourceHTML)).Trim();
+        }
+
+        public static string LimitToLengthOnWordBoundaries(string str, int maxLength)
+        {
+            if (str == null || str.Length <= maxLength)
+            {
+                return str;
+            }
+            int truncationIndex = Math.Min(maxLength, str.Length) - 1;
+            while (truncationIndex > 0 && !Char.IsWhiteSpace(str[truncationIndex]))
+            {
+                truncationIndex--;
+            }
+            string result = str.Substring(0, truncationIndex + 1).Trim();
+            result += "...";
+            return result;
+        }
     }
 }

@@ -143,8 +143,7 @@ namespace BYU
             Announcement[] announcements = await Announcement.GetAnnouncements(courseID);
             foreach (Announcement announcement in announcements)
             {
-                announcement.text = Regex.Replace(announcement.text, "<.*?>", string.Empty);
-                announcement.text = WebUtility.HtmlDecode(announcement.text);
+                announcement.text = StringUtils.ExtractAndPrettifyHTMLText(announcement.text);
             }
             AnnouncementsList.ItemsSource = new ObservableCollection<Announcement>(announcements);
         }
