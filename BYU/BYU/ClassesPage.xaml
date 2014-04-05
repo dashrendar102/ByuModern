@@ -69,7 +69,10 @@
                     <TextBlock Text=" " Margin ="5,0,0,5" FontSize="16"/>
                     <TextBlock Text="{Binding building}" Margin="0,0,0,5" FontSize="16"/>
                 </StackPanel>
-                <Button x:Name="btnAddClass" Content="Add To Calendar"  VerticalAlignment="Top" Margin="15,0,0,0" Click="btnAddClass_Click"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="ShowOnMapButton" Click="ShowOnMapButton_OnClick">Show on map</Button>
+                    <Button x:Name="btnAddClass" Content="Add To Calendar"  VerticalAlignment="Top" Margin="15,0,0,0" Click="btnAddClass_Click"/>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
         <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="2" Margin="0,10,15,10" Visibility="Collapsed"/>
@@ -133,7 +136,7 @@
 
                     <TextBlock Text="Upcoming Assignments" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <ScrollViewer ZoomMode="Disabled" Width="400" Height="485" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">
-                        
+
                         <ListView x:Name="UpcomingAssignmentsList" ItemsSource="{Binding}" SelectionChanged="UpcomingAssignmentsList_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>

@@ -180,5 +180,12 @@ namespace BYU
             var parameters = Tuple.Create(selectedCourse, UpcomingAssignmentsList.SelectedValue as Assignment);
             this.Frame.Navigate(typeof(AssignmentDetail), parameters);
         }
+
+        private void ShowOnMapButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+            CourseInformation course = (CourseInformation)b.DataContext;
+            Frame.Navigate(typeof(MapPage), course.building);
+        }
     }
 }

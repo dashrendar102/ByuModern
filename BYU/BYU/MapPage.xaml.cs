@@ -240,9 +240,16 @@ namespace BYU
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            if (e.Parameter != null && e.Parameter is string)
+            {
+                string buildingName = (string) e.Parameter;
+                var buildings = await map.GetBuildingsAsync();
+                var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
+                map.SelectEntity(buildingEntity);
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
