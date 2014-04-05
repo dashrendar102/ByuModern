@@ -1,13 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Common.WebServices;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.Serialization.Json;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage;
@@ -45,7 +39,8 @@ namespace Common.Storage
             return CryptographicBuffer.EncodeToHexString(hashed);
         }
 
-        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true, TimeSpan timeout = default(TimeSpan))
+        //if the file is not already cached, cache it
+        internal async Task<Stream> GetCachedFileStream(string url, bool useEncryption = true, bool authenticate = true, TimeSpan timeout = default(TimeSpan))
         {
             string fileName = TransformURLToFilename(url);
             StorageFile file = await FileHelper.GetFile(await GetCacheFolder(), fileName);
@@ -54,27 +49,29 @@ namespace Common.Storage
                 TimeSpan age = DateTimeOffset.Now - file.DateCreated;
                 if (timeout == default(TimeSpan) || age < timeout)
                 {
-                    return await FileHelper.OpenReadOnlyFileStream(file, decrypt);
+                    return await FileHelper.OpenReadOnlyFileStream(file, useEncryption);
                 }
-                else
-                {
-                    //is this desirable? Should we delete or just ignore it?
-                    await file.DeleteAsync();
-                }
+                //is this desirable? Should we delete or just ignore it?
+                await file.DeleteAsync();
             }
-            return null;
+            file = await DownloadToCache(url, fileName, useEncryption, authenticate);
+            return await FileHelper.OpenReadOnlyFileStream(file, useEncryption);
+        }
+
+        private async Task<StorageFile> DownloadToCache(string url, string fileName, bool useEncryption, bool authenticate)
+        {
+            //use the application/json accept header because we only support JSON parsing in this method
+            using (var response = await BYUWebServiceHelper.SendGetRequest(url, authenticate, "application/json"))
+            {
+                var file = await Download(url, response.GetResponseStream(), useEncryption);
+                return file;
+            }
         }
 
         internal async Task<StorageFile> GetDownloadedFile(string filename)
         {
             var folder = await GetCacheFolder();
             return await FileHelper.GetFile(folder, filename);
-        }
-
-        internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)
-        {
-            string fileName = TransformURLToFilename(url);
-            return await Download(fileName, dataStream, encrypt);
         }
 
         internal async Task<StorageFile> Download(string filename, Stream dataStream, bool encrypt = true)

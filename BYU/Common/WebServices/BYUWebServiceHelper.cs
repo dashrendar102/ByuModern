@@ -16,7 +16,7 @@ namespace Common.WebServices
 {
     public class BYUWebServiceHelper
     {
-        private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
+        private const string NonceHeader = "Nonce-Encoded-WsSession-Key ";
 
         public async static Task<string> GetNonceAuthHeader()
         {
@@ -29,11 +29,11 @@ namespace Common.WebServices
 
                 string nonceHash = GetHmac(session.sharedSecret, nonce.nonceValue);
 
-                return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
+                return NonceHeader + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
             }
         }
 
-        public async static Task<WebResponse> SendGETRequest(string url, bool authenticate = true, string acceptString = null)
+        public async static Task<WebResponse> SendGetRequest(string url, bool authenticate = true, string acceptString = null)
         {
             try
             {
@@ -73,25 +73,12 @@ namespace Common.WebServices
             {
                 using (Stream dataStream = await WebCache.Instance.GetCachedFileStream(url, timeout: timeout))
                 {
-                    if (dataStream != null)
-                    {
-                        return (T)serializer.ReadObject(dataStream);
-                    }
-                }
-                //use the application/json accept header because we only support JSON parsing in this method
-                using (var response = await SendGETRequest(url, authenticate, "application/json"))
-                {
-                    var file = await WebCache.Instance.Cache(url, response.GetResponseStream());
-                    using (Stream dataStream = await FileHelper.OpenReadOnlyFileStream(file))
-                    {
-                        return (T)serializer.ReadObject(dataStream);
-                    }
+                    return (T)serializer.ReadObject(dataStream);
                 }
             }
             else
             {
-                //use the application/json accept header because we only support JSON parsing in this method
-                using (var response = await SendGETRequest(url, authenticate, "application/json"))
+                using (var response = await SendGetRequest(url, authenticate, "application/json"))
                 {
                     return (T)serializer.ReadObject(response.GetResponseStream());
                 }
