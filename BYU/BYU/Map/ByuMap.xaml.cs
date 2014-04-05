@@ -31,8 +31,8 @@ namespace Common
 
     public sealed partial class ByuMap : UserControl
     {
-        private IEnumerable<ByuMapEntity> Buildings;
-        private VenueMap ByuVenue;
+        private static IEnumerable<ByuMapEntity> Buildings;
+        private static VenueMap ByuVenue;
         Task MapInit = null;
         //This event has a default empty method so that we don't have to null check the event before firing it
         public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => { };
@@ -54,18 +54,18 @@ namespace Common
 
         async Task SetupMapAsync()
         {
-            var webServiceBuildingTask = BuildingRoot.GetAllBuildings();
-            ByuVenue = await this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
-            this.MyBingMap.VenueManager.ActiveVenue = ByuVenue;
 
-            await webServiceBuildingTask;
-            var webServiceBuildings = webServiceBuildingTask.Result;
+            await LoadBuildingsAndVenue();
 
-            var buildings = 
-                (from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
-                where !String.IsNullOrWhiteSpace(ve.Name)
-                select new ByuMapEntity(ve.Name, ve.Description, ve)).ToArray();
+            this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
+            this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
+            parkingLayer = new MapShapeLayer();
+            this.MyBingMap.ShapeLayers.Add(parkingLayer);
+            DrawParkingLots();
+        }
 
+        private void LoadBuildingAcronyms(ByuBuilding[] webServiceBuildings, ByuMapEntity[] buildings)
+        {
             #region Somewhat tricky code for mapping Bing Venue Entity objects to BYU Building abbreviations
 
             //Catalog all of the BYU Buildings by the words of their names
@@ -78,14 +78,14 @@ namespace Common
 
             var usedMatches = new HashSet<ByuBuilding>();
             //Iterate through each Bing Venue entity to find the best BYU Building match
-            foreach(var building in buildings)
+            foreach (var building in buildings)
             {
                 var nameTerms = GetWordsToLower(building.Name);
 
                 float bestScore = 0f;
                 ByuBuilding bestMatch = null;
 
-                foreach(var kvp in webBuildingsDict)
+                foreach (var kvp in webBuildingsDict)
                 {
                     //Intersect the words of the Bing Map Entity name with the BYU Building name to see if any match
                     var intersect = nameTerms.Intersect(kvp.Key);
@@ -95,9 +95,9 @@ namespace Common
                     // - Joseph Smith Building vs. the Joseph F. Smith Building.
                     // - Auxiliary Services Maintenance Building vs. Laundry Building,Auxiliary Services
                     float score = 0f;
-                    if(intersect.Count() > 0)
+                    if (intersect.Any())
                     {
-                        score = intersect.Count() - 0.5f * (kvp.Key.Length - intersect.Count());
+                        score = intersect.Count() - 0.5f*(kvp.Key.Length - intersect.Count());
                         score = Math.Max(score, 1);
                     }
                     //If the words in the name have more matches than our last best, use this building
@@ -112,20 +112,41 @@ namespace Common
                 {
                     usedMatches.Add(bestMatch);
                     //And now finally do what we're here for - set the acronym
-                    if(!String.IsNullOrWhiteSpace(bestMatch.Acronym))
+                    if (!String.IsNullOrWhiteSpace(bestMatch.Acronym))
                         building.Acronym = bestMatch.Acronym;
                 }
             }
 
             #endregion
+        }
 
-            this.Buildings = buildings;
+        private async Task LoadByuVenueAsync()
+        {
+            if(ByuVenue == null)
+            {
+                ByuVenue = await this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
+            }
+            MyBingMap.VenueManager.ActiveVenue = ByuVenue;
+        }
 
-            this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
-            this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
-            parkingLayer = new MapShapeLayer();
-            this.MyBingMap.ShapeLayers.Add(parkingLayer);
-            DrawParkingLots();
+        private async Task LoadBuildingsAndVenue()
+        {
+            if (Buildings == null)
+            {
+                Task<ByuBuilding[]> webServiceBuildingTask = BuildingRoot.GetAllBuildings();
+                Task venueTask = LoadByuVenueAsync();
+
+                var webServiceBuildings = await webServiceBuildingTask;
+                await venueTask;
+
+                ByuMapEntity[] buildings =
+                (from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
+                 where !String.IsNullOrWhiteSpace(ve.Name)
+                 select new ByuMapEntity(ve.Name, ve.Description, ve)).ToArray();
+
+                LoadBuildingAcronyms(webServiceBuildings, buildings);
+                Buildings = buildings;
+            }
         }
 
         private string[] GetWordsToLower(string str)
@@ -143,7 +164,7 @@ namespace Common
 
         void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
         {
-            var buildings = this.Buildings;
+            var buildings = Buildings;
             var building = buildings.SingleOrDefault(b => b.BingEntity == e.VenueEntity);
             MapEntitySelected(this, building);
         }
@@ -155,11 +176,11 @@ namespace Common
 
         public async Task<IEnumerable<ByuMapEntity>> GetBuildingsAsync()
         {
-            return await Task<IEnumerable<ByuMapEntity>>.Run(() =>
+            return await Task.Run(() =>
             {
                 if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
                 {
-                    IEnumerable<ByuMapEntity> buildingEnumerable = this.Buildings;
+                    IEnumerable<ByuMapEntity> buildingEnumerable = Buildings;
                     ByuMapEntity[] buildingArray = buildingEnumerable.ToArray<ByuMapEntity>();
                     return buildingArray;
                 }
