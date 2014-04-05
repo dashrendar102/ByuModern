@@ -1,4 +1,5 @@
-﻿using Common.Storage;
+﻿using System.Collections.Generic;
+using Common.Storage;
 using Common.WebServices.DO;
 using System;
 using System.IO;
@@ -67,23 +68,17 @@ namespace Common.WebServices
             {
                 return default(T);
             }
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
 
             if (allowCache)
             {
-                using (Stream dataStream = await WebCache.Instance.GetCachedFileStream(url, timeout: timeout))
-                {
-                    return (T)serializer.ReadObject(dataStream);
-                }
-            }
-            else
-            {
-                using (var response = await SendGetRequest(url, authenticate, "application/json"))
-                {
-                    return (T)serializer.ReadObject(response.GetResponseStream());
-                }
+                return await WebCache.Instance.RetrieveObject<T>(url, true, authenticate, timeout);
             }
 
+            using (var response = await SendGetRequest(url, authenticate, "application/json"))
+            {
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+                return (T)serializer.ReadObject(response.GetResponseStream());
+            }
         }
 
         internal async static Task<WebResponse> SendPost(string url, string parameters)

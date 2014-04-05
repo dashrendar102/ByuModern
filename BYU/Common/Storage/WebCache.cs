@@ -1,4 +1,6 @@
-﻿using Common.WebServices;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization.Json;
+using Common.WebServices;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -13,6 +15,7 @@ namespace Common.Storage
     {
         private StorageFolder cacheFolder;
         private const string cacheFolderName = "webcache";
+        private Dictionary<string, object> memoryCache;
         private async Task<StorageFolder> GetCacheFolder()
         {
             if (cacheFolder == null)
@@ -40,7 +43,7 @@ namespace Common.Storage
         }
 
         //if the file is not already cached, cache it
-        internal async Task<Stream> GetCachedFileStream(string url, bool useEncryption = true, bool authenticate = true, TimeSpan timeout = default(TimeSpan))
+        private async Task<Stream> RetrieveStream(string url, bool useEncryption = true, bool authenticate = true, TimeSpan timeout = default(TimeSpan))
         {
             string fileName = TransformURLToFilename(url);
             StorageFile file = await FileHelper.GetFile(await GetCacheFolder(), fileName);
@@ -56,6 +59,22 @@ namespace Common.Storage
             }
             file = await DownloadToCache(url, fileName, useEncryption, authenticate);
             return await FileHelper.OpenReadOnlyFileStream(file, useEncryption);
+        }
+
+        internal async Task<T> RetrieveObject<T>(string url, bool useEncryption = true, bool authenticate = true,
+            TimeSpan timeout = default(TimeSpan))
+        {
+            if (memoryCache.ContainsKey(url))
+            {
+                return (T) memoryCache[url];
+            }
+            using (var dataStream = await RetrieveStream(url, useEncryption, authenticate, timeout))
+            {
+                var serializer = new DataContractJsonSerializer(typeof(T));
+                T obj = (T) serializer.ReadObject(dataStream);
+                memoryCache[url] = obj;
+                return obj;
+            }
         }
 
         private async Task<StorageFile> DownloadToCache(string url, string fileName, bool useEncryption, bool authenticate)
@@ -95,6 +114,7 @@ namespace Common.Storage
 
         internal async Task DeleteCachedItem(string url)
         {
+            memoryCache.Remove(url);
             await DeleteDownloadedItem(TransformURLToFilename(url));
         }
 
@@ -117,6 +137,7 @@ namespace Common.Storage
         }
         private WebCache()
         {
+            memoryCache = new Dictionary<string, object>();
         }
     }
 }
