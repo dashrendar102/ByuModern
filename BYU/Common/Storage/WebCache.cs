@@ -82,7 +82,7 @@ namespace Common.Storage
             //use the application/json accept header because we only support JSON parsing in this method
             using (var response = await BYUWebServiceHelper.SendGetRequest(url, authenticate, "application/json"))
             {
-                var file = await Download(url, response.GetResponseStream(), useEncryption);
+                var file = await Download(fileName, response.GetResponseStream(), useEncryption);
                 return file;
             }
         }
