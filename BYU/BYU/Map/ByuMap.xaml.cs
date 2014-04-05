@@ -33,7 +33,7 @@ namespace Common
     {
         private static IEnumerable<ByuMapEntity> Buildings;
         private static VenueMap ByuVenue;
-        Task MapInit = null;
+        private Task MapInit = null;
         //This event has a default empty method so that we don't have to null check the event before firing it
         public event MapEntitySelectedEventArgs MapEntitySelected = (a, b) => { };
         private static MapShapeLayer parkingLayer;

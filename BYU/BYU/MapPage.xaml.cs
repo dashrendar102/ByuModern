@@ -1,4 +1,5 @@
-﻿using BYU.Common;
+﻿using System.Threading.Tasks;
+using BYU.Common;
 using BYU.Data;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,7 @@ namespace BYU
             // Setup the logical page navigation components that allow
             // the page to only show one pane at a time.
             this.navigationHelper.GoBackCommand = new RelayCommand(() => this.GoBack(), () => this.CanGoBack());
-            this.itemListView.SelectionChanged += ItemListView_SelectionChanged;
+            this.BuildingListView.SelectionChanged += BuildingListViewSelectionChanged;
 
             // Start listening for Window size changes 
             // to change from showing two panes to showing a single pane
@@ -88,7 +89,7 @@ namespace BYU
             
             if (e.PageState == null)
             {
-                this.itemListView.SelectedItem = null;
+                this.BuildingListView.SelectedItem = null;
                 // When this is a new page, select the first item automatically unless logical page
                 // navigation is being used (see the logical page navigation #region below.)
                 /*if (!this.UsingLogicalPageNavigation() && this.itemsViewSource.View != null)
@@ -164,7 +165,7 @@ namespace BYU
         /// </summary>
         /// <param name="sender">The GridView displaying the selected item.</param>
         /// <param name="e">Event data that describes how the selection was changed.</param>
-        private void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void BuildingListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             IList<object> results = ((ListView)sender).SelectedItems;
             if (results.Count != 0)
@@ -177,7 +178,7 @@ namespace BYU
 
         private bool CanGoBack()
         {
-            if (this.UsingLogicalPageNavigation() && this.itemListView.SelectedItem != null)
+            if (this.UsingLogicalPageNavigation() && this.BuildingListView.SelectedItem != null)
             {
                 return true;
             }
@@ -188,13 +189,13 @@ namespace BYU
         }
         private void GoBack()
         {
-            if (this.UsingLogicalPageNavigation() && this.itemListView.SelectedItem != null)
+            if (this.UsingLogicalPageNavigation() && this.BuildingListView.SelectedItem != null)
             {
                 // When logical page navigation is in effect and there's a selected item that
                 // item's details are currently displayed.  Clearing the selection will return to
                 // the item list.  From the user's point of view this is a logical backward
                 // navigation.
-                this.itemListView.SelectedItem = null;
+                this.BuildingListView.SelectedItem = null;
             }
             else
             {
@@ -222,7 +223,7 @@ namespace BYU
                 return "PrimaryView";
 
             // Update the back button's enabled state when the view state changes
-            var logicalPageBack = this.UsingLogicalPageNavigation() && this.itemListView.SelectedItem != null;
+            var logicalPageBack = this.UsingLogicalPageNavigation() && this.BuildingListView.SelectedItem != null;
 
             return logicalPageBack ? "SinglePane_Detail" : "SinglePane";
         }
@@ -246,10 +247,18 @@ namespace BYU
             if (e.Parameter != null && e.Parameter is string)
             {
                 string buildingName = (string) e.Parameter;
-                var buildings = await map.GetBuildingsAsync();
-                var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
-                map.SelectEntity(buildingEntity);
+                await SelectBuildingByName(buildingName);
             }
+        }
+
+        private async Task SelectBuildingByName(string buildingName)
+        {
+            var buildings = await map.GetBuildingsAsync();
+            var buildingEntity = BuildingListView.Items.FirstOrDefault(obj => (obj as ByuMapEntity).Acronym == buildingName);
+            //var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
+            //map.SelectEntity(buildingEntity);
+            this.BuildingListView.SelectedItem = buildingEntity;
+            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
