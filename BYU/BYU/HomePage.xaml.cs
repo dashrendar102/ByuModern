@@ -30,7 +30,7 @@ using Windows.Storage;
 
 namespace BYU
 {
-    public sealed partial class HubPage : Page
+    public sealed partial class HomePage : Page
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
@@ -56,7 +56,7 @@ namespace BYU
             get { return this.defaultViewModel; }
         }
 
-        public HubPage()
+        public HomePage()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
@@ -189,6 +189,8 @@ namespace BYU
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
                     "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
                 await PopulateClasses();
+                LoginNameTextbox.Text = "";
+                LoginPasswordTextbox.Password = "";
             }
             else
             {
@@ -218,8 +220,7 @@ namespace BYU
             this.LoginNameTextbox.IsEnabled = !loggedIn;
             this.LoginPasswordTextbox.IsEnabled = !loggedIn;
             this.SignInButton.IsEnabled = !loggedIn;
-            this.UserButton.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
-            this.UserImage.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
+            this.UserStack.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
             this.LoginSection.Visibility = loggedIn ? Visibility.Collapsed : Visibility.Visible;
             this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
         }
@@ -271,6 +272,20 @@ namespace BYU
                 await PopulateClasses();
             }
 
+            SetElementEnableStatuses();
+        }
+
+        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            /*var vault = new Windows.Security.Credentials.PasswordVault();
+
+            try {
+                foreach (PasswordCredential pass in vault.FindAllByResource("byu.edu")){
+                    vault.Remove(pass);
+                } 
+            }
+            catch (Exception ex) { }*/
+            AuthenticationManager.Logout();
             SetElementEnableStatuses();
         }
     }

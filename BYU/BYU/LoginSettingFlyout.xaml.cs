@@ -87,7 +87,7 @@ namespace BYU
                 this.Hide();
 
                 // revert back to start screen ?
-                App.RootFrame.Navigate(typeof(HubPage));
+                App.RootFrame.Navigate(typeof(HomePage));
             }
         }
     }
