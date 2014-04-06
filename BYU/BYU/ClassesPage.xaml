@@ -52,7 +52,9 @@
         <StackPanel x:Name="SelectedClassSummary" Margin="0,35,10,0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
             <StackPanel Orientation="Vertical" VerticalAlignment="Top">
                 <StackPanel Orientation="Horizontal" Margin="15,0,5,20">
-                    <TextBlock Text="{Binding course_title}" Style="{StaticResource HeaderTextBlockStyle}" />
+                    <TextBlock Text="{Binding course}" Margin="0,0,5,0" Style="{StaticResource HeaderTextBlockStyle}" />
+                    <TextBlock Text=" - " Style="{StaticResource HeaderTextBlockStyle}"/>
+                    <TextBlock Text="{Binding course_title}" Margin="20,0,0,0" Style="{StaticResource HeaderTextBlockStyle}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="15,0">
                     <TextBlock Text="Instructor: " FontSize="16"/>
@@ -77,7 +79,7 @@
         </StackPanel>
         <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="2" Margin="0,10,15,10" Visibility="Collapsed"/>
         <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Background="#FFB6B6B6" Grid.Column="2" Margin="0,60,130,37" Visibility="Collapsed" Height="31"/>
-        <ScrollViewer ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" Grid.Row="1" Grid.ColumnSpan="3">
+        <ScrollViewer ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="1" Grid.ColumnSpan="3">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
@@ -144,7 +146,7 @@
                                         <StackPanel.Background>
                                             <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                                         </StackPanel.Background>
-                                        <TextBlock Text="{Binding name}" Foreground="White" FontSize="20"/>
+                                        <TextBlock Text="{Binding name}" Margin="5,0" Foreground="White" FontSize="20"/>
                                         <StackPanel Orientation="Horizontal" Margin="15,0">
                                             <TextBlock Foreground="White" FontSize="16">
                                             <Run Text="Due " />
