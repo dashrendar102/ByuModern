@@ -57,10 +57,11 @@ namespace Common
 
             await LoadBuildingsAndVenue();
 
-            this.MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
-            this.MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
+            MyBingMap.VenueManager.ActiveVenue = ByuVenue;
+            MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
+            MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
             parkingLayer = new MapShapeLayer();
-            this.MyBingMap.ShapeLayers.Add(parkingLayer);
+            MyBingMap.ShapeLayers.Add(parkingLayer);
             DrawParkingLots();
         }
 
@@ -97,7 +98,7 @@ namespace Common
                     float score = 0f;
                     if (intersect.Any())
                     {
-                        score = intersect.Count() - 0.5f*(kvp.Key.Length - intersect.Count());
+                        score = intersect.Count() - 0.5f * (kvp.Key.Length - intersect.Count());
                         score = Math.Max(score, 1);
                     }
                     //If the words in the name have more matches than our last best, use this building
@@ -120,32 +121,27 @@ namespace Common
             #endregion
         }
 
-        private async Task LoadByuVenueAsync()
-        {
-            if(ByuVenue == null)
-            {
-                ByuVenue = await this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
-            }
-            MyBingMap.VenueManager.ActiveVenue = ByuVenue;
-        }
-
         private async Task LoadBuildingsAndVenue()
         {
+            var venueTask = this.MyBingMap.VenueManager.CreateVenueMapAsync(Constants.ByuVenueId);
             if (Buildings == null)
             {
                 Task<ByuBuilding[]> webServiceBuildingTask = BuildingRoot.GetAllBuildings();
-                Task venueTask = LoadByuVenueAsync();
 
                 var webServiceBuildings = await webServiceBuildingTask;
-                await venueTask;
+                ByuVenue = await venueTask;
 
                 ByuMapEntity[] buildings =
-                (from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
-                 where !String.IsNullOrWhiteSpace(ve.Name)
-                 select new ByuMapEntity(ve.Name, ve.Description, ve)).ToArray();
+                    (from ve in ByuVenue.Floors.SelectMany(x => x.VenueEntities)
+                        where !String.IsNullOrWhiteSpace(ve.Name)
+                        select new ByuMapEntity(ve.Name, ve.Description, ve)).ToArray();
 
                 LoadBuildingAcronyms(webServiceBuildings, buildings);
                 Buildings = buildings;
+            }
+            else
+            {
+                ByuVenue = await venueTask;
             }
         }
 
@@ -207,13 +203,13 @@ namespace Common
         public async void DrawParkingLots()
         {
             ParkingLotResponse[] parkingLots = await ParkingLotRoot.getAllLots();
-             
-             foreach(ParkingLotResponse Lot in parkingLots)
-             {
-                 ParkingLot newLot = new ParkingLot(Lot, this);
-                 parkingLayer.Shapes.Add(newLot.getParkingPolygon());
-                 parkingLayer.Shapes.Add(newLot.getParkingOutline());
-             }
+
+            foreach (ParkingLotResponse Lot in parkingLots)
+            {
+                ParkingLot newLot = new ParkingLot(Lot, this);
+                parkingLayer.Shapes.Add(newLot.getParkingPolygon());
+                parkingLayer.Shapes.Add(newLot.getParkingOutline());
+            }
         }
 
         internal void OpenInfobox(MapPolygon myLot)
@@ -223,7 +219,7 @@ namespace Common
             Infobox.Visibility = Visibility.Visible;
             MapLayer.SetPosition(Infobox, MapLayer.GetPosition(myLot.Locations[1]));
         }
-        
+
         private void CloseInfoboxTapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             Infobox.Visibility = Visibility.Collapsed;
