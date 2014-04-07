@@ -48,9 +48,9 @@ namespace Common.Authentication
             if (credential != null)
             {
                 var vault = new Windows.Security.Credentials.PasswordVault();
-                foreach (var credential in vault.FindAllByResource("byu.edu"))
+                foreach (var c in vault.FindAllByResource("byu.edu"))
                 {
-                    vault.Remove(credential);
+                    vault.Remove(c);
                 }
                 //vault.Remove(credential);
 
