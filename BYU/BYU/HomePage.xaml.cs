@@ -142,7 +142,7 @@ namespace BYU
 
         private void ParkingButton_Clicked(object sender, RoutedEventArgs e)
         {
-            this.Frame.Navigate(typeof(MapPage));
+            this.Frame.Navigate(typeof(ParkingPage));
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)

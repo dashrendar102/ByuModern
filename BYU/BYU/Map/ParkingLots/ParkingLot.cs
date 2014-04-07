@@ -28,13 +28,11 @@ namespace Common.WebServices.DO.ParkingLots
         public static readonly DependencyProperty TagProp = DependencyProperty.Register
             ("Tag", typeof(object), typeof(MapShape), new PropertyMetadata(null));
         private Windows.UI.Xaml.Controls.Grid Infobox;
-        private ByuMap map;
 
         
-        public ParkingLot(ParkingLotResponse Lot, ByuMap map)
+        public ParkingLot(ParkingLotResponse Lot)
         {
             this.Lot = Lot;
-            this.map = map;
             parkingPolygon = new MapPolygon();
             parkingPolygon.PointerEntered += ParkingLotEntered;
             parkingPolygon.PointerExited += ParkingLotExited;
@@ -124,7 +122,7 @@ namespace Common.WebServices.DO.ParkingLots
         private void ParkingLotEntered(object sender, PointerRoutedEventArgs e)
         {
             //send string to map
-            map.OpenInfobox(this.parkingPolygon);
+            //map.OpenInfobox(this.parkingPolygon);
             this.parkingOutline.Width = 3;
         }
 
@@ -138,6 +136,27 @@ namespace Common.WebServices.DO.ParkingLots
         internal DependencyObject GetPosition()
         {
             return this.parkingPolygon.Locations[1];
+        }
+
+        internal void SetVisible(bool p)
+        {
+            parkingPolygon.Visible = p;
+            parkingOutline.Visible = p;
+        }
+
+        internal void SetVisible(int lotType)
+        {
+            if(this.Lot.TypeID == lotType)
+            {
+                this.parkingOutline.Visible = true;
+                this.parkingPolygon.Visible = true;
+            }
+            else
+            {
+
+                this.parkingOutline.Visible = false;
+                this.parkingPolygon.Visible = false;
+            }
         }
     }
     public class ParkingData

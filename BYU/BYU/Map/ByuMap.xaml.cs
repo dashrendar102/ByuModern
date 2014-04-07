@@ -32,6 +32,7 @@ namespace Common
     public sealed partial class ByuMap : UserControl
     {
         private static IEnumerable<ByuMapEntity> Buildings;
+        private static IEnumerable<ParkingLot> ParkingLots;
         private static VenueMap ByuVenue;
         private Task MapInit = null;
         //This event has a default empty method so that we don't have to null check the event before firing it
@@ -56,13 +57,10 @@ namespace Common
         {
 
             await LoadBuildingsAndVenue();
-
+            await LoadParkingLots();
             MyBingMap.VenueManager.ActiveVenue = ByuVenue;
             MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
             MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
-            parkingLayer = new MapShapeLayer();
-            MyBingMap.ShapeLayers.Add(parkingLayer);
-            DrawParkingLots();
         }
 
         private void LoadBuildingAcronyms(ByuBuilding[] webServiceBuildings, ByuMapEntity[] buildings)
@@ -200,16 +198,68 @@ namespace Common
             }
         }
 
-        public async void DrawParkingLots()
+        public void DrawAllParkingLots()
         {
-            ParkingLotResponse[] parkingLots = await ParkingLotRoot.getAllLots();
-
-            foreach (ParkingLotResponse Lot in parkingLots)
+            foreach (ParkingLot Lot in ParkingLots)
             {
-                ParkingLot newLot = new ParkingLot(Lot, this);
-                parkingLayer.Shapes.Add(newLot.getParkingPolygon());
-                parkingLayer.Shapes.Add(newLot.getParkingOutline());
+                Lot.SetVisible(true);
             }
+        }
+
+        public void DrawLotType(int parkingLotType)
+        {
+            foreach(ParkingLot lot in ParkingLots)
+            {
+                lot.SetVisible(parkingLotType);
+            }
+        }
+
+        public void HideAllParkingLots()
+        {
+            foreach (ParkingLot lot in ParkingLots)
+            {
+                lot.SetVisible(false);
+            }
+        }
+
+        private async Task LoadParkingLots()
+        {
+            if (ParkingLots == null)
+            {
+                parkingLayer = new MapShapeLayer();
+                MyBingMap.ShapeLayers.Add(parkingLayer);
+
+                ParkingLotResponse[] parkingLots = await ParkingLotRoot.getAllLots();
+
+                List<ParkingLot> myLots = new List<ParkingLot>();
+                foreach (ParkingLotResponse Lot in parkingLots)
+                {
+                    ParkingLot newLot = new ParkingLot(Lot);
+                    parkingLayer.Shapes.Add(newLot.getParkingPolygon());
+                    parkingLayer.Shapes.Add(newLot.getParkingOutline());
+                    myLots.Add(newLot);
+                }
+
+                ParkingLots = myLots;
+            }
+            DrawAllParkingLots();
+        }
+
+        public async Task <IEnumerable<ParkingLot>> GetParkingLotsAsync()
+        {
+            return await Task.Run(() =>
+            {
+                if (MapInit.IsCompleted || MapInit.Wait(TimeSpan.FromSeconds(10)))
+                {
+                    IEnumerable<ParkingLot> parkingEnumerable = ParkingLots;
+                    ParkingLot[] ParkingLotArray = parkingEnumerable.ToArray<ParkingLot>();
+                    return ParkingLotArray;
+                }
+                else
+                {
+                    throw new TimeoutException("Could not load parking Data");
+                }
+            });
         }
 
         internal void OpenInfobox(MapPolygon myLot)
@@ -275,5 +325,6 @@ namespace Common
 
 
         public DependencyProperty TagProp { get; set; }
+
     }
 }
