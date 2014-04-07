@@ -280,7 +280,7 @@ namespace BYU
             SetElementEnableStatuses();
         }
 
-        private void LogoutButton_Click(object sender, RoutedEventArgs e)
+        private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             /*var vault = new Windows.Security.Credentials.PasswordVault();
 
@@ -290,7 +290,7 @@ namespace BYU
                 } 
             }
             catch (Exception ex) { }*/
-            AuthenticationManager.Logout();
+            await AuthenticationManager.Logout();
             SetElementEnableStatuses();
         }
     }

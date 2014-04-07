@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Security.Credentials;
+using Common.Storage;
 using Common.WebServices.DO;
 using Common.WebServices.DO.PersonSummary;
 
@@ -42,7 +43,7 @@ namespace Common.Authentication
             }
         }
 
-        static public void Logout()
+        static public async Task Logout()
         {
             if (credential != null)
             {
@@ -50,6 +51,7 @@ namespace Common.Authentication
                 vault.Remove(credential);
 
                 credential = null;
+                await WebCache.Instance.ClearCache();
             }
         }
 

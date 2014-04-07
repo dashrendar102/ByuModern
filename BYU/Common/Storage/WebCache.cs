@@ -110,6 +110,7 @@ namespace Common.Storage
             {
                 await cacheFolder.DeleteAsync();
             }
+            memoryCache.Clear();
         }
 
         internal async Task DeleteCachedItem(string url)

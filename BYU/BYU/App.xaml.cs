@@ -200,8 +200,7 @@ namespace BYU
 
         public async Task LogoutSettingHandler()
         {
-            AuthenticationManager.Logout();
-            await WebCache.Instance.ClearCache();
+            await AuthenticationManager.Logout();
             ((Frame)Window.Current.Content).SetNavigationState(firstNavState);
         }
 
