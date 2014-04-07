@@ -140,6 +140,11 @@ namespace BYU
             this.Frame.Navigate(typeof(MapPage));
         }
 
+        private void ParkingButton_Clicked(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MapPage));
+        }
+
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             DoLogin();

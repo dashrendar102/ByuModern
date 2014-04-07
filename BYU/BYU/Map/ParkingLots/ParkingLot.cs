@@ -85,13 +85,6 @@ namespace Common.WebServices.DO.ParkingLots
             ParkingData myData = new ParkingData();
             myData.Title = ParkingLotRoot.GetTitle(Lot.TypeID);
 
-            //Check for a bike lot as they throw exceptions
-            if(Lot.TypeID == 9)
-            {
-                myData.Description = "Park your Bike here!";
-                return myData;
-            }
-
             if(String.IsNullOrEmpty(Lot.Description))
             {
                 myData.Description = "No information is available for this lot.";
