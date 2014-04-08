@@ -48,7 +48,11 @@ namespace Common.Authentication
             if (credential != null)
             {
                 var vault = new Windows.Security.Credentials.PasswordVault();
-                vault.Remove(credential);
+                foreach (var c in vault.FindAllByResource("byu.edu"))
+                {
+                    vault.Remove(c);
+                }
+                //vault.Remove(credential);
 
                 credential = null;
                 await WebCache.Instance.ClearCache();
