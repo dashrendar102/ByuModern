@@ -106,9 +106,9 @@
     <Compile Include="Buildings\BuildingRoot.cs" />
     <Compile Include="Buildings\ByuBuilding.cs" />
     <Compile Include="Calendar\AppointmentGenerator.cs" />
-    <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\Win8CalendarClient.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="ParkingLots\ParkingLot.cs" />
     <Compile Include="ParkingLots\ParkingLotRequest.cs" />
     <Compile Include="ParkingLots\ParkingLotResponse.cs" />
