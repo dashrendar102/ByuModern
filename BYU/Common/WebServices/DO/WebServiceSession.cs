@@ -64,14 +64,7 @@ namespace Common.WebServices.DO
 
         public async static Task<WebServiceSession> GetSession(string netId, string password)
         {
-            if (sessionIsValid())
-            {
-                return curSession;
-            }
-            else
-            {
-                return await GetSession(netId, password, DEFAULT_TIMEOUT);
-            }
+            return await GetSession(netId, password, DEFAULT_TIMEOUT);
         }
 
         public static void LogOut()
@@ -81,29 +74,23 @@ namespace Common.WebServices.DO
 
         private async static Task<WebServiceSession> GetSession(string netId, string password, string timeout)
         {
-            if (sessionIsValid())
-            {
-                return curSession;
-            }
-            else
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(WebServiceSession));
+            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(WebServiceSession));
 
-                try
+            try
+            {
+                string url = BYUWebServiceURLs.GET_WS_SESSION;
+                string parameters = "timeout=" + timeout + "&netId=" + Uri.EscapeDataString(netId) + "&password=" + Uri.EscapeDataString(password);
+                using (WebResponse response = await BYUWebServiceHelper.SendPost(url, parameters))
                 {
-                    string url = BYUWebServiceURLs.GET_WS_SESSION;
-                    string parameters = "timeout=" + timeout + "&netId=" + Uri.EscapeDataString(netId) + "&password=" + Uri.EscapeDataString(password);
-                    using (WebResponse response = await BYUWebServiceHelper.SendPost(url, parameters))
-                    {
-                        curSession = (WebServiceSession)serializer.ReadObject(response.GetResponseStream());
-                        return curSession;
-                    }
-                }
-                catch(Exception)
-                {
-                    return null;
+                    curSession = (WebServiceSession)serializer.ReadObject(response.GetResponseStream());
+                    return curSession;
                 }
             }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
 
         private static bool sessionIsValid()

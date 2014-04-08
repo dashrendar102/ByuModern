@@ -36,7 +36,7 @@ namespace BYU
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         private const string userPhotoName = "userPhoto.jpg";
-        private Uri userPhotoUri;
+        //private Uri userPhotoUri;
         PersonSummaryResponse userInfo;
 
         /// <summary>
@@ -82,8 +82,8 @@ namespace BYU
                 if (AuthenticationManager.LoggedIn())
                 {
                     userInfo = await PersonSummaryResponse.GetPersonSummary();
-                    userPhotoUri = await PersonPhoto.getPhotoUri();
-                    LoadUserPhoto();
+                    // userPhotoUri = await PersonPhoto.getPhotoUri();
+                    await LoadUserPhoto();
                     await PopulateClasses();
                 }
 
@@ -188,8 +188,8 @@ namespace BYU
             {
                 this.userInfo = await PersonSummaryResponse.GetPersonSummary();
 
-                userPhotoUri = await PersonPhoto.getPhotoUri();
-                LoadUserPhoto();
+                //userPhotoUri = await PersonPhoto.getPhotoUri();
+                await LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
                     "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
@@ -230,11 +230,11 @@ namespace BYU
             this.ClassesSection.Visibility = loggedIn ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void LoadUserPhoto()
+        private async Task LoadUserPhoto()
         {
-            if (userPhotoUri != null)
+            if ((await PersonPhoto.getPhotoUri()) != null)
             {
-                UserImage.Source = new BitmapImage(userPhotoUri);
+                UserImage.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
             }
             else
             {
@@ -272,8 +272,8 @@ namespace BYU
             if (AuthenticationManager.LoggedIn())
             {
                 this.userInfo = await PersonSummaryResponse.GetPersonSummary();
-                userPhotoUri = await PersonPhoto.getPhotoUri();
-                LoadUserPhoto();
+                //userPhotoUri = await PersonPhoto.getPhotoUri();
+                await LoadUserPhoto();
                 await PopulateClasses();
             }
 
