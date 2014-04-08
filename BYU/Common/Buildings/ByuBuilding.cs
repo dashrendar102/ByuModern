@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Common.Buildings
 {
     [DataContract]
-    class ByuBuilding
+    public class ByuBuilding
     {
         [DataMember(Name = "Acronym")]
         public string Acronym { get; set; }

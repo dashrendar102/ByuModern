@@ -103,10 +103,17 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\InvalidCredentialsException.cs" />
+    <Compile Include="Buildings\BuildingRoot.cs" />
+    <Compile Include="Buildings\ByuBuilding.cs" />
     <Compile Include="Calendar\AppointmentGenerator.cs" />
     <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\Win8CalendarClient.cs" />
+    <Compile Include="ParkingLots\ParkingLot.cs" />
+    <Compile Include="ParkingLots\ParkingLotRequest.cs" />
+    <Compile Include="ParkingLots\ParkingLotResponse.cs" />
+    <Compile Include="ParkingLots\ParkingLotRoot.cs" />
+    <Compile Include="ParkingLots\ParkingService.cs" />
     <Compile Include="WebServices\DateTypes.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardRequest.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardResponse.cs" />

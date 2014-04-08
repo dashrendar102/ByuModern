@@ -17,7 +17,7 @@ namespace Common.WebServices.DO.ParkingLots
     [DataContract]
     public class ParkingLotRoot
     {
-        enum lotType { Y = 1, G, A, C, R, V, T, MOTOR, BIKE, CON, B};        
+        public enum lotType { Y = 1, G, A, C, R, V, T, MOTOR, BIKE, CON, B};        
         //            {1, "Y"},               Y (student)           Lot Type = 1
         //            {2, "G"},               G (Graduate)          Lot Type = 2
         //            {3, "A"},               A (Faculty/Staff)     Lot Type = 3

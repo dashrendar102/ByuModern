@@ -114,8 +114,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Buildings\BuildingRoot.cs" />
-    <Compile Include="Buildings\ByuBuilding.cs" />
     <Compile Include="ByuMapEntity.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
@@ -128,11 +126,6 @@
     <Compile Include="ByuMap.xaml.cs">
       <DependentUpon>ByuMap.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ParkingLots\ParkingLot.cs" />
-    <Compile Include="ParkingLots\ParkingLotRequest.cs" />
-    <Compile Include="ParkingLots\ParkingLotResponse.cs" />
-    <Compile Include="ParkingLots\ParkingLotRoot.cs" />
-    <Compile Include="ParkingLots\ParkingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

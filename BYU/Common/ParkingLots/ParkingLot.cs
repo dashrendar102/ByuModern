@@ -141,13 +141,13 @@ namespace Common.WebServices.DO.ParkingLots
             return this.parkingPolygon.Locations[1];
         }
 
-        internal void SetVisible(bool p)
+        public void SetVisible(bool p)
         {
             parkingPolygon.Visible = p;
             parkingOutline.Visible = p;
         }
 
-        internal void SetVisible(int lotType)
+        public void SetVisible(int lotType)
         {
             if(this.Lot.TypeID == lotType)
             {

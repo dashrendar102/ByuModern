@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Common.Buildings
 {
-    static class BuildingRoot
+    public static class BuildingRoot
     {
         public async static Task<ByuBuilding[]> GetAllBuildings()
         {
