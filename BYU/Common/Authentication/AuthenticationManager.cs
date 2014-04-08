@@ -57,6 +57,8 @@ namespace Common.Authentication
                 credential = null;
                 await WebCache.Instance.ClearCache();
             }
+
+            await PersonPhoto.DeletePhoto();
         }
 
         //static public PasswordCredential GetBYUCredentials()

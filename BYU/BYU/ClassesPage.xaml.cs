@@ -24,6 +24,8 @@ namespace BYU
     /// </summary>
     public sealed partial class ClassesPage : Page
     {
+        private const string SELECTED_COURSE_KEY = "selected_course";
+
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private CourseInformation selectedCourse = null;
@@ -55,6 +57,7 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
+            this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
 
         /// <summary>
@@ -65,7 +68,7 @@ namespace BYU
             this.ScheduleInformation = await ClassScheduleRoot.GetClassSchedule();
             ObservableCollection<CourseInformation> courses = new ObservableCollection<CourseInformation>(this.ScheduleInformation.courseList);
             ClassesListView.ItemsSource = courses;
-            ClassesListView.SelectedItem = courses.Single(c => c.curriculum_id == selectedCourse.curriculum_id);
+            ClassesListView.SelectedItem = selectedCourse;
         }
 
         /// <summary>
@@ -81,7 +84,18 @@ namespace BYU
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            if (e.PageState != null && e.PageState.ContainsKey(SELECTED_COURSE_KEY))
+            {
+                await this.SetSelectedCourse((CourseInformation)e.PageState[SELECTED_COURSE_KEY]);
+            }
+            
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
+        }
+
+        private async void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+            selectedCourse = ClassesListView.SelectedItem as CourseInformation;
+            e.PageState.Add(SELECTED_COURSE_KEY, ClassesListView.SelectedItem);
         }
 
         #region NavigationHelper registration
@@ -99,12 +113,18 @@ namespace BYU
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            await SetSelectedCourse(e.Parameter as CourseInformation);
+
+            if (e.NavigationMode != NavigationMode.Back)
+            {
+                await SetSelectedCourse(e.Parameter as CourseInformation);
+            }
+
             LoadClasses();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            selectedCourse = ClassesListView.SelectedItem as CourseInformation;
             navigationHelper.OnNavigatedFrom(e);
         }
 
