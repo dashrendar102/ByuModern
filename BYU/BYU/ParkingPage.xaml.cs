@@ -33,7 +33,7 @@ namespace BYU
         private static MapShapeLayer parkingLayer;
 
         string[] ParkingLotTypes = new string[] {"All Lots", "Student (Y)", "Graduate (G)", "Faculty/Staff (A)", "Helaman Halls (C)","Restricted Visitor (R)", 
-                 "Visitor (V)","timed (T)", "Motorcycle (MOTOR)","Bike (BIKE)","Construction (CON)","Heritage Halls (B)"};
+                 "Visitor (V)","Timed (T)", "Motorcycle (MOTOR)","Bike (BIKE)","Construction (CON)","Heritage Halls (B)"};
 
         public NavigationHelper NavigationHelper
         {
@@ -83,7 +83,7 @@ namespace BYU
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             var ParkingLots = await map.GetParkingLotsAsync();
-            this.DefaultViewModel["Items"] = this.ParkingLotTypes;
+            this.DefaultViewModel["Items"] = GetParkingLotTypes();
             map.DrawAllParkingLots();
             if (e.PageState == null)
             {
@@ -103,6 +103,29 @@ namespace BYU
                     //var selectedItem = await SampleDataSource.GetItemAsync((String)e.PageState["SelectedItem"]);
                     //this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
+            }
+        }
+
+        private object GetParkingLotTypes()
+        {
+            List<ParkingData> myData = new List<ParkingData>();
+            int typeID = 0;
+            foreach (string lotType in ParkingLotTypes)
+            {
+                myData.Add(new ParkingData(lotType,typeID));
+                typeID++;
+            }
+            return myData;
+        }
+
+        public class ParkingData
+        {
+            public string Name { get; set; }
+            public int typeID { get; set; }
+            public ParkingData(string name, int TypeID)
+            {
+                Name = name;
+                typeID = TypeID;
             }
         }
 
@@ -168,10 +191,8 @@ namespace BYU
             IList<object> results = ((ListView)sender).SelectedItems;
             if (results.Count != 0)
             {
-                string lotType = (string)results[0];
-                
-                int enumType = Array.IndexOf(this.ParkingLotTypes, lotType);
-                map.DrawParkingLotType(enumType);
+                ParkingData lotType = (ParkingData)results[0];
+                map.DrawParkingLotType(lotType.typeID);
             }
             else map.ResetView();
         }

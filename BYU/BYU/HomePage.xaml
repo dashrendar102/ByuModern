@@ -155,7 +155,7 @@
                         <Button BorderThickness="1" Click="ParkingButton_Clicked" Width="150" Height="150">
                             <Button.Content>
                                 <StackPanel Width="150" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Image Source="Assets/campus-buildings.png" Width="119" Margin="0,25,0,2"/>
+                                    <Image Source="Assets/parking_lots.jpg" Width="119" Margin="0,25,0,2"/>
                                     <TextBlock Foreground="White" TextAlignment="Center" Width="150">Parking Lots</TextBlock>
                                 </StackPanel>
                             </Button.Content>

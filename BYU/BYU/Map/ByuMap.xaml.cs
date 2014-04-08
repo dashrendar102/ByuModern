@@ -343,8 +343,5 @@ namespace Common
             ResetView();
         }
 
-
-        public DependencyProperty TagProp { get; set; }
-
     }
 }
