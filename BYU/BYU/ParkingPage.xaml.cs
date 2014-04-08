@@ -30,8 +30,9 @@ namespace BYU
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        private static MapShapeLayer parkingLayer;
 
-        string[] ParkingLotTypes = new string[] { "Student (Y)", "Graduate (G)", "Faculty/Staff (A)", "Helaman Halls (C)","Restricted Visitor (R)", 
+        string[] ParkingLotTypes = new string[] {"All Lots", "Student (Y)", "Graduate (G)", "Faculty/Staff (A)", "Helaman Halls (C)","Restricted Visitor (R)", 
                  "Visitor (V)","timed (T)", "Motorcycle (MOTOR)","Bike (BIKE)","Construction (CON)","Heritage Halls (B)"};
 
         public NavigationHelper NavigationHelper
@@ -62,6 +63,10 @@ namespace BYU
             // to change from showing two panes to showing a single pane
             Window.Current.SizeChanged += Window_SizeChanged;
             this.InvalidateVisualState();
+            
+            //parkingLayer = new MapShapeLayer();
+            //map.addShapeLayer(parkingLayer);
+
         }
 
         /// <summary>
@@ -79,7 +84,7 @@ namespace BYU
         {
             var ParkingLots = await map.GetParkingLotsAsync();
             this.DefaultViewModel["Items"] = this.ParkingLotTypes;
-
+            map.DrawAllParkingLots();
             if (e.PageState == null)
             {
                 this.ParkingListView.SelectedItem = null;
@@ -165,8 +170,8 @@ namespace BYU
             {
                 string lotType = (string)results[0];
                 
-                int enumType = Array.IndexOf(this.ParkingLotTypes, lotType)+1;
-                map.DrawLotType(enumType);
+                int enumType = Array.IndexOf(this.ParkingLotTypes, lotType);
+                map.DrawParkingLotType(enumType);
             }
             else map.ResetView();
         }
@@ -239,24 +244,19 @@ namespace BYU
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            //TODO buildings removed
             navigationHelper.OnNavigatedTo(e);
             if (e.Parameter != null && e.Parameter is string)
             {
                 string ParkingName = (string)e.Parameter;
-                await SelectBuildingByName(ParkingName);
+                await SelectParkingByType(ParkingName);
             }
         }
 
-        private async Task SelectBuildingByName(string buildingName)
+        private async Task SelectParkingByType(string ParkingType)
         {
-            //todo: change to parking lots
-            var ParkingLots = await map.GetBuildingsAsync();
-            var buildingEntity = ParkingListView.Items.FirstOrDefault(obj => (obj as ByuMapEntity).Acronym == buildingName);
-            //var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
-            //map.SelectEntity(buildingEntity);
-            this.ParkingListView.SelectedItem = buildingEntity;
-
+            var ParkingLots = await map.GetParkingLotsAsync();
+            map.DrawParkingLotType(Array.IndexOf(this.ParkingLotTypes, ParkingType));
+            this.ParkingListView.SelectedItem = ParkingType;
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)

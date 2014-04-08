@@ -200,14 +200,34 @@ namespace Common
 
         public void DrawAllParkingLots()
         {
+            //CheckForParkingLayer();
             foreach (ParkingLot Lot in ParkingLots)
             {
                 Lot.SetVisible(true);
             }
         }
 
-        public void DrawLotType(int parkingLotType)
+        private void CheckForParkingLayer()
         {
+            if(MyBingMap.ShapeLayers.Count == 0)
+            {
+                MyBingMap.ShapeLayers.Add(parkingLayer);
+
+                //foreach (ParkingLot mylot in ParkingLots)
+                //{
+                //    parkingLayer.Shapes.Add(mylot.getParkingPolygon());
+                //    parkingLayer.Shapes.Add(mylot.getParkingOutline());
+                //}
+            }
+        }
+
+        public void DrawParkingLotType(int parkingLotType)
+        {
+            if(parkingLotType == 0)
+            {
+                DrawAllParkingLots();
+                return;
+            }
             foreach(ParkingLot lot in ParkingLots)
             {
                 lot.SetVisible(parkingLotType);
@@ -242,7 +262,7 @@ namespace Common
 
                 ParkingLots = myLots;
             }
-            DrawAllParkingLots();
+            else MyBingMap.ShapeLayers.Add(parkingLayer);
         }
 
         public async Task <IEnumerable<ParkingLot>> GetParkingLotsAsync()

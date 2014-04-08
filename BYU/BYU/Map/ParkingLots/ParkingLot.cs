@@ -27,8 +27,7 @@ namespace Common.WebServices.DO.ParkingLots
 
         public static readonly DependencyProperty TagProp = DependencyProperty.Register
             ("Tag", typeof(object), typeof(MapShape), new PropertyMetadata(null));
-        private Windows.UI.Xaml.Controls.Grid Infobox;
-
+        
         
         public ParkingLot(ParkingLotResponse Lot)
         {
@@ -37,10 +36,10 @@ namespace Common.WebServices.DO.ParkingLots
             parkingPolygon.PointerEntered += ParkingLotEntered;
             parkingPolygon.PointerExited += ParkingLotExited;
             parkingPolygon.Tapped += ParkingLotTapped;
-            parkingPolygon.Visible = true;
+            parkingPolygon.Visible = false;
             parkingOutline = new MapPolyline();
             parkingOutline.Width = 2;
-            parkingOutline.Visible = true;
+            parkingOutline.Visible = false;
             parkingPolygon.SetValue(TagProp, GetDescription());
             setColors();
             setPoints();

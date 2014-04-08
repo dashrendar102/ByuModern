@@ -86,7 +86,7 @@ namespace BYU
             var buildings = await map.GetBuildingsAsync();
             buildings = buildings.OrderBy(building => building.Name);
             this.DefaultViewModel["Items"] = buildings;
-            
+            map.DrawAllParkingLots();
             if (e.PageState == null)
             {
                 this.BuildingListView.SelectedItem = null;
