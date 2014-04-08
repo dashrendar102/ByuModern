@@ -99,6 +99,10 @@ namespace Common.WebServices.DO.ParkingLots
             if(sender is MapShape)
             {
                 var poly = sender as MapPolygon;
+                if(poly.Visible == false)
+                {
+                    return;
+                }
                 ParkingData tag = (ParkingData)poly.GetValue(TagProp);
 
                 if(!String.IsNullOrEmpty(tag.Title) || !String.IsNullOrEmpty(tag.Description))
@@ -152,7 +156,6 @@ namespace Common.WebServices.DO.ParkingLots
             }
             else
             {
-
                 this.parkingOutline.Visible = false;
                 this.parkingPolygon.Visible = false;
             }
