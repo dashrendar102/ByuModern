@@ -114,6 +114,10 @@
     <Compile Include="AssignmentDetail.xaml.cs">
       <DependentUpon>AssignmentDetail.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ByuMap.xaml.cs">
+      <DependentUpon>ByuMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ByuMapEntity.cs" />
     <Compile Include="BYUSettingsFlyout.xaml.cs">
       <DependentUpon>BYUSettingsFlyout.xaml</DependentUpon>
     </Compile>
@@ -122,6 +126,9 @@
     </Compile>
     <Compile Include="LoginSettingFlyout.xaml.cs">
       <DependentUpon>LoginSettingFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MapPage.xaml.cs">
       <DependentUpon>MapPage.xaml</DependentUpon>
@@ -146,6 +153,10 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="AssignmentDetail.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -215,6 +226,10 @@
     <Content Include="Assets\SplashScreen180.png" />
     <Content Include="Assets\storelogo.png" />
     <Content Include="Assets\test-background.png" />
+    <Page Include="ByuMap.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Content Include="DataModel\SampleData.json" />
   </ItemGroup>
   <ItemGroup>
