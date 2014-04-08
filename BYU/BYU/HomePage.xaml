@@ -103,11 +103,14 @@
   -->
     <Grid>
         <Grid.Background>
+            <ImageBrush Stretch="Fill" ImageSource="Assets/test-background.png"/>
+        </Grid.Background>
+        <!--<Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                 <GradientStop Color="#FFE0EDF9" Offset="1"/>
                 <GradientStop Color="White" Offset="0.5"/>
             </LinearGradientBrush>
-        </Grid.Background>
+        </Grid.Background>-->
         <Grid.RowDefinitions>
             <RowDefinition Height="120"/>
             <RowDefinition Height="*"/>
@@ -124,15 +127,15 @@
         </Grid.ChildrenTransitions>
 
         <!-- Define Backgrounds -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="White"/>
+        <Border Grid.Row="0" Grid.ColumnSpan="3" />
 
         <Border Grid.Row="1" Grid.ColumnSpan="3">
-            <Border.Background>
+            <!--<Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFE0EDF9" Offset="1"/>
                     <GradientStop Color="White"/>
                 </LinearGradientBrush>
-            </Border.Background>
+            </Border.Background>-->
         </Border>
 
         <!-- button and page title -->
