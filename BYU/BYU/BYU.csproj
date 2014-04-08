@@ -208,6 +208,7 @@
     <Content Include="Assets\Logos\Temp\logo_70_70.png" />
     <Content Include="Assets\Logos\Temp\SplashScreen.png" />
     <Content Include="Assets\messing_with_background.png" />
+    <Content Include="Assets\parking.png" />
     <Content Include="Assets\parking_lots.jpg" />
     <Content Include="Assets\SplashScreen.scale-140.png" />
     <Content Include="Assets\SplashScreen140.png" />

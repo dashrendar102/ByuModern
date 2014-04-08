@@ -61,6 +61,7 @@ namespace Common
             MyBingMap.VenueManager.ActiveVenue = ByuVenue;
             MyBingMap.VenueManager.ActiveVenueChanged += VenueManager_ActiveVenueChanged;
             MyBingMap.VenueManager.VenueEntityTapped += VenueManager_VenueEntityTapped;
+            this.ResetView();
         }
 
         private void LoadBuildingAcronyms(ByuBuilding[] webServiceBuildings, ByuMapEntity[] buildings)
@@ -193,8 +194,10 @@ namespace Common
                 //Orignal values 1/475 and 14.25 found using linear regression
                 //Reduce the denominator on the left to increase the zoom per pixel of height increase
                 //Increase the number on the right to increase the baseline zoom
-                //Max is used because zoom should be at least 16 to make buildings clickable
-                return Math.Max(this.Height / 475 + 14.25, 16);
+                //Max is used because certain zoom levels are required for certain functionality:
+                // - Zoom should be at least 16 to make buildings clickable
+                // - Zoom should be at least 17 for buildings to have 3D outlines
+                return Math.Max(this.Height / 475 + 14.25, 17);
             }
         }
 
