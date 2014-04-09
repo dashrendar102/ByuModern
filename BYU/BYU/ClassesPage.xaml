@@ -100,7 +100,7 @@
                                         <StackPanel.Background>
                                             <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                                         </StackPanel.Background>
-                                        <StackPanel Orientation="Horizontal" Margin="5,5,0,0" Height="50">
+                                        <StackPanel Orientation="Horizontal" Margin="15,10,0,0" Height="50">
                                             <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
                                             <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
                                             <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
@@ -146,14 +146,14 @@
                                         <StackPanel.Background>
                                             <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
                                         </StackPanel.Background>
-                                        <TextBlock Text="{Binding name}" Margin="5,0" Foreground="White" FontSize="20"/>
+                                        <TextBlock Text="{Binding name}" Margin="10,10,0,0" Foreground="White" FontSize="20"/>
                                         <StackPanel Orientation="Horizontal" Margin="15,0">
                                             <TextBlock Foreground="White" FontSize="16">
                                             <Run Text="Due " />
                                             <Run Text="{Binding FormattedDueDate}" />
                                             </TextBlock>
                                         </StackPanel>
-                                        <TextBlock Text="{Binding ShortDescription}" TextWrapping="WrapWholeWords" Margin="15,0" Foreground="White" FontSize="16"/>
+                                        <TextBlock Text="{Binding ShortDescription}" TextWrapping="WrapWholeWords" Margin="15,0,0,10" Foreground="White" FontSize="16"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
