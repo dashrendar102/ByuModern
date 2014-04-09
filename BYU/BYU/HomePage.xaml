@@ -103,7 +103,7 @@
   -->
     <Grid>
         <Grid.Background>
-            <ImageBrush Stretch="Fill" ImageSource="Assets/test-background.png"/>
+            <ImageBrush Stretch="UniformToFill" ImageSource="Assets/test-background.png"/>
         </Grid.Background>
         <!--<Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
