@@ -210,6 +210,7 @@ namespace BYU
         }
         private void GoBack()
         {
+            map.HideAllParkingLots();
             if (this.UsingLogicalPageNavigation() && this.ParkingListView.SelectedItem != null)
             {
                 // When logical page navigation is in effect and there's a selected item that
