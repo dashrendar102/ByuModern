@@ -215,11 +215,11 @@ namespace BYU
             {
                 if (userInfo != null)
                 {
-                    this.UserButton.Content = userInfo.names.preferred_name;
+                    this.UserButton.Text = userInfo.names.preferred_name;
                 }
                 else
                 {
-                    this.UserButton.Content = credential.UserName;
+                    this.UserButton.Text = credential.UserName;
                 }
             }
             this.LoginNameTextbox.IsEnabled = !loggedIn;

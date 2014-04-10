@@ -92,7 +92,7 @@ namespace BYU
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
         }
 
-        private async void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
             selectedCourse = ClassesListView.SelectedItem as CourseInformation;
             e.PageState.Add(SELECTED_COURSE_KEY, ClassesListView.SelectedItem);

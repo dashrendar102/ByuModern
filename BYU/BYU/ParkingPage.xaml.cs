@@ -30,7 +30,7 @@ namespace BYU
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
-        private static MapShapeLayer parkingLayer;
+        //private static MapShapeLayer parkingLayer;
 
         string[] ParkingLotTypes = new string[] {"All Lots", "Student (Y)", "Graduate (G)", "Faculty/Staff (A)", "Helaman Halls (C)","Restricted Visitor (R)", 
                  "Visitor (V)","Timed (T)", "Motorcycle (MOTOR)","Bike (BIKE)","Construction (CON)","Heritage Halls (B)"};
