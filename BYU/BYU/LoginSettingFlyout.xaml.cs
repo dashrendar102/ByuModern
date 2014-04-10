@@ -27,11 +27,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using System.Collections.ObjectModel;
 using Windows.UI;
 using Windows.Storage;
-
-using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Navigation = Windows.UI.Xaml.Navigation;
-using System;
 
 // The Settings Flyout item template is documented at http://go.microsoft.com/fwlink/?LinkId=273769
 
