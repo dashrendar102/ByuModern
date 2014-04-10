@@ -25,6 +25,7 @@ namespace BackgroundTask
             BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
 
             await UpdateTile();
+            //await CourseDebug();
 
             // Inform the system that the task is finished.
             deferral.Complete();
@@ -33,6 +34,61 @@ namespace BackgroundTask
         private static int CompareAssignments(Assignment x, Assignment y)
         {
             return x.DueDateTime.CompareTo(y.DueDateTime); // TODO need to make these comparisons by day only and not the time
+        }
+
+        private static async Task CourseDebug()
+        {
+            // Create a tile update manager
+            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
+            updater.EnableNotificationQueue(true);
+            updater.Clear();
+
+            LearningSuiteCourse[] courses = await LearningSuiteCourse.GetCourses();
+            foreach (var course in courses)
+            {
+                XmlDocument tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWide310x150Text01);
+                XmlNodeList textAttrs = tileXml.GetElementsByTagName(textElementName);
+                //textAttrs[0].InnerText = course.title; // Softwae Engineering
+                //textAttrs[1].InnerText = course.titleCode; // 003
+                //textAttrs[2].InnerText = course.CourseID; // random string
+                try
+                {
+                    textAttrs[0].InnerText = course.curriculumID;
+                }
+                catch 
+                {
+                    textAttrs[0].InnerText = "NULL";
+                }
+
+                try
+                {
+                    textAttrs[1].InnerText = course.shortTitle;
+                }
+                catch
+                {
+                    textAttrs[1].InnerText = "NULL";
+                }
+
+                try
+                {
+                    textAttrs[2].InnerText = course.externalURL;
+                }
+                catch
+                {
+                    textAttrs[2].InnerText = "NULL";
+                }
+
+                try
+                {
+                    textAttrs[3].InnerText = course.period;
+                }
+                catch
+                {
+                    textAttrs[3].InnerText = "NULL";
+                }
+
+                updater.Update(new TileNotification(tileXml));
+            }
         }
 
         private static async Task UpdateTile()
@@ -47,11 +103,34 @@ namespace BackgroundTask
                 Assignment[] assignments = await Assignment.GetUpcomingAssignments(Int16.MaxValue);
                 Dictionary<string, List<Assignment>> sortedAssigns = SortAssignments(assignments);
 
+                // create course id to shorttitle map
+                LearningSuiteCourse[] courses = await LearningSuiteCourse.GetCourses();
+                Dictionary<string, string[]> courseShortTitles = new Dictionary<string, string[]>();
+                foreach (var course in courses)
+                {
+                    try
+                    {
+                        string[] courseInfo = new string[2];
+                        courseInfo[0] = course.shortTitle;
+                        courseInfo[1] = course.title;
+                        courseShortTitles[course.CourseID] = courseInfo;
+                    }
+                    catch (ArgumentException)
+                    {
+                        // skip if for some reason the course is already in the dictionary
+                    }
+                }
+
                 foreach (KeyValuePair<string, List<Assignment>> kvp in sortedAssigns)
                 {
                     XmlDocument tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWide310x150Text01);
                     XmlNodeList textAttrs = tileXml.GetElementsByTagName(textElementName);
-                    textAttrs[0].InnerText = kvp.Key;
+
+                    string[] courseTitle;
+                    if (courseShortTitles.TryGetValue(kvp.Key, out courseTitle))
+                    {
+                        textAttrs[0].InnerText = courseTitle[0] + ": " + courseTitle[1];
+                    }
 
                     // only 4 text fields in TileWide310x150Text01, must use them wisely.
                     // line 0: course
@@ -60,15 +139,15 @@ namespace BackgroundTask
                     // line 3: the last assignment if there are only 3 assignments total, or a string indicating how many more there are "+6 more"
                     if (kvp.Value.Count > 0)
                     {
-                        textAttrs[1].InnerText = kvp.Value[0].name;
+                        textAttrs[1].InnerText = kvp.Value[0].DueDateTime.Month + "/" + kvp.Value[0].DueDateTime.Day + " " + kvp.Value[0].name;
                         if (kvp.Value.Count > 1) 
                         {
-                            textAttrs[2].InnerText = kvp.Value[1].name;
+                            textAttrs[2].InnerText = kvp.Value[1].DueDateTime.Month + "/" + kvp.Value[1].DueDateTime.Day + " " + kvp.Value[1].name;
                             if (kvp.Value.Count > 2) 
                             {
                                 if (kvp.Value.Count == 3)
                                 {
-                                    textAttrs[3].InnerText = kvp.Value[2].name;
+                                    textAttrs[3].InnerText = kvp.Value[2].DueDateTime.Month + "/" + kvp.Value[2].DueDateTime.Day + " " + kvp.Value[2].name;
                                 }
                                 else
                                 {
