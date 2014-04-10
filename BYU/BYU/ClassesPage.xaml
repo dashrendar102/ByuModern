@@ -19,9 +19,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="20"/>
             <ColumnDefinition Width="180"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -30,9 +31,11 @@
         </Grid.ChildrenTransitions>
 
         <!-- Define Backgrounds -->
-        <Border Grid.Row="0" Grid.ColumnSpan="3" Background="White"/>
+        <Border Grid.RowSpan="2" Background="{StaticResource BYU_BLUE_BRUSH}"/>
+        
+        <Border Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Background="White"/>
 
-        <Border Grid.Row="1" Grid.ColumnSpan="3">
+        <Border Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
             <Border.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFE0EDF9" Offset="1"/>
@@ -42,14 +45,36 @@
         </Border>
 
         <!-- button and page title -->
-        <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
-                Margin="20,42,0,0" 
-                VerticalAlignment="Top"
-                Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
-                AutomationProperties.Name="Back"
-                AutomationProperties.AutomationId="BackButton"
-                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"/>
-        <StackPanel x:Name="SelectedClassSummary" Margin="0,35,10,0" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
+        <StackPanel Grid.RowSpan="2">
+            <StackPanel Orientation="Horizontal">
+                <Button  x:Name="backButton" Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    Margin="20,42,0,0" 
+                    VerticalAlignment="Top"
+                    Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                    AutomationProperties.Name="Back"
+                    AutomationProperties.AutomationId="BackButton"
+                    AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"
+                    RequestedTheme="Dark"/>
+                <TextBlock Text="Classes" Style="{StaticResource HeaderTextBlockStyle}" Margin="20,42,30,0" Foreground="White"/>
+            </StackPanel>
+            <ListView x:Name="ClassesListView" Margin="10,20,0,0" ItemsSource="{Binding}" SelectionChanged="ClassButton_Click">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Width="200">
+                            <StackPanel.Background>
+                                <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
+                            </StackPanel.Background>
+                            <StackPanel Orientation="Horizontal" Margin="15,10,0,0" Height="45">
+                                <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                                <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>
+        <StackPanel x:Name="SelectedClassSummary" Margin="0,35,10,0" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Left" Orientation="Horizontal">
             <StackPanel Orientation="Vertical" VerticalAlignment="Top">
                 <StackPanel Orientation="Horizontal" Margin="15,0,5,20">
                     <TextBlock Text="{Binding course}" Margin="0,0,5,0" Style="{StaticResource HeaderTextBlockStyle}" />
@@ -77,12 +102,11 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-        <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="2" Margin="0,10,15,10" Visibility="Collapsed"/>
-        <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Background="#FFB6B6B6" Grid.Column="2" Margin="0,60,130,37" Visibility="Collapsed" Height="31"/>
-        <ScrollViewer ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="1" Grid.ColumnSpan="3">
+        <Image x:Name="UserImage" HorizontalAlignment="Right" VerticalAlignment="Center" Source="Assets/defaultPhoto.png" Width="100" Height="100" Grid.Column="3" Margin="0,10,15,10" Visibility="Collapsed"/>
+        <Button x:Name="UserButton" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI Light" Background="#FFB6B6B6" Grid.Column="3" Margin="0,60,130,37" Visibility="Collapsed" Height="31"/>
+        <ScrollViewer ZoomMode="Disabled" VerticalScrollBarVisibility="Hidden" VerticalScrollMode="Disabled" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
@@ -90,28 +114,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel x:Name="ClassesSection" Grid.Column="0" Margin="100,30,40,0" >
-                    <TextBlock Text="My Classes" Style="{StaticResource SubheaderTextBlockStyle}"/>
-                    <ScrollViewer Height="485" Margin="0,20,0,0" ZoomMode="Disabled" HorizontalScrollMode="Disabled">
-                        <ListView x:Name="ClassesListView" ItemsSource="{Binding}" SelectionChanged="ClassButton_Click">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Width="200">
-                                        <StackPanel.Background>
-                                            <SolidColorBrush Color="{StaticResource BYU_BLUE}"/>
-                                        </StackPanel.Background>
-                                        <StackPanel Orientation="Horizontal" Margin="15,10,0,0" Height="50">
-                                            <TextBlock Text="{Binding course}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
-                                            <TextBlock Text="-" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
-                                            <TextBlock Text="{Binding section}" Foreground="White" FontFamily="Global User Interface" FontSize="24"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </ScrollViewer>
-                </StackPanel>
-                <StackPanel x:Name="SelectedClassContent" Grid.Column="2" Margin="40,30,0,0">
+                <StackPanel x:Name="SelectedClassContent" Grid.Column="1" Margin="40,30,0,0">
                     <TextBlock Text="Announcements" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <ScrollViewer Height="485" Margin="0,15,0,0">
                         <ListView x:Name="AnnouncementsList" ItemsSource="{Binding}" SelectionMode="None">
@@ -134,7 +137,7 @@
                     </ScrollViewer>
                 </StackPanel>
 
-                <StackPanel x:Name="UpcomingAssignments" Grid.Column="1" Margin="40,30,0,0" VerticalAlignment="Top" >
+                <StackPanel x:Name="UpcomingAssignments" Grid.Column="0" Margin="40,30,0,0" VerticalAlignment="Top" >
 
                     <TextBlock Text="Upcoming Assignments" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <ScrollViewer ZoomMode="Disabled" Width="400" Height="485" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">

@@ -145,7 +145,8 @@
                 Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
                 AutomationProperties.Name="Back"
                 AutomationProperties.AutomationId="BackButton"
-                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"/>
+                AutomationProperties.ItemType="Navigation Button" HorizontalAlignment="Left" Width="41" Height="41"
+                RequestedTheme="Light"/>
         <!--<Image Source="Assets/Logos/logo_200_95_blue.png" Grid.Column="1"/>-->
         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" >
             <TextBlock Text="BYU" Style="{StaticResource HeaderTextBlockStyle}" FontWeight="Bold">

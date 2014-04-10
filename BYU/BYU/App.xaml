@@ -12,6 +12,7 @@
         <x:String x:Key="AppName">BYU8</x:String>
         <Color x:Key="BYU_BLUE">#FF002255</Color>
         <Color x:Key="BYU_TAN">#FFC5AF7D</Color>
+        <SolidColorBrush x:Key="BYU_BLUE_BRUSH" Color="{StaticResource BYU_BLUE}"/>
 
     </Application.Resources>
 </Application>
