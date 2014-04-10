@@ -25,7 +25,6 @@ namespace BackgroundTask
             BackgroundTaskDeferral deferral = taskInstance.GetDeferral();
 
             await UpdateTile();
-            //await CourseDebug();
 
             // Inform the system that the task is finished.
             deferral.Complete();
@@ -36,59 +35,15 @@ namespace BackgroundTask
             return x.DueDateTime.CompareTo(y.DueDateTime); // TODO need to make these comparisons by day only and not the time
         }
 
-        private static async Task CourseDebug()
+        private static string FormatAssignment(Assignment assign)
         {
-            // Create a tile update manager
-            var updater = TileUpdateManager.CreateTileUpdaterForApplication();
-            updater.EnableNotificationQueue(true);
-            updater.Clear();
-
-            LearningSuiteCourse[] courses = await LearningSuiteCourse.GetCourses();
-            foreach (var course in courses)
+            DateTime today = DateTime.Today;
+            if (assign.DueDateTime.Month == today.Month && assign.DueDateTime.Day == today.Day) 
             {
-                XmlDocument tileXml = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWide310x150Text01);
-                XmlNodeList textAttrs = tileXml.GetElementsByTagName(textElementName);
-                //textAttrs[0].InnerText = course.title; // Softwae Engineering
-                //textAttrs[1].InnerText = course.titleCode; // 003
-                //textAttrs[2].InnerText = course.CourseID; // random string
-                try
-                {
-                    textAttrs[0].InnerText = course.curriculumID;
-                }
-                catch 
-                {
-                    textAttrs[0].InnerText = "NULL";
-                }
-
-                try
-                {
-                    textAttrs[1].InnerText = course.shortTitle;
-                }
-                catch
-                {
-                    textAttrs[1].InnerText = "NULL";
-                }
-
-                try
-                {
-                    textAttrs[2].InnerText = course.externalURL;
-                }
-                catch
-                {
-                    textAttrs[2].InnerText = "NULL";
-                }
-
-                try
-                {
-                    textAttrs[3].InnerText = course.period;
-                }
-                catch
-                {
-                    textAttrs[3].InnerText = "NULL";
-                }
-
-                updater.Update(new TileNotification(tileXml));
+                return assign.DueDateTime.Month + "/" + assign.DueDateTime.Day + " (Today) " + assign.name;
             }
+
+            return assign.DueDateTime.Month + "/" + assign.DueDateTime.Day + " " + assign.name;
         }
 
         private static async Task UpdateTile()
@@ -139,15 +94,15 @@ namespace BackgroundTask
                     // line 3: the last assignment if there are only 3 assignments total, or a string indicating how many more there are "+6 more"
                     if (kvp.Value.Count > 0)
                     {
-                        textAttrs[1].InnerText = kvp.Value[0].DueDateTime.Month + "/" + kvp.Value[0].DueDateTime.Day + " " + kvp.Value[0].name;
+                        textAttrs[1].InnerText = FormatAssignment(kvp.Value[0]);
                         if (kvp.Value.Count > 1) 
                         {
-                            textAttrs[2].InnerText = kvp.Value[1].DueDateTime.Month + "/" + kvp.Value[1].DueDateTime.Day + " " + kvp.Value[1].name;
+                            textAttrs[2].InnerText = FormatAssignment(kvp.Value[1]);
                             if (kvp.Value.Count > 2) 
                             {
                                 if (kvp.Value.Count == 3)
                                 {
-                                    textAttrs[3].InnerText = kvp.Value[2].DueDateTime.Month + "/" + kvp.Value[2].DueDateTime.Day + " " + kvp.Value[2].name;
+                                    textAttrs[3].InnerText = FormatAssignment(kvp.Value[2]);
                                 }
                                 else
                                 {
