@@ -29,7 +29,7 @@ namespace BYU
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private CourseInformation selectedCourse = null;
-        
+
         public CourseScheduleInformation ScheduleInformation { get; private set; }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace BYU
             {
                 await this.SetSelectedCourse((CourseInformation)e.PageState[SELECTED_COURSE_KEY]);
             }
-            
+
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
         }
 
@@ -155,21 +155,34 @@ namespace BYU
 
         private async Task setSelectedAnnouncements()
         {
-            String courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
-            Announcement[] announcements = await Announcement.GetAnnouncements(courseID);
-            foreach (Announcement announcement in announcements)
+            if (selectedCourse.LearningSuiteCourseInformation == null)
             {
-                announcement.text = StringUtils.ExtractAndPrettifyHTMLText(announcement.text);
+                AnnouncementsList.ItemsSource = null;
             }
-            AnnouncementsList.ItemsSource = new ObservableCollection<Announcement>(announcements);
+            else
+            {
+                String courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
+                Announcement[] announcements = await Announcement.GetAnnouncements(courseID);
+                foreach (Announcement announcement in announcements)
+                {
+                    announcement.text = StringUtils.ExtractAndPrettifyHTMLText(announcement.text);
+                }
+                AnnouncementsList.ItemsSource = new ObservableCollection<Announcement>(announcements);
+            }
         }
 
         private async Task loadAssignmentInfo()
         {
-            string courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
-            Assignment[] assignments = await Assignment.GetUpcomingAssignments(courseID);
-            ObservableCollection<Assignment> assignmentCollection = new ObservableCollection<Assignment>(assignments);
-            UpcomingAssignmentsList.ItemsSource = assignmentCollection;
+            if (selectedCourse.LearningSuiteCourseInformation == null)
+            {
+                UpcomingAssignmentsList.ItemsSource = null;
+            }
+            else
+            {
+                string courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
+                Assignment[] assignments = await Assignment.GetUpcomingAssignments(courseID);
+                UpcomingAssignmentsList.ItemsSource = new ObservableCollection<Assignment>(assignments); ;
+            }
         }
 
         /// <summary>

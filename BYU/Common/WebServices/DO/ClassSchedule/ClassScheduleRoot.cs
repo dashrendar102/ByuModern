@@ -34,8 +34,9 @@ namespace Common.WebServices.DO.ClassSchedule
                 LearningSuiteCourse matchingLSCourse = learningSuiteCourses.SingleOrDefault(lsCourse => lsCourse.curriculumID.Equals(course.curriculum_id));
                 if (matchingLSCourse == null)
                 {
-                    throw new Exception("there appears to be a course in the schedule with no learning suite equivalent");
+                    //throw new Exception("there appears to be a course in the schedule with no learning suite equivalent");
                 }
+
                 course.LearningSuiteCourseInformation = matchingLSCourse;
             }
         }
