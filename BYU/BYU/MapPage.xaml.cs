@@ -257,7 +257,7 @@ namespace BYU
             //var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
             //map.SelectEntity(buildingEntity);
             this.BuildingListView.SelectedItem = buildingEntity;
-            
+            map.SelectEntity((ByuMapEntity)buildingEntity);            
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
