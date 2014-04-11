@@ -42,22 +42,32 @@ namespace Common.Storage
             return CryptographicBuffer.EncodeToHexString(hashed);
         }
 
-        //if the file is not already cached, cache it
-        private async Task<Stream> RetrieveStream(string url, bool useEncryption = true, bool authenticate = true, TimeSpan timeout = default(TimeSpan))
+        internal async Task<StorageFile> RetrieveFile(string url, bool useEncryption = true, bool authenticate = true,
+            TimeSpan timeout = default(TimeSpan))
         {
             string fileName = TransformURLToFilename(url);
             StorageFile file = await FileHelper.GetFile(await GetCacheFolder(), fileName);
             if (file != null)
             {
                 TimeSpan age = DateTimeOffset.Now - file.DateCreated;
-                if (timeout == default(TimeSpan) || age < timeout)
+                if (timeout != default(TimeSpan) && age >= timeout)
                 {
-                    return await FileHelper.OpenReadOnlyFileStream(file, useEncryption);
+                    await file.DeleteAsync();
+                    file = null;
                 }
-                //is this desirable? Should we delete or just ignore it?
-                await file.DeleteAsync();
             }
-            file = await DownloadToCache(url, fileName, useEncryption, authenticate);
+
+            if (file == null)
+            {
+                file = await DownloadToCache(url, fileName, useEncryption, authenticate);
+            }
+            return file;
+        }
+
+        //if the file is not already cached, cache it
+        private async Task<Stream> RetrieveStream(string url, bool useEncryption = true, bool authenticate = true, TimeSpan timeout = default(TimeSpan))
+        {
+            StorageFile file = await RetrieveFile(url, useEncryption, authenticate, timeout);
             return await FileHelper.OpenReadOnlyFileStream(file, useEncryption);
         }
 

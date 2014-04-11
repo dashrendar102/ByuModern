@@ -117,7 +117,7 @@ namespace BYU
                 SetIdCardTemplate("Assets/idCardDTF.png");
             }
 
-            userPicture.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
+            userPicture.Source = new BitmapImage(await PersonPhoto.GetPhotoUriAsync());
 
             idCardCanvas.DataContext = idResponse;
 
