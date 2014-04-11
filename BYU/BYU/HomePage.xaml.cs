@@ -82,7 +82,7 @@ namespace BYU
                 if (AuthenticationManager.LoggedIn())
                 {
                     userInfo = await PersonSummaryResponse.GetPersonSummary();
-                    // userPhotoUri = await PersonPhoto.getPhotoUri();
+                    // userPhotoUri = await PersonPhoto.GetPhotoUriAsync();
                     await LoadUserPhoto();
                     await PopulateClasses();
                 }
@@ -188,7 +188,7 @@ namespace BYU
             {
                 this.userInfo = await PersonSummaryResponse.GetPersonSummary();
 
-                //userPhotoUri = await PersonPhoto.getPhotoUri();
+                //userPhotoUri = await PersonPhoto.GetPhotoUriAsync();
                 await LoadUserPhoto();
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 vault.Add(new Windows.Security.Credentials.PasswordCredential(
@@ -232,9 +232,9 @@ namespace BYU
 
         private async Task LoadUserPhoto()
         {
-            if ((await PersonPhoto.getPhotoUri()) != null)
+            if ((await PersonPhoto.GetPhotoUriAsync()) != null)
             {
-                UserImage.Source = new BitmapImage(await PersonPhoto.getPhotoUri());
+                UserImage.Source = new BitmapImage(await PersonPhoto.GetPhotoUriAsync());
             }
             else
             {
@@ -272,7 +272,7 @@ namespace BYU
             if (AuthenticationManager.LoggedIn())
             {
                 this.userInfo = await PersonSummaryResponse.GetPersonSummary();
-                //userPhotoUri = await PersonPhoto.getPhotoUri();
+                //userPhotoUri = await PersonPhoto.GetPhotoUriAsync();
                 await LoadUserPhoto();
                 await PopulateClasses();
             }
