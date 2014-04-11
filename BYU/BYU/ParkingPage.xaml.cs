@@ -63,10 +63,6 @@ namespace BYU
             // to change from showing two panes to showing a single pane
             Window.Current.SizeChanged += Window_SizeChanged;
             this.InvalidateVisualState();
-            
-            //parkingLayer = new MapShapeLayer();
-            //map.addShapeLayer(parkingLayer);
-
         }
 
         /// <summary>
@@ -128,6 +124,7 @@ namespace BYU
                 typeID = TypeID;
             }
         }
+
 
         /// <summary>
         /// Preserves state associated with this page in case the application is suspended or the

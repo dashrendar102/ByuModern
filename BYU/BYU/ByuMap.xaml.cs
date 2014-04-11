@@ -203,24 +203,9 @@ namespace Common
 
         public void DrawAllParkingLots()
         {
-            //CheckForParkingLayer();
             foreach (ParkingLot Lot in ParkingLots)
             {
                 Lot.SetVisible(true);
-            }
-        }
-
-        private void CheckForParkingLayer()
-        {
-            if(MyBingMap.ShapeLayers.Count == 0)
-            {
-                MyBingMap.ShapeLayers.Add(parkingLayer);
-
-                //foreach (ParkingLot mylot in ParkingLots)
-                //{
-                //    parkingLayer.Shapes.Add(mylot.getParkingPolygon());
-                //    parkingLayer.Shapes.Add(mylot.getParkingOutline());
-                //}
             }
         }
 
@@ -251,7 +236,7 @@ namespace Common
             {
                 parkingLayer = new MapShapeLayer();
                 MyBingMap.ShapeLayers.Add(parkingLayer);
-
+                //MyBingMap.Children.Add(Infobox);
                 ParkingLotResponse[] parkingLots = await ParkingLotRoot.getAllLots();
 
                 List<ParkingLot> myLots = new List<ParkingLot>();
@@ -285,9 +270,9 @@ namespace Common
             });
         }
 
-        internal void OpenInfobox(MapPolygon myLot)
+        public void OpenInfobox(MapPolygon myLot)
         {
-            //Infobox.DataContext = myLot.GetValue(TagProp);
+            //Infobox.DataContext = myLot.GetValue();
             Infobox.DataContext = "hello";
             Infobox.Visibility = Visibility.Visible;
             MapLayer.SetPosition(Infobox, MapLayer.GetPosition(myLot.Locations[1]));

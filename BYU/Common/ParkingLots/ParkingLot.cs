@@ -28,7 +28,7 @@ namespace Common.WebServices.DO.ParkingLots
         public static readonly DependencyProperty TagProp = DependencyProperty.Register
             ("Tag", typeof(object), typeof(MapShape), new PropertyMetadata(null));
         
-        
+
         public ParkingLot(ParkingLotResponse Lot)
         {
             this.Lot = Lot;
@@ -44,6 +44,7 @@ namespace Common.WebServices.DO.ParkingLots
             setColors();
             setPoints();
         }
+
 
         private void setPoints()
         {
@@ -96,20 +97,27 @@ namespace Common.WebServices.DO.ParkingLots
 
         private async void ParkingLotTapped(object sender, TappedRoutedEventArgs e)
         {
-            if(sender is MapShape)
+            //if(sender is MapShape)
+            //{
+            //    var poly = sender as MapShape;
+            //    ParkingData tag = (ParkingData)poly.GetValue(TagProp);
+                
+            //}
+
+            if (sender is MapShape)
             {
                 var poly = sender as MapPolygon;
-                if(poly.Visible == false)
+                if (poly.Visible == false)
                 {
                     return;
                 }
                 ParkingData tag = (ParkingData)poly.GetValue(TagProp);
 
-                if(!String.IsNullOrEmpty(tag.Title) || !String.IsNullOrEmpty(tag.Description))
+                if (!String.IsNullOrEmpty(tag.Title) || !String.IsNullOrEmpty(tag.Description))
                 {
                     //ByuMap.OpenInfobox(poly as MapPolygon);
                     //map.infobox
-                    var msg = new MessageDialog(tag.Title + '\n' +tag.Description);
+                    var msg = new MessageDialog(tag.Title + '\n' + tag.Description);
                     try
                     {
                         await msg.ShowAsync();
@@ -124,14 +132,11 @@ namespace Common.WebServices.DO.ParkingLots
 
         private void ParkingLotEntered(object sender, PointerRoutedEventArgs e)
         {
-            //send string to map
-            //map.OpenInfobox(this.parkingPolygon);
             this.parkingOutline.Width = 3;
         }
 
         private void ParkingLotExited(object sender, PointerRoutedEventArgs e)
         {
-            //Infobox.Visibility = Visibility.Collapsed;
             this.parkingOutline.Width = 2;
         }
 

@@ -75,7 +75,7 @@
         </ListView>
 
 
-        <Map:ByuMap x:Name = "map" Grid.Column="1" Grid.Row="0" />
+        <Map:ByuMap x:Name = "map" Grid.Column="1" Grid.Row="0"/>
 
     </Grid>
     <!--<local:ByuMap Grid.Column = />-->
