@@ -164,5 +164,58 @@ namespace BYU
         }
 
         #endregion
+
+        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width < 549)
+            {
+                idCardCanvas.Margin = new Thickness(-220, 100, 0, 0);
+                Logo1.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                Logo2.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                DetailsScrollViewer.VerticalScrollMode = ScrollMode.Enabled;
+                DetailsScrollViewer.Width = 450;
+                DetailsScrollViewer.Margin = new Thickness(-200, 0, 0, 0);
+            }
+            else if (e.NewSize.Width < 585)
+            {
+                idCardCanvas.Margin = new Thickness(-140, 10, 0, 0);
+                Logo1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                Logo2.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                DetailsScrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+                DetailsScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                DetailsScrollViewer.Width = 525;
+                DetailsScrollViewer.Margin = new Thickness(-225, 0, 0, 0);
+            }
+            else if (e.NewSize.Width < 675)
+            {
+                idCardCanvas.Margin = new Thickness(-120, 10, 0, 0);
+                Logo1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                Logo2.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                DetailsScrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+                DetailsScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                DetailsScrollViewer.Width = 600;
+                DetailsScrollViewer.Margin = new Thickness(-175, 0, 0, 0);
+            }
+            else if (e.NewSize.Width < 1008)
+            {
+                idCardCanvas.Margin = new Thickness(-40, 10, 0, 0);
+                Logo1.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                Logo2.Visibility = Windows.UI.Xaml.Visibility.Collapsed;
+                DetailsScrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+                DetailsScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                DetailsScrollViewer.Width = 700;
+                DetailsScrollViewer.Margin = new Thickness(-125, 0, 0, 0);
+            }
+            else
+            {
+                idCardCanvas.Margin = new Thickness(0, 10, 0, 0);
+                Logo1.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                Logo2.Visibility = Windows.UI.Xaml.Visibility.Visible;
+                DetailsScrollViewer.VerticalScrollMode = ScrollMode.Disabled;
+                DetailsScrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                DetailsScrollViewer.Width = Double.NaN;
+                DetailsScrollViewer.Margin = new Thickness(0, 0, 0, 0);
+            }
+        }
     }
 }
