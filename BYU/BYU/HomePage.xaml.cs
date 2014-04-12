@@ -186,16 +186,7 @@ namespace BYU
             });
             if (webServiceSession != null)
             {
-                this.userInfo = await PersonSummaryResponse.GetPersonSummary();
-
-                //userPhotoUri = await PersonPhoto.GetPhotoUriAsync();
-                await LoadUserPhoto();
-                var vault = new Windows.Security.Credentials.PasswordVault();
-                vault.Add(new Windows.Security.Credentials.PasswordCredential(
-                    "byu.edu", LoginNameTextbox.Text, LoginPasswordTextbox.Password));
-                await PopulateClasses();
-                LoginNameTextbox.Text = "";
-                LoginPasswordTextbox.Password = "";
+                SetupAuthenticatedUser(LoginNameTextbox.Text, LoginPasswordTextbox.Password);
             }
             else
             {
@@ -205,6 +196,20 @@ namespace BYU
 
             SetElementEnableStatuses();
             ProgressBar.Visibility = Visibility.Collapsed;
+        }
+
+        public async void SetupAuthenticatedUser(string name, string pass)
+        {
+            this.userInfo = await PersonSummaryResponse.GetPersonSummary();
+
+            //userPhotoUri = await PersonPhoto.GetPhotoUriAsync();
+            await LoadUserPhoto();
+            var vault = new Windows.Security.Credentials.PasswordVault();
+            vault.Add(new Windows.Security.Credentials.PasswordCredential(
+                "byu.edu", name, pass));
+            await PopulateClasses();
+            LoginNameTextbox.Text = "";
+            LoginPasswordTextbox.Password = "";
         }
 
         private void SetElementEnableStatuses()

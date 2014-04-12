@@ -83,7 +83,11 @@ namespace BYU
                 this.Hide();
 
                 // revert back to start screen ?
+                var vault = new Windows.Security.Credentials.PasswordVault();
+                vault.Add(new Windows.Security.Credentials.PasswordCredential(
+                    "byu.edu", netID, password));
                 App.RootFrame.Navigate(typeof(HomePage));
+
             }
         }
     }
