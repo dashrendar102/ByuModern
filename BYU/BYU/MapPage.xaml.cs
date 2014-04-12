@@ -19,6 +19,8 @@ namespace BYU
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
+        private Task LoadBuildingsTask;
+
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
         /// process lifetime management
@@ -39,6 +41,7 @@ namespace BYU
         public MapPage()
         {
             this.InitializeComponent();
+            LoadBuildingsTask = LoadBuildings();
 
             // Setup the navigation helper
             this.navigationHelper = new NavigationHelper(this);
@@ -64,6 +67,16 @@ namespace BYU
             BuildingListView.SelectAndScrollIntoView(e.Entity);
         }
 
+        private async Task LoadBuildings()
+        {
+            var buildings = await map.GetBuildingsAsync();
+            if (buildings != null)
+            {
+                buildings = buildings.OrderBy(building => building.Name);
+                this.DefaultViewModel["Items"] = buildings;
+            }
+        }
+
         /// <summary>
         /// Populates the page with content passed during navigation.  Any saved state is also
         /// provided when recreating a page from a prior session.
@@ -77,13 +90,6 @@ namespace BYU
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-
-            var buildings = await map.GetBuildingsAsync();
-            if (buildings != null)
-            {
-                buildings = buildings.OrderBy(building => building.Name);
-                this.DefaultViewModel["Items"] = buildings;
-            }
             if (e.PageState == null)
             {
                 this.BuildingListView.SelectedItem = null;
@@ -103,6 +109,7 @@ namespace BYU
                     //this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
+            await LoadBuildingsTask;
         }
 
 
@@ -250,6 +257,7 @@ namespace BYU
 
         private async Task SelectBuildingByName(string buildingName)
         {
+            await LoadBuildingsTask;
             var buildings = await map.GetBuildingsAsync();
             if (buildings != null)
             {
