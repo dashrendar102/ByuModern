@@ -1,26 +1,13 @@
-﻿using System.Threading.Tasks;
-using BYU.Common;
-using BYU.Data;
+﻿using BYU.Common;
+using Common;
+using Common.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Common;
-using Windows.UI.Xaml.Shapes;
-using Bing.Maps;
-
-// The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
 namespace BYU
 {
@@ -58,9 +45,11 @@ namespace BYU
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
+            map.BuildingSelected += SelectEntityInList;
+
             // Setup the logical page navigation components that allow
             // the page to only show one pane at a time.
-            this.navigationHelper.GoBackCommand = new RelayCommand(() => this.GoBack(), () => this.CanGoBack());
+            this.navigationHelper.GoBackCommand = new RelayCommand(GoBack, CanGoBack);
             this.BuildingListView.SelectionChanged += BuildingListViewSelectionChanged;
 
             // Start listening for Window size changes 
@@ -68,6 +57,11 @@ namespace BYU
             Window.Current.SizeChanged += Window_SizeChanged;
             this.InvalidateVisualState();
 
+        }
+
+        private void SelectEntityInList(object sender, BuildingSelectedEventArgs e)
+        {
+            BuildingListView.SelectAndScrollIntoView(e.Entity);
         }
 
         /// <summary>
@@ -259,12 +253,14 @@ namespace BYU
             var buildings = await map.GetBuildingsAsync();
             if (buildings != null)
             {
-                var buildingEntity =
-                    BuildingListView.Items.FirstOrDefault(obj => (obj as ByuMapEntity).Acronym == buildingName);
-                //var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
-                //map.SelectEntity(buildingEntity);
-                this.BuildingListView.SelectedItem = buildingEntity;
-                map.SelectEntity((ByuMapEntity)buildingEntity);
+                var buildingEntity = (ByuMapEntity)
+                    BuildingListView.Items.FirstOrDefault(obj => ((ByuMapEntity) obj).Acronym == buildingName);
+
+                if (buildingEntity != null)
+                {
+                    BuildingListView.SelectAndScrollIntoView(buildingEntity);
+                    map.SelectEntity(buildingEntity);
+                }
             }
         }
 

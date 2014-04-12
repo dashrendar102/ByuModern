@@ -128,6 +128,7 @@
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleResponse.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
+    <Compile Include="Extensions\ListViewExtensions.cs" />
     <Compile Include="WebServices\DO\LearningSuite\Announcement.cs" />
     <Compile Include="WebServices\DO\LearningSuite\Assignment.cs" />
     <Compile Include="WebServices\DO\LearningSuite\CalendarItem.cs" />

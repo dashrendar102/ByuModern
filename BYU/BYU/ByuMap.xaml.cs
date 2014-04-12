@@ -146,8 +146,9 @@ namespace Common
         void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
         {
             var buildings = Buildings;
-            var building = buildings.SingleOrDefault(b => b.BingEntity == e.VenueEntity);
+            var building = buildings.SingleOrDefault(b => b.BingEntity.Id == e.VenueEntity.Id);
             MapEntitySelected(this, building);
+            OnBuildingSelected(new BuildingSelectedEventArgs {Entity = building});
         }
 
         void VenueManager_ActiveVenueChanged(object sender, ActiveVenueChangedEventArgs e)
@@ -321,5 +322,16 @@ namespace Common
             ResetView();
         }
 
+        public event EventHandler<BuildingSelectedEventArgs> BuildingSelected;
+
+        private void OnBuildingSelected(BuildingSelectedEventArgs e)
+        {
+            EventHandler<BuildingSelectedEventArgs> handler = BuildingSelected;
+            if (handler != null) handler(this, e);
+        }
+    }
+    public class BuildingSelectedEventArgs : EventArgs
+    {
+        public ByuMapEntity Entity { get; set; }
     }
 }

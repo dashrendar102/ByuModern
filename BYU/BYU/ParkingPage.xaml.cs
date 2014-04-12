@@ -56,7 +56,7 @@ namespace BYU
 
             // Setup the logical page navigation components that allow
             // the page to only show one pane at a time.
-            this.navigationHelper.GoBackCommand = new RelayCommand(() => this.GoBack(), () => this.CanGoBack());
+            this.navigationHelper.GoBackCommand = new RelayCommand(GoBack, CanGoBack);
             this.ParkingListView.SelectionChanged += ParkingListViewSelectionChanged;
 
             // Start listening for Window size changes 
