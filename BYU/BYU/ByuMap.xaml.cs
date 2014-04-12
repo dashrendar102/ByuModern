@@ -167,7 +167,7 @@ namespace Common
                 }
                 else
                 {
-                    throw new TimeoutException("Could not load maps data");
+                    return null;
                 }
             });
         }
@@ -197,12 +197,12 @@ namespace Common
 
         public void DrawParkingLotType(int parkingLotType)
         {
-            if(parkingLotType == 0)
+            if (parkingLotType == 0)
             {
                 DrawAllParkingLots();
                 return;
             }
-            foreach(ParkingLot lot in ParkingLots)
+            foreach (ParkingLot lot in ParkingLots)
             {
                 lot.SetVisible(parkingLotType);
             }
@@ -239,7 +239,7 @@ namespace Common
             else MyBingMap.ShapeLayers.Add(parkingLayer);
         }
 
-        public async Task <IEnumerable<ParkingLot>> GetParkingLotsAsync()
+        public async Task<IEnumerable<ParkingLot>> GetParkingLotsAsync()
         {
             return await Task.Run(() =>
             {
@@ -281,10 +281,14 @@ namespace Common
                         (double)(this.Resources["Longitude"] ?? ByuVenue.Location.Longitude)),
                     zoomLevel: Zoom
                 );
+
                 var buildings = await GetBuildingsAsync();
-                foreach (var building in buildings)
+                if (buildings != null)
                 {
-                    DeselectEntity(building);
+                    foreach (var building in buildings)
+                    {
+                        DeselectEntity(building);
+                    }
                 }
             }
         }

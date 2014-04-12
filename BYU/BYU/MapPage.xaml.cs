@@ -83,9 +83,13 @@ namespace BYU
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+
             var buildings = await map.GetBuildingsAsync();
-            buildings = buildings.OrderBy(building => building.Name);
-            this.DefaultViewModel["Items"] = buildings;
+            if (buildings != null)
+            {
+                buildings = buildings.OrderBy(building => building.Name);
+                this.DefaultViewModel["Items"] = buildings;
+            }
             if (e.PageState == null)
             {
                 this.BuildingListView.SelectedItem = null;
@@ -253,11 +257,15 @@ namespace BYU
         private async Task SelectBuildingByName(string buildingName)
         {
             var buildings = await map.GetBuildingsAsync();
-            var buildingEntity = BuildingListView.Items.FirstOrDefault(obj => (obj as ByuMapEntity).Acronym == buildingName);
-            //var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
-            //map.SelectEntity(buildingEntity);
-            this.BuildingListView.SelectedItem = buildingEntity;
-            map.SelectEntity((ByuMapEntity)buildingEntity);            
+            if (buildings != null)
+            {
+                var buildingEntity =
+                    BuildingListView.Items.FirstOrDefault(obj => (obj as ByuMapEntity).Acronym == buildingName);
+                //var buildingEntity = buildings.FirstOrDefault(entity => entity.Acronym == buildingName);
+                //map.SelectEntity(buildingEntity);
+                this.BuildingListView.SelectedItem = buildingEntity;
+                map.SelectEntity((ByuMapEntity)buildingEntity);
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
