@@ -17,7 +17,7 @@ namespace Common.Authentication
         {
             if (string.IsNullOrEmpty(netID) || string.IsNullOrEmpty(password))
             {
-                throw new InvalidCredentialsException(netID,password,"Given null or empty credentials.");
+                throw new InvalidCredentialsException(netID, password, "Given null or empty credentials.");
             }
 
             //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
@@ -31,7 +31,7 @@ namespace Common.Authentication
                 var vault = new Windows.Security.Credentials.PasswordVault();
                 if (credential != null)
                 {
-                    Logout();
+                    await Logout();
                 }
                 credential = new Windows.Security.Credentials.PasswordCredential(
                     "byu.edu", netID, password);
@@ -45,18 +45,14 @@ namespace Common.Authentication
 
         static public async Task Logout()
         {
-            if (credential != null)
+            var vault = new Windows.Security.Credentials.PasswordVault();
+            foreach (var c in vault.FindAllByResource("byu.edu"))
             {
-                var vault = new Windows.Security.Credentials.PasswordVault();
-                foreach (var c in vault.FindAllByResource("byu.edu"))
-                {
-                    vault.Remove(c);
-                }
-                //vault.Remove(credential);
-
-                credential = null;
-                await WebCache.Instance.ClearCache();
+                vault.Remove(c);
             }
+
+            credential = null;
+            await WebCache.Instance.ClearCache();
         }
 
         //static public PasswordCredential GetBYUCredentials()

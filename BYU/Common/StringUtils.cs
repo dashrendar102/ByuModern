@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.Data.Xml.Dom;
 
-namespace Common.WebServices
+namespace Common
 {
     public static class StringUtils
     {
@@ -68,6 +69,19 @@ namespace Common.WebServices
             string result = str.Substring(0, truncationIndex + 1).Trim();
             result += "...";
             return result;
+        }
+
+        public static string[] GetWordsToLower(string str)
+        {
+            if (!String.IsNullOrWhiteSpace(str))
+            {
+                //Remove anything in parenthesis
+                str = Regex.Replace(str, @"\(.*\)", String.Empty);
+                str = str.Trim();
+                return str.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => s.ToLower()).ToArray();
+            }
+            else return new string[0];
         }
     }
 }

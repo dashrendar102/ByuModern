@@ -55,7 +55,6 @@ namespace Common
 
         async Task SetupMapAsync()
         {
-
             await LoadBuildingsAndVenue();
             await LoadParkingLots();
             MyBingMap.VenueManager.ActiveVenue = ByuVenue;
@@ -72,7 +71,7 @@ namespace Common
             var webBuildingsDict = new Dictionary<string[], ByuBuilding>();
             foreach (var wb in webServiceBuildings)
             {
-                var nameTerms = GetWordsToLower(wb.Name);
+                var nameTerms = StringUtils.GetWordsToLower(wb.Name);
                 webBuildingsDict.Add(nameTerms, wb);
             }
 
@@ -80,7 +79,7 @@ namespace Common
             //Iterate through each Bing Venue entity to find the best BYU Building match
             foreach (var building in buildings)
             {
-                var nameTerms = GetWordsToLower(building.Name);
+                var nameTerms = StringUtils.GetWordsToLower(building.Name);
 
                 float bestScore = 0f;
                 ByuBuilding bestMatch = null;
@@ -142,19 +141,6 @@ namespace Common
             {
                 ByuVenue = await venueTask;
             }
-        }
-
-        private string[] GetWordsToLower(string str)
-        {
-            if (!String.IsNullOrWhiteSpace(str))
-            {
-                //Remove anything in parenthesis
-                str = Regex.Replace(str, @"\(.*\)", String.Empty);
-                str = str.Trim();
-                return str.Split(new char[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.ToLower()).ToArray();
-            }
-            else return new string[0];
         }
 
         void VenueManager_VenueEntityTapped(object sender, VenueEntityEventArgs e)
