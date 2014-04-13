@@ -138,10 +138,8 @@
                 </StackPanel>
 
                 <StackPanel x:Name="UpcomingAssignments" Grid.Column="0" Margin="40,30,0,0" VerticalAlignment="Top" >
-
                     <TextBlock Text="Upcoming Assignments" Style="{StaticResource SubheaderTextBlockStyle}"/>
                     <ScrollViewer ZoomMode="Disabled" Width="400" Height="485" VerticalScrollBarVisibility="Auto" Margin="0,15,0,0">
-
                         <ListView x:Name="UpcomingAssignmentsList" ItemsSource="{Binding}" SelectionChanged="UpcomingAssignmentsList_SelectionChanged">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
@@ -156,7 +154,7 @@
                                             <Run Text="{Binding FormattedDueDate}" />
                                             </TextBlock>
                                         </StackPanel>
-                                        <TextBlock Text="{Binding ShortDescription}" TextWrapping="WrapWholeWords" Margin="15,0,0,10" Foreground="White" FontSize="16"/>
+                                        <TextBlock Text="{Binding ShortDescription}" Width="320" TextWrapping="WrapWholeWords" Margin="10,0,0,10" Foreground="White" FontSize="16"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>

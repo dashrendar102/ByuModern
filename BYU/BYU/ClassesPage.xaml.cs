@@ -1,19 +1,14 @@
 ﻿using BYU.Common;
 using Common;
 using Common.Calendar;
-using Common.WebServices;
 using Common.WebServices.DO.ClassSchedule;
 using Common.WebServices.DO.LearningSuite;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using System.Linq;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -21,7 +16,11 @@ using System.Linq;
 namespace BYU
 {
     /// <summary>
-    /// A page that displays details for a single item within a group.
+    /// This page shows all courses for which the user is registered.
+    /// It accesses Learning Suite web services to display information about 
+    ///     upcoming assignments and course announcements.
+    /// Also gives the option to view the course's location on the Maps page
+    ///     or add the class to the Windows 8 Calendar.
     /// </summary>
     public sealed partial class ClassesPage : Page
     {
@@ -89,8 +88,6 @@ namespace BYU
             {
                 await this.SetSelectedCourse((CourseInformation)e.PageState[SELECTED_COURSE_KEY]);
             }
-
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
         }
 
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
@@ -132,9 +129,9 @@ namespace BYU
         #endregion
 
         /// <summary>
-        /// 
+        /// Event handler for class button click. Updates selected course information
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="sender">The button that was clicked.</param>
         /// <param name="e"></param>
         private async void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
@@ -142,9 +139,9 @@ namespace BYU
         }
 
         /// <summary>
-        /// Sets the currently selected course and loads course information into summary.
+        /// Sets the currently selected course and loads appropriate course information.
         /// </summary>
-        /// <param name="newCourse"></param>
+        /// <param name="newCourse">The course that has been selected.</param>
         private async Task SetSelectedCourse(CourseInformation newCourse)
         {
             selectedCourse = newCourse;
@@ -154,6 +151,10 @@ namespace BYU
             await loadAssignmentInfo();
         }
 
+        /// <summary>
+        /// Loads Learning Suite announcements based on the currently selected course.
+        /// </summary>
+        /// <returns></returns>
         private async Task setSelectedAnnouncements()
         {
             if (selectedCourse.LearningSuiteCourseInformation == null)
@@ -172,6 +173,10 @@ namespace BYU
             }
         }
 
+        /// <summary>
+        /// Loads Learning Suite assignment information for the currently selected course.
+        /// </summary>
+        /// <returns></returns>
         private async Task loadAssignmentInfo()
         {
             if (selectedCourse.LearningSuiteCourseInformation == null)
@@ -209,12 +214,22 @@ namespace BYU
             return new Windows.Foundation.Rect(point, new Windows.Foundation.Size(element.ActualWidth, element.ActualHeight));
         }
 
+        /// <summary>
+        /// When a course assignment is clicked, navigates to the Assignment Detail page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UpcomingAssignmentsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var parameters = Tuple.Create(selectedCourse, UpcomingAssignmentsList.SelectedValue as Assignment);
             this.Frame.Navigate(typeof(AssignmentDetail), parameters);
         }
 
+        /// <summary>
+        /// Shows the campus location of the currently selected class on the Maps page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ShowOnMapButton_OnClick(object sender, RoutedEventArgs e)
         {
             Button b = (Button)sender;
