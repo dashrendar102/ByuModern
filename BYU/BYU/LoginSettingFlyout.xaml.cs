@@ -50,18 +50,13 @@ namespace BYU
             var netID = this.LoginNameTextbox.Text;
             var password = this.LoginPasswordTextbox.Password;
 
-            bool success = false;
-            //try
-            //{
+            
             ProgressBar.Visibility = Visibility.Visible;
             SignInButton.IsEnabled = false;
             LoginNameTextbox.IsEnabled = false;
             LoginPasswordTextbox.IsEnabled = false;
-            //AuthenticationManager.Login(netID, password);
             WebServiceSession session = await WebServiceSession.GetSession(netID, password);
-            success = session != null;
-            //}
-            //catch (InvalidCredentialsException){ }
+            bool success = session != null;
 
             if (!success)
             {
@@ -74,12 +69,7 @@ namespace BYU
                 return;
             }
 
-            //await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => );
-            WebServiceSession webServiceSession = await Task.Run(() =>
-            {
-                return WebServiceSession.GetSession(netID, password);
-            });
-            if (webServiceSession == null)
+            if (session == null)
             {
                 var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
                 await messageDialog.ShowAsync();
