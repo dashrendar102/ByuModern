@@ -40,7 +40,12 @@ namespace BYU
             this.InitializeComponent();
         }
 
-        private async void SignInButton_Click(object sender, RoutedEventArgs e)
+        private void SignInButton_Click(object sender, RoutedEventArgs e)
+        {
+            DoLogin();
+        }
+
+        private async void DoLogin()
         {
             var netID = this.LoginNameTextbox.Text;
             var password = this.LoginPasswordTextbox.Password;
@@ -79,7 +84,8 @@ namespace BYU
                 var messageDialog = new MessageDialog("Username and Password are incorrect. Please try again.");
                 await messageDialog.ShowAsync();
             }
-            else {
+            else
+            {
                 this.Hide();
 
                 // revert back to start screen ?
@@ -88,6 +94,14 @@ namespace BYU
                     "byu.edu", netID, password));
                 App.RootFrame.Navigate(typeof(HomePage));
 
+            }
+        }
+
+        private void PasswordTextbox_KeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter && !this.LoginNameTextbox.Text.Equals(""))
+            {
+                DoLogin();
             }
         }
     }
