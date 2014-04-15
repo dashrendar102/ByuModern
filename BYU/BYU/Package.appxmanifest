@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="44891WilliamsWare.BYU8" Publisher="CN=48CB40B6-8D67-4F1E-BB42-013D2AF73764" Version="1.1.0.10" />
+  <Identity Name="44891WilliamsWare.BYU8" Publisher="CN=48CB40B6-8D67-4F1E-BB42-013D2AF73764" Version="1.2.0.13" />
   <Properties>
     <DisplayName>BYU8</DisplayName>
     <PublisherDisplayName>WilliamsWare</PublisherDisplayName>
@@ -16,7 +16,7 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BYU.App">
       <m2:VisualElements DisplayName="BYU8" Square150x150Logo="Assets\Logos\Temp\logo_150_150.png" Square30x30Logo="Assets\Logos\Temp\logo_30_30.png" Description="BYU" ForegroundText="light" BackgroundColor="#002255">
-        <m2:LockScreen Notification="badgeAndTileText" BadgeLogo="BYU\Assets\Logos\logo_24_24.png" />
+        <m2:LockScreen Notification="badgeAndTileText" BadgeLogo="Assets\Logos\logo_24_24.png" />
         <m2:DefaultTile Square310x310Logo="Assets\Logos\Temp\logo_310_310.png" Wide310x150Logo="Assets\Logos\Temp\logo_310_150.png" Square70x70Logo="Assets\Logos\Temp\logo_70_70.png">
         </m2:DefaultTile>
         <m2:SplashScreen Image="Assets\Logos\Temp\SplashScreen.png" BackgroundColor="#FFFFFF" />
