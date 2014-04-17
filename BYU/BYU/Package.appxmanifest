@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="44891WilliamsWare.BYU8" Publisher="CN=48CB40B6-8D67-4F1E-BB42-013D2AF73764" Version="1.2.0.13" />
+  <Identity Name="44891WilliamsWare.BYU8" Publisher="CN=48CB40B6-8D67-4F1E-BB42-013D2AF73764" Version="1.2.0.14" />
   <Properties>
     <DisplayName>BYU8</DisplayName>
     <PublisherDisplayName>WilliamsWare</PublisherDisplayName>
