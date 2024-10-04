@@ -1,24 +1,13 @@
 ﻿using BYU.Common;
 using Common.Authentication;
-using Common.Storage;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Background;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // The Hub App template is documented at http://go.microsoft.com/fwlink/?LinkId=321221
@@ -30,6 +19,8 @@ namespace BYU
     /// </summary>
     sealed partial class App : Application
     {
+        public static Frame RootFrame { get; private set; }
+
         private SettingsCommand loginSetting;
         private SettingsCommand logoutSetting;
         private SettingsCommand privacyPolicySetting;
@@ -66,6 +57,7 @@ namespace BYU
             this.RegisterBackgroundTask();
 
             Frame rootFrame = Window.Current.Content as Frame;
+            App.RootFrame = rootFrame;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
@@ -74,6 +66,7 @@ namespace BYU
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+                App.RootFrame = rootFrame;
                 //Associate the frame with a SuspensionManager key                                
                 SuspensionManager.RegisterFrame(rootFrame, "AppFrame");
                 // Set the default language
@@ -103,7 +96,7 @@ namespace BYU
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-                rootFrame.Navigate(typeof(HubPage), e.Arguments);
+                rootFrame.Navigate(typeof(HomePage), e.Arguments);
             }
             // Ensure the current window is active
             Window.Current.Activate();
@@ -112,24 +105,30 @@ namespace BYU
 
         private async void RegisterBackgroundTask()
         {
-            var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
-            if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity ||
-                backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
+            try
             {
-                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                var backgroundAccessStatus = await BackgroundExecutionManager.RequestAccessAsync();
+                if (backgroundAccessStatus == BackgroundAccessStatus.AllowedMayUseActiveRealTimeConnectivity ||
+                    backgroundAccessStatus == BackgroundAccessStatus.AllowedWithAlwaysOnRealTimeConnectivity)
                 {
-                    if (task.Value.Name == taskName)
+                    foreach (var task in BackgroundTaskRegistration.AllTasks)
                     {
-                        task.Value.Unregister(true);
+                        if (task.Value.Name == taskName)
+                        {
+                            task.Value.Unregister(true);
+                        }
                     }
-                }
 
-                BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
-                taskBuilder.Name = taskName;
-                taskBuilder.TaskEntryPoint = taskEntryPoint;
-                taskBuilder.SetTrigger(new TimeTrigger(15, false));
-                var registration = taskBuilder.Register();
+                    BackgroundTaskBuilder taskBuilder = new BackgroundTaskBuilder();
+                    taskBuilder.Name = taskName;
+                    taskBuilder.TaskEntryPoint = taskEntryPoint;
+                    taskBuilder.SetTrigger(new TimeTrigger(15, false));
+                    var registration = taskBuilder.Register();
+                }
             }
+            //Ignore the request if an exception is thrown. This allows the simulator to work.
+            catch
+            { }
         }
 
         /// <summary>
@@ -190,7 +189,7 @@ namespace BYU
 
         public async Task LogoutSettingHandler()
         {
-            AuthenticationManager.Logout();
+            await AuthenticationManager.Logout();
             await WebCache.Instance.ClearCache();
             GoHome();
         }

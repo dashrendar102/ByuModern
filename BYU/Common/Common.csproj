@@ -103,10 +103,17 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\InvalidCredentialsException.cs" />
+    <Compile Include="Buildings\BuildingRoot.cs" />
+    <Compile Include="Buildings\ByuBuilding.cs" />
     <Compile Include="Calendar\AppointmentGenerator.cs" />
-    <Compile Include="Calendar\Constants.cs" />
     <Compile Include="Calendar\TimeRange.cs" />
     <Compile Include="Calendar\Win8CalendarClient.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ParkingLots\ParkingLot.cs" />
+    <Compile Include="ParkingLots\ParkingLotRequest.cs" />
+    <Compile Include="ParkingLots\ParkingLotResponse.cs" />
+    <Compile Include="ParkingLots\ParkingLotRoot.cs" />
+    <Compile Include="ParkingLots\ParkingService.cs" />
     <Compile Include="WebServices\DateTypes.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardRequest.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardResponse.cs" />
@@ -114,16 +121,14 @@
     <Compile Include="WebServices\DO\IdCard\IdCardRoles.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardRoot.cs" />
     <Compile Include="WebServices\DO\IdCard\IdCardService.cs" />
+    <Compile Include="WebServices\DO\LearningSuite\AssignmentCategory.cs" />
     <Compile Include="WebServices\DO\LearningSuite\LearningSuiteUtils.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingLot.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingLotRequest.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingLotResponse.cs" />
-    <Compile Include="WebServices\DO\ParkingLots\ParkingService.cs" />
     <Compile Include="Storage\WebCache.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRoot.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleRequest.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\ClassScheduleResponse.cs" />
     <Compile Include="Extensions\HttpResponseMessageExtensions.cs" />
+    <Compile Include="Extensions\ListViewExtensions.cs" />
     <Compile Include="WebServices\DO\LearningSuite\Announcement.cs" />
     <Compile Include="WebServices\DO\LearningSuite\Assignment.cs" />
     <Compile Include="WebServices\DO\LearningSuite\CalendarItem.cs" />
@@ -169,6 +174,7 @@
     <Compile Include="WebServices\DO\PersonSummary\UserInformation.cs" />
     <Compile Include="WebServices\JsonUtils.cs" />
     <Compile Include="WebServices\DO\ClassSchedule\WeeklySchedService.cs" />
+    <Compile Include="StringUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json">
@@ -182,8 +188,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="Bing.Maps.Xaml, Version=1.313.0825.0">
+      <Name>Bing Maps for C#, C++, or Visual Basic</Name>
+    </SDKReference>
     <SDKReference Include="LiveSDKXAML, Version=5.5">
       <Name>Live SDK</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs, version=12.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows</Name>
     </SDKReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

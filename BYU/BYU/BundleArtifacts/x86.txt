@@ -1,1 +1,1 @@
-MainPackage=C:\Users\Lawrence\ByuModern\BYU\BYU\bin\x86\Release\BYU_1.1.0.9_Bundle\BYU_1.1.0.9_x86.appx
+MainPackage=C:\Users\Lawrence\ByuModern\BYU\BYU\bin\x86\Release\BYU_1.2.0.14_Bundle\BYU_1.2.0.14_x86.appx

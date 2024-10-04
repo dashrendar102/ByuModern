@@ -34,11 +34,9 @@
             <TextBlock Text="Username:" Margin="0,20,0,0"/>
             <TextBox x:Name="LoginNameTextbox" Margin="0,10,0,0" FontFamily="Global User Interface" />
             <TextBlock Text="Password:" Margin="0,20,0,0"/>
-            <PasswordBox x:Name="LoginPasswordTextbox" Margin="0,10,0,0" IsPasswordRevealButtonEnabled="True" />
+            <PasswordBox x:Name="LoginPasswordTextbox" Margin="0,10,0,0" IsPasswordRevealButtonEnabled="True" KeyUp="PasswordTextbox_KeyUp" />
             <Button x:Name="SignInButton" Content="Login" Margin="0,20,0,0" HorizontalAlignment="Right" Click="SignInButton_Click" />
-            <TextBlock x:Name="MessageTextbox" TextWrapping="Wrap" Style="{StaticResource ErrorMessageStyle}"/>
-            <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" Margin="0,-30,0,0" HorizontalAlignment="Left" Width="185" Visibility="Collapsed"/>
-            <ProgressBar Height="10" VerticalAlignment="Stretch" Margin="0,20"/>
+            <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" Visibility="Collapsed" Margin="0,-30,0,0" HorizontalAlignment="Left" Width="185"/>
 
             <!-- Section 1 body -->
 

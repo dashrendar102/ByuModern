@@ -19,7 +19,8 @@ namespace Common.WebServices.DO.ClassSchedule
             string term = await TermUtility.TermUtility.getCurrentTerm();
             WebServiceSession session = await WebServiceSession.GetSession();
 
-            ClassScheduleRoot schedule = await BYUWebServiceHelper.GetObjectFromWebService<ClassScheduleRoot>(string.Format(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, term));
+            string url = string.Format(BYUWebServiceURLs.GET_STUDENT_SCHEDULE, session.personId, term);
+            ClassScheduleRoot schedule = await BYUWebServiceHelper.GetObjectFromWebService<ClassScheduleRoot>(url);
             await incorporateLearningSuiteCourseInformation(schedule);
             return schedule.WeeklySchedService.response;
         }
@@ -30,11 +31,12 @@ namespace Common.WebServices.DO.ClassSchedule
             var courses = schedule.WeeklySchedService.response.courseList;
             foreach (var course in courses)
             {
-                LearningSuiteCourse matchingLSCourse = learningSuiteCourses.Where(lsCourse => lsCourse.curriculumID.Equals(course.curriculum_id)).SingleOrDefault();
+                LearningSuiteCourse matchingLSCourse = learningSuiteCourses.SingleOrDefault(lsCourse => lsCourse.curriculumID.Equals(course.curriculum_id));
                 if (matchingLSCourse == null)
                 {
-                    throw new Exception("there appears to be a course in the schedule with no learning suite equivalent");
+                    //throw new Exception("there appears to be a course in the schedule with no learning suite equivalent");
                 }
+
                 course.LearningSuiteCourseInformation = matchingLSCourse;
             }
         }

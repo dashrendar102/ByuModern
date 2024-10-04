@@ -1,29 +1,14 @@
 ﻿using BYU.Common;
-using BYU.Data;
+using Common;
+using Common.Calendar;
+using Common.WebServices.DO.ClassSchedule;
+using Common.WebServices.DO.LearningSuite;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
-using System.Windows;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using Windows.UI;
-using Common.WebServices.DO;
-using Common.WebServices.DO.ClassSchedule;
-using Common.WebServices.DO.TermUtility;
-using Common.WebServices;
-using System.Threading.Tasks;
-using Common.Calendar;
 
 
 // The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
@@ -31,15 +16,19 @@ using Common.Calendar;
 namespace BYU
 {
     /// <summary>
-    /// A page that displays details for a single item within a group.
+    /// This page shows all courses for which the user is registered.
+    /// It accesses Learning Suite web services to display information about 
+    ///     upcoming assignments and course announcements.
+    /// Also gives the option to view the course's location on the Maps page
+    ///     or add the class to the Windows 8 Calendar.
     /// </summary>
     public sealed partial class ClassesPage : Page
     {
+        private const string SELECTED_COURSE_KEY = "selected_course";
+
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
         private CourseInformation selectedCourse = null;
-        private ObservableCollection<CourseInformation> selected_class_list =
-                    new ObservableCollection<CourseInformation>();
 
         public CourseScheduleInformation ScheduleInformation { get; private set; }
 
@@ -68,9 +57,9 @@ namespace BYU
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
-
+            this.navigationHelper.SaveState += navigationHelper_SaveState;
         }
-        
+
         /// <summary>
         /// Requires authentication. Obtains class list from web service and loads menu.
         /// </summary>
@@ -79,13 +68,7 @@ namespace BYU
             this.ScheduleInformation = await ClassScheduleRoot.GetClassSchedule();
             ObservableCollection<CourseInformation> courses = new ObservableCollection<CourseInformation>(this.ScheduleInformation.courseList);
             ClassesListView.ItemsSource = courses;
-            foreach (CourseInformation course in courses)
-            {
-                if (course.curriculum_id == selectedCourse.curriculum_id)
-                {
-                    ClassesListView.SelectedItem = course;
-                }
-            }
+            ClassesListView.SelectedItem = selectedCourse;
         }
 
         /// <summary>
@@ -101,7 +84,16 @@ namespace BYU
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
+            if (e.PageState != null && e.PageState.ContainsKey(SELECTED_COURSE_KEY))
+            {
+                await this.SetSelectedCourse((CourseInformation)e.PageState[SELECTED_COURSE_KEY]);
+            }
+        }
+
+        private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
+        {
+            selectedCourse = ClassesListView.SelectedItem as CourseInformation;
+            e.PageState.Add(SELECTED_COURSE_KEY, ClassesListView.SelectedItem);
         }
 
         #region NavigationHelper registration
@@ -116,38 +108,87 @@ namespace BYU
         /// in addition to page state preserved during an earlier session.
 
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
-            SetSelectedCourse(e.Parameter as CourseInformation);
+
+            if (e.NavigationMode != NavigationMode.Back)
+            {
+                await SetSelectedCourse(e.Parameter as CourseInformation);
+            }
+
             LoadClasses();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            selectedCourse = ClassesListView.SelectedItem as CourseInformation;
             navigationHelper.OnNavigatedFrom(e);
         }
 
         #endregion
 
         /// <summary>
-        /// 
+        /// Event handler for class button click. Updates selected course information
         /// </summary>
-        /// <param name="sender"></param>
+        /// <param name="sender">The button that was clicked.</param>
         /// <param name="e"></param>
-        private void ClassButton_Click(object sender, SelectionChangedEventArgs e)
+        private async void ClassButton_Click(object sender, SelectionChangedEventArgs e)
         {
-            this.SetSelectedCourse((CourseInformation)e.AddedItems[0]);
+            await this.SetSelectedCourse((CourseInformation)e.AddedItems[0]);
         }
 
         /// <summary>
-        /// Sets the currently selected course and loads course information into summary.
+        /// Sets the currently selected course and loads appropriate course information.
         /// </summary>
-        /// <param name="newCourse"></param>
-        private void SetSelectedCourse(CourseInformation newCourse)
+        /// <param name="newCourse">The course that has been selected.</param>
+        private async Task SetSelectedCourse(CourseInformation newCourse)
         {
             selectedCourse = newCourse;
             SelectedClassContent.DataContext = selectedCourse;
+            SelectedClassSummary.DataContext = selectedCourse;
+            await setSelectedAnnouncements();
+            await loadAssignmentInfo();
+        }
+
+        /// <summary>
+        /// Loads Learning Suite announcements based on the currently selected course.
+        /// </summary>
+        /// <returns></returns>
+        private async Task setSelectedAnnouncements()
+        {
+            if (selectedCourse.LearningSuiteCourseInformation == null)
+            {
+                AnnouncementsList.ItemsSource = null;
+            }
+            else
+            {
+                String courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
+                Announcement[] announcements = await Announcement.GetAnnouncements(courseID);
+                foreach (Announcement announcement in announcements)
+                {
+                    announcement.text = StringUtils.ExtractAndPrettifyHTMLText(announcement.text);
+                }
+                AnnouncementsList.ItemsSource = new ObservableCollection<Announcement>(announcements);
+            }
+        }
+
+        /// <summary>
+        /// Loads Learning Suite assignment information for the currently selected course.
+        /// </summary>
+        /// <returns></returns>
+        private async Task loadAssignmentInfo()
+        {
+            if (selectedCourse.LearningSuiteCourseInformation == null)
+            {
+                UpcomingAssignmentsList.ItemsSource = null;
+            }
+            else
+            {
+                string courseID = selectedCourse.LearningSuiteCourseInformation.CourseID;
+                Assignment[] assignments = await Assignment.GetUpcomingAssignments(courseID);
+                UpcomingAssignmentsList.ItemsSource = new ObservableCollection<Assignment>(assignments); ;
+            }
         }
 
         /// <summary>
@@ -171,6 +212,29 @@ namespace BYU
             Windows.UI.Xaml.Media.GeneralTransform buttonTransform = element.TransformToVisual(null);
             Windows.Foundation.Point point = buttonTransform.TransformPoint(new Windows.Foundation.Point());
             return new Windows.Foundation.Rect(point, new Windows.Foundation.Size(element.ActualWidth, element.ActualHeight));
+        }
+
+        /// <summary>
+        /// When a course assignment is clicked, navigates to the Assignment Detail page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void UpcomingAssignmentsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var parameters = Tuple.Create(selectedCourse, UpcomingAssignmentsList.SelectedValue as Assignment);
+            this.Frame.Navigate(typeof(AssignmentDetail), parameters);
+        }
+
+        /// <summary>
+        /// Shows the campus location of the currently selected class on the Maps page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ShowOnMapButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            Button b = (Button)sender;
+            CourseInformation course = (CourseInformation)b.DataContext;
+            Frame.Navigate(typeof(MapPage), course.building);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Common.Storage;
+﻿using System.Collections.Generic;
+using Common.Storage;
 using Common.WebServices.DO;
 using System;
 using System.IO;
@@ -16,7 +17,7 @@ namespace Common.WebServices
 {
     public class BYUWebServiceHelper
     {
-        private const string NONCE_HEADER = "Nonce-Encoded-WsSession-Key ";
+        private const string NonceHeader = "Nonce-Encoded-WsSession-Key ";
 
         public async static Task<string> GetNonceAuthHeader()
         {
@@ -29,11 +30,11 @@ namespace Common.WebServices
 
                 string nonceHash = GetHmac(session.sharedSecret, nonce.nonceValue);
 
-                return NONCE_HEADER + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
+                return NonceHeader + session.apiKey + "," + nonce.nonceKey + "," + nonceHash;
             }
         }
 
-        public async static Task<WebResponse> sendGETRequest(string url, bool authenticate = true, string acceptString = null)
+        public async static Task<WebResponse> SendGetRequest(string url, bool authenticate = true, string acceptString = null)
         {
             try
             {
@@ -61,42 +62,23 @@ namespace Common.WebServices
             }
         }
 
-        internal async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true)
+        public async static Task<T> GetObjectFromWebService<T>(string url, bool authenticate = true, bool allowCache = true, TimeSpan timeout = default(TimeSpan))
         {
             if (WebServiceSession.GetSession() == null)
             {
                 return default(T);
             }
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
 
             if (allowCache)
             {
-                using (Stream dataStream = await WebCache.Instance.GetCachedFileStream(url))
-                {
-                    if (dataStream != null)
-                    {
-                        return (T)serializer.ReadObject(dataStream);
-                    }
-                }
-                //use the application/json accept header because we only support JSON parsing in this method
-                using (var response = await sendGETRequest(url, authenticate, "application/json"))
-                {
-                    var file = await WebCache.Instance.Cache(url, response.GetResponseStream());
-                    using (Stream dataStream = await FileHelper.OpenReadOnlyFileStream(file))
-                    {
-                        return (T)serializer.ReadObject(dataStream);
-                    }
-                }
-            }
-            else
-            {
-                //use the application/json accept header because we only support JSON parsing in this method
-                using (var response = await sendGETRequest(url, authenticate, "application/json"))
-                {
-                    return (T)serializer.ReadObject(response.GetResponseStream());
-                }
+                return await WebCache.Instance.RetrieveObject<T>(url, true, authenticate, timeout);
             }
 
+            using (var response = await SendGetRequest(url, authenticate, "application/json"))
+            {
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
+                return (T)serializer.ReadObject(response.GetResponseStream());
+            }
         }
 
         internal async static Task<WebResponse> SendPost(string url, string parameters)

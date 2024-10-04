@@ -1,13 +1,9 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
-using System.Text;
+using Common.WebServices;
+using System;
+using System.IO;
 using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Serialization;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using Windows.Storage;
@@ -18,16 +14,16 @@ namespace Common.Storage
     public class WebCache
     {
         private StorageFolder cacheFolder;
+        private const string cacheFolderName = "webcache";
+        private Dictionary<string, object> memoryCache;
         private async Task<StorageFolder> GetCacheFolder()
         {
             if (cacheFolder == null)
             {
                 cacheFolder = await FileHelper.LocalFolder.CreateFolderAsync(cacheFolderName, CreationCollisionOption.OpenIfExists);
-                return null;
             }
             return cacheFolder;
         }
-        private const string cacheFolderName = "webcache";
 
         //this prevents illegal filename characters like '/' at the expense of filename intelligibility.
         private string TransformURLToFilename(string url)
@@ -46,71 +42,65 @@ namespace Common.Storage
             return CryptographicBuffer.EncodeToHexString(hashed);
         }
 
-        internal async Task<Stream> GetCachedFileStream(string url, bool decrypt = true)
+        internal async Task<StorageFile> RetrieveFile(string url, bool useEncryption = true, bool authenticate = true,
+            TimeSpan timeout = default(TimeSpan))
         {
             string fileName = TransformURLToFilename(url);
-            return await FileHelper.OpenReadOnlyFileStream(await GetCacheFolder(), fileName, decrypt);
-        }
-
-        internal async Task<StorageFile> Cache(string url, Stream dataStream, bool encrypt = true)
-        {
-            string fileName = TransformURLToFilename(url);
-            return await Download(fileName, dataStream, encrypt);
-        }
-
-        public async Task CacheObject<T>(string identifier, T objectToSerialize, bool encrypt = true)
-        {
-            try
+            StorageFile file = await FileHelper.GetFile(await GetCacheFolder(), fileName);
+            if (file != null)
             {
-                string fileName = TransformURLToFilename(identifier);
-                Tuple<object> foo = new Tuple<object>(objectToSerialize);
-                //string json = JsonConvert.SerializeObject(objectToSerialize);
-                //string json2 = JsonConvert.SerializeObject(foo);
-
-
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Encoding = new System.Text.UnicodeEncoding(); // no BOM in a .NET string
-                settings.Indent = false;
-                settings.OmitXmlDeclaration = false;
-
-                using (StringWriter textWriter = new StringWriter())
+                TimeSpan age = DateTimeOffset.Now - file.DateCreated;
+                if (timeout != default(TimeSpan) && age >= timeout)
                 {
-                    using (XmlWriter xmlWriter = XmlWriter.Create(textWriter, settings))
-                    {
-                        serializer.Serialize(xmlWriter, objectToSerialize);
-                    }
-                    var str = textWriter.ToString();
-                    str.ToString();
+                    await file.DeleteAsync();
+                    file = null;
                 }
-
-                //await FileHelper.SaveStringToFile(cacheFolder, fileName, json2, encrypt);
             }
-            catch(Exception)
+
+            if (file == null)
             {
-                return;
+                file = await DownloadToCache(url, fileName, useEncryption, authenticate);
+            }
+            return file;
+        }
+
+        //if the file is not already cached, cache it
+        private async Task<Stream> RetrieveStream(string url, bool useEncryption = true, bool authenticate = true, TimeSpan timeout = default(TimeSpan))
+        {
+            StorageFile file = await RetrieveFile(url, useEncryption, authenticate, timeout);
+            return await FileHelper.OpenReadOnlyFileStream(file, useEncryption);
+        }
+
+        internal async Task<T> RetrieveObject<T>(string url, bool useEncryption = true, bool authenticate = true,
+            TimeSpan timeout = default(TimeSpan))
+        {
+            if (memoryCache.ContainsKey(url))
+            {
+                return (T) memoryCache[url];
+            }
+            using (var dataStream = await RetrieveStream(url, useEncryption, authenticate, timeout))
+            {
+                var serializer = new DataContractJsonSerializer(typeof(T));
+                T obj = (T) serializer.ReadObject(dataStream);
+                memoryCache[url] = obj;
+                return obj;
             }
         }
 
-
-        public async Task<T> RetrieveObjectFromCache<T>(string identifier, bool decrypt = true)
+        private async Task<StorageFile> DownloadToCache(string url, string fileName, bool useEncryption, bool authenticate)
         {
-            try
+            //use the application/json accept header because we only support JSON parsing in this method
+            using (var response = await BYUWebServiceHelper.SendGetRequest(url, authenticate, "application/json"))
             {
-                string json = await FileHelper.ReadStringFromFile(cacheFolder, TransformURLToFilename(identifier), decrypt);
-                var bob = JsonConvert.DeserializeObject<Tuple<T>>(json);
-                //DataContractJsonSerializer foo = new DataContractJsonSerializer(typeof(Tuple<T>));
-                //var bob2 = JsonConvert.DeserializeObject<Tuple<T>>(json, new JsonSerializerSettings().);
-                //bob
-                //var klj = 
-                return default(T);
+                var file = await Download(fileName, response.GetResponseStream(), useEncryption);
+                return file;
+            }
+        }
 
-            }
-            catch (Exception)
-            {
-                return default(T);
-            }
+        internal async Task<StorageFile> GetDownloadedFile(string filename)
+        {
+            var folder = await GetCacheFolder();
+            return await FileHelper.GetFile(folder, filename);
         }
 
         internal async Task<StorageFile> Download(string filename, Stream dataStream, bool encrypt = true)
@@ -118,33 +108,30 @@ namespace Common.Storage
             return await FileHelper.Save(await GetCacheFolder(), filename, dataStream, encrypt);
         }
 
-        public async Task<bool> IsCached(string url)
+        internal async Task<bool> IsDownloaded(string filename)
         {
-            string filename = TransformURLToFilename(url);
-            return await IsDownloaded(filename);
-        }
-
-        internal Task<bool> IsDownloaded(string filename)
-        {
-            return FileHelper.FileExists(cacheFolder, filename);
+            return await FileHelper.FileExists(await GetCacheFolder(), filename);
         }
 
         public async Task ClearCache()
         {
+            await GetCacheFolder();
             if (cacheFolder != null)
             {
                 await cacheFolder.DeleteAsync();
             }
+            memoryCache.Clear();
         }
 
         internal async Task DeleteCachedItem(string url)
         {
+            memoryCache.Remove(url);
             await DeleteDownloadedItem(TransformURLToFilename(url));
         }
 
         internal async Task DeleteDownloadedItem(string filename)
         {
-            await FileHelper.DeleteFile(cacheFolder, filename);
+            await FileHelper.DeleteFile(await GetCacheFolder(), filename);
         }
 
         private static WebCache instance;
@@ -161,6 +148,7 @@ namespace Common.Storage
         }
         private WebCache()
         {
+            memoryCache = new Dictionary<string, object>();
         }
     }
 }

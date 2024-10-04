@@ -14,33 +14,14 @@ namespace Common.WebServices.DO
 {
     public class PersonPhoto
     {
-        private static Uri photoUri = null;
-        private const string userPhotoName = "userPhoto.jpg";
-
-        public async static Task<Uri> getPhotoUri()
+        public async static Task<Uri> GetPhotoUriAsync()
         {
-            if (!(await photoFileExists()))
-            {
-                string photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + (await WebServiceSession.GetSession()).personId;
-                using (WebResponse response = await BYUWebServiceHelper.sendGETRequest(photoRequestUrl))
-                {
-                    Stream photoStream = response.GetResponseStream();
-                    StorageFile file = await WebCache.Instance.Download(userPhotoName, photoStream, encrypt: false);
-                    photoUri = new Uri(file.Path, UriKind.Absolute);
-                }
-            }
+            string personId = WebServiceSession.GetSession().Result.personId;
+            var photoRequestUrl = BYUWebServiceURLs.GET_USER_PHOTO_BY_PERSON_ID + personId;
 
-            return photoUri;
-        }
+            var file = await WebCache.Instance.RetrieveFile(photoRequestUrl, useEncryption: false);
 
-        private static async Task<bool> photoFileExists()
-        {
-            if (photoUri == null)
-            {
-                return false;
-            }
-            //return await WebCache.Instance.IsCached(userPhotoName);
-            return await WebCache.Instance.IsDownloaded(userPhotoName);
+            return new Uri(file.Path, UriKind.Absolute);
         }
     }
 }

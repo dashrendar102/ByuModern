@@ -36,9 +36,9 @@
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"
                         
-                        Foreground="White" />
+                        Foreground="White" RequestedTheme="Dark" />
         <ListView
-            x:Name="itemListView"
+            x:Name="BuildingListView"
             AutomationProperties.AutomationId="ItemsListView"
             AutomationProperties.Name="Items"
             TabIndex="1"
@@ -48,7 +48,7 @@
             Padding="20,0,0,60"
             ItemsSource="{Binding Source={StaticResource itemsViewSource}}"
             IsSwipeEnabled="False"
-            SelectionChanged="ItemListView_SelectionChanged">
+            SelectionChanged="BuildingListViewSelectionChanged">
             <ListView.Header>
                 <StackPanel Margin ="0, 0, 0, 15">
                     <TextBlock Text="Buildings" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" MaxHeight="70" Margin="6" Foreground="White" />

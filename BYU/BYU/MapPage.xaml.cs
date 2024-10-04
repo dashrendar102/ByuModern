@@ -1,27 +1,13 @@
 ﻿using BYU.Common;
-using BYU.Data;
+using Common;
+using Common.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Windows.Input;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Common;
-using Windows.UI.Xaml.Shapes;
-using Bing.Maps;
-using Common.WebServices.DO.ParkingLots;
-
-
-// The Item Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234232
 
 namespace BYU
 {
@@ -32,6 +18,8 @@ namespace BYU
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+
+        private Task LoadBuildingsTask;
 
         /// <summary>
         /// NavigationHelper is used on each page to aid in navigation and 
@@ -53,22 +41,40 @@ namespace BYU
         public MapPage()
         {
             this.InitializeComponent();
+            LoadBuildingsTask = LoadBuildings();
 
             // Setup the navigation helper
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
+            map.BuildingSelected += SelectEntityInList;
+
             // Setup the logical page navigation components that allow
             // the page to only show one pane at a time.
-            this.navigationHelper.GoBackCommand = new RelayCommand(() => this.GoBack(), () => this.CanGoBack());
-            this.itemListView.SelectionChanged += ItemListView_SelectionChanged;
+            this.navigationHelper.GoBackCommand = new RelayCommand(GoBack, CanGoBack);
+            this.BuildingListView.SelectionChanged += BuildingListViewSelectionChanged;
 
             // Start listening for Window size changes 
             // to change from showing two panes to showing a single pane
             Window.Current.SizeChanged += Window_SizeChanged;
             this.InvalidateVisualState();
 
+        }
+
+        private void SelectEntityInList(object sender, BuildingSelectedEventArgs e)
+        {
+            BuildingListView.SelectAndScrollIntoView(e.Entity);
+        }
+
+        private async Task LoadBuildings()
+        {
+            var buildings = await map.GetBuildingsAsync();
+            if (buildings != null)
+            {
+                buildings = buildings.OrderBy(building => building.Name);
+                this.DefaultViewModel["Items"] = buildings;
+            }
         }
 
         /// <summary>
@@ -84,14 +90,9 @@ namespace BYU
         /// session.  The state will be null the first time a page is visited.</param>
         private async void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            var buildings = await map.GetBuildings();
-            ParkingLotResponse[] parkingLots = await ParkingLot.getAllLots();
-            buildings = buildings.OrderBy(building => building.Name);
-            this.DefaultViewModel["Items"] = buildings;
-            
             if (e.PageState == null)
             {
-                this.itemListView.SelectedItem = null;
+                this.BuildingListView.SelectedItem = null;
                 // When this is a new page, select the first item automatically unless logical page
                 // navigation is being used (see the logical page navigation #region below.)
                 /*if (!this.UsingLogicalPageNavigation() && this.itemsViewSource.View != null)
@@ -108,6 +109,7 @@ namespace BYU
                     //this.itemsViewSource.View.MoveCurrentTo(selectedItem);
                 }
             }
+            await LoadBuildingsTask;
         }
 
 
@@ -167,7 +169,7 @@ namespace BYU
         /// </summary>
         /// <param name="sender">The GridView displaying the selected item.</param>
         /// <param name="e">Event data that describes how the selection was changed.</param>
-        private void ItemListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void BuildingListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             IList<object> results = ((ListView)sender).SelectedItems;
             if (results.Count != 0)
@@ -180,7 +182,7 @@ namespace BYU
 
         private bool CanGoBack()
         {
-            if (this.UsingLogicalPageNavigation() && this.itemListView.SelectedItem != null)
+            if (this.UsingLogicalPageNavigation() && this.BuildingListView.SelectedItem != null)
             {
                 return true;
             }
@@ -191,13 +193,13 @@ namespace BYU
         }
         private void GoBack()
         {
-            if (this.UsingLogicalPageNavigation() && this.itemListView.SelectedItem != null)
+            if (this.UsingLogicalPageNavigation() && this.BuildingListView.SelectedItem != null)
             {
                 // When logical page navigation is in effect and there's a selected item that
                 // item's details are currently displayed.  Clearing the selection will return to
                 // the item list.  From the user's point of view this is a logical backward
                 // navigation.
-                this.itemListView.SelectedItem = null;
+                this.BuildingListView.SelectedItem = null;
             }
             else
             {
@@ -225,7 +227,7 @@ namespace BYU
                 return "PrimaryView";
 
             // Update the back button's enabled state when the view state changes
-            var logicalPageBack = this.UsingLogicalPageNavigation() && this.itemListView.SelectedItem != null;
+            var logicalPageBack = this.UsingLogicalPageNavigation() && this.BuildingListView.SelectedItem != null;
 
             return logicalPageBack ? "SinglePane_Detail" : "SinglePane";
         }
@@ -243,9 +245,31 @@ namespace BYU
         /// The navigation parameter is available in the LoadState method 
         /// in addition to page state preserved during an earlier session.
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             navigationHelper.OnNavigatedTo(e);
+            if (e.Parameter != null && e.Parameter is string)
+            {
+                string buildingName = (string) e.Parameter;
+                await SelectBuildingByName(buildingName);
+            }
+        }
+
+        private async Task SelectBuildingByName(string buildingName)
+        {
+            await LoadBuildingsTask;
+            var buildings = await map.GetBuildingsAsync();
+            if (buildings != null)
+            {
+                var buildingEntity = (ByuMapEntity)
+                    BuildingListView.Items.FirstOrDefault(obj => ((ByuMapEntity) obj).Acronym == buildingName);
+
+                if (buildingEntity != null)
+                {
+                    BuildingListView.SelectAndScrollIntoView(buildingEntity);
+                    map.SelectEntity(buildingEntity);
+                }
+            }
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
